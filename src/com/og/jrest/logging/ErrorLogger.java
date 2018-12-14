@@ -1,13 +1,25 @@
 package com.og.jrest.logging;
 
-import java.io.OutputStream;
+/**
+ * Implementation of the BaseLogger to handle logging of errors.
+ * 
+ * @author Matthew.Shoemaker
+ *
+ */
+class ErrorLogger extends BaseLogger {
 
-class ErrorLogger {
+	protected ErrorLogger() {
+		super();
+	}
 
-	private static OutputStream output = System.err;
+	@Override
+	protected void log(String message) {
+		this.log(message, output);
+	}
 
-	public static void log(String message) {
-		BaseLogger.log(message, output);
+	@Override
+	protected void setToDefaultOutput() {
+		this.output = System.err;
 	}
 
 }

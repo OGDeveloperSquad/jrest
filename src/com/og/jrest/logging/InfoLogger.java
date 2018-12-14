@@ -1,13 +1,25 @@
 package com.og.jrest.logging;
 
-import java.io.OutputStream;
+/**
+ * Implementation of BaseLogger to handle info logging.
+ * 
+ * @author Matthew.Shoemaker
+ *
+ */
+class InfoLogger extends BaseLogger {
 
-class InfoLogger {
+	protected InfoLogger() {
+		super();
+	}
 
-	private static OutputStream output = System.out;
+	@Override
+	protected void log(String message) {
+		this.log(message, output);
+	}
 
-	public static void log(String message) {
-		BaseLogger.log(message, output);
+	@Override
+	protected void setToDefaultOutput() {
+		this.output = System.out;
 	}
 
 }
