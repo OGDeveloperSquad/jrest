@@ -2,7 +2,7 @@ package com.og.jrest.logging;
 
 import java.io.OutputStream;
 
-class InfoLogger {
+public class DebugLogger {
 
 	private static OutputStream output = System.out;
 

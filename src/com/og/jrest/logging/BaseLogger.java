@@ -5,8 +5,12 @@ import java.io.OutputStream;
 
 abstract class BaseLogger {
 
-	protected static void log(String message, OutputStream output) throws IOException {
-		output.write(message.getBytes());
+	protected static void log(String message, OutputStream output) {
+		try {
+			output.write(message.getBytes());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }
