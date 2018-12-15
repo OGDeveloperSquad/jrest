@@ -27,6 +27,9 @@ class LoggingTest {
 	}
 
 	private String getTimeStamp() {
+		// FYI SimpleDateFormat is stupid and for some reason has concurrency issues.
+		// Therefore the console output may be printed out of order. Deprecated as of
+		// java 8 in favor of java.time (thankfully)
 		return new SimpleDateFormat("** MM/dd/yyyy hh:mm:ss aa **   ").format(Calendar.getInstance().getTime());
 	}
 
