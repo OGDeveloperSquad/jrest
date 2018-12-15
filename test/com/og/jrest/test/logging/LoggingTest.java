@@ -2,6 +2,8 @@ package com.og.jrest.test.logging;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,9 +26,14 @@ class LoggingTest {
 		Log.setAllToDefault();
 	}
 
+	private String getDateTimeString() {
+		return new SimpleDateFormat("** MM/dd/yyyy hh:mm:ss aa **   ").format(Calendar.getInstance().getTime());
+	}
+
 	@Test
 	void exceptionTest_Console() {
-		String textToShow = "Throwing a new test exception. Should print red with a big long indented stack trace.";
+		String textToShow = this.getDateTimeString()
+				+ "Throwing a new test exception. Should print red with a big long indented stack trace.";
 		this.announce(textToShow);
 		try {
 			Log.exception(new Exception(textToShow));
@@ -39,7 +46,7 @@ class LoggingTest {
 
 	@Test
 	void exceptionTest_File() {
-		String textToShow = "Throwing a new test exception";
+		String textToShow = this.getDateTimeString() + "Throwing a new test exception";
 		try {
 			String path = TEST_LOG_PATH + "exceptionLogTest.txt";
 			Log.setExceptionOutput(new File(path));
@@ -52,7 +59,7 @@ class LoggingTest {
 
 	@Test
 	void errorTest_Console() {
-		String textToShow = "Testing the error output. Should be red and stuff";
+		String textToShow = this.getDateTimeString() + "Testing the error output. Should be red and stuff";
 		this.announce(textToShow);
 		Log.error(textToShow);
 		this.printDivider();
@@ -61,7 +68,7 @@ class LoggingTest {
 
 	@Test
 	void errorTest_File() {
-		String textToShow = "Testing the error output to a file. yes indeedio";
+		String textToShow = this.getDateTimeString() + "Testing the error output to a file. yes indeedio";
 		boolean append = false;
 		try {
 			String path = TEST_LOG_PATH + "errorLogTest.txt";
@@ -75,7 +82,7 @@ class LoggingTest {
 
 	@Test
 	void debugTest_Consose() {
-		String textToShow = "Testing the debug output. Should be white and plain";
+		String textToShow = this.getDateTimeString() + "Testing the debug output. Should be white and plain";
 		this.announce(textToShow);
 		Log.debug(textToShow);
 		this.printDivider();
@@ -84,7 +91,7 @@ class LoggingTest {
 
 	@Test
 	void debugTest_File() {
-		String textToShow = "Testing the debug file output. If you can read this it worked.";
+		String textToShow = this.getDateTimeString() + "Testing the debug file output. If you can read this it worked.";
 		boolean append = false;
 		try {
 			String path = TEST_LOG_PATH + "debugLogTest.txt";
@@ -98,7 +105,7 @@ class LoggingTest {
 
 	@Test
 	void infoTest_Console() {
-		String textToShow = "Testing the info output. Should be white and plain";
+		String textToShow = this.getDateTimeString() + "Testing the info output. Should be white and plain";
 		this.announce(textToShow);
 		Log.debug(textToShow);
 		this.printDivider();
@@ -107,7 +114,7 @@ class LoggingTest {
 
 	@Test
 	void infoTest_File() {
-		String textToShow = "Testing the info file output. If you can read this it worked.";
+		String textToShow = this.getDateTimeString() + "Testing the info file output. If you can read this it worked.";
 		boolean append = false;
 		try {
 			String path = TEST_LOG_PATH + "infoLogTest.txt";

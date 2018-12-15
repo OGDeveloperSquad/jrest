@@ -1,1 +1,1 @@
-Testing the error output to a file. yes indeedio
+** 12/15/2018 06:58:09 AM **   Testing the error output to a file. yes indeedio
