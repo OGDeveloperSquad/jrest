@@ -23,9 +23,9 @@ public class Log {
 	 * @param ex
 	 */
 	public static void exception(Exception ex) {
-		Log.exceptionLogger.log(ex.getMessage());
+		Log.exceptionLogger.log(ex.getMessage() + ":");
 		for (StackTraceElement element : ex.getStackTrace()) {
-			Log.exceptionLogger.log(element.toString());
+			Log.exceptionLogger.log("\t" + element.toString());
 		}
 	}
 
@@ -69,7 +69,8 @@ public class Log {
 	}
 
 	/**
-	 * Set all logging output streams to write to the given file.
+	 * Set all logging output streams to write to the given file, overwriting any
+	 * existing contents.
 	 * 
 	 * @param file
 	 * @throws IOException
@@ -82,6 +83,20 @@ public class Log {
 	}
 
 	/**
+	 * Set all logging output streams to write to the given file, appending to
+	 * existing contents if append is true.
+	 * 
+	 * @param file
+	 * @throws IOException
+	 */
+	public static void setAllOutput(File file, boolean append) throws IOException {
+		Log.errorLogger.setOutput(file, append);
+		Log.debugLogger.setOutput(file, append);
+		Log.exceptionLogger.setOutput(file, append);
+		Log.infoLogger.setOutput(file, append);
+	}
+
+	/**
 	 * Set the error logging output stream to the given output stream.
 	 * 
 	 * @param output
@@ -91,12 +106,23 @@ public class Log {
 	}
 
 	/**
-	 * Set the error logging output stream to write to the given file.
+	 * Set the error logging output stream to write to the given file, overwriting
+	 * existing file contents.
 	 * 
 	 * @param file
 	 */
 	public static void setErrorOutput(File file) throws IOException {
 		Log.errorLogger.setOutput(file);
+	}
+
+	/**
+	 * Set the error logging output stream to write to the given file, appending to
+	 * existing file contents if append is true.
+	 * 
+	 * @param file
+	 */
+	public static void setErrorOutput(File file, boolean append) throws IOException {
+		Log.errorLogger.setOutput(file, append);
 	}
 
 	/**
@@ -109,12 +135,23 @@ public class Log {
 	}
 
 	/**
-	 * Set the debug logging output stream to write to the given file.
+	 * Set the debug logging output stream to write to the given file, overwriting
+	 * existing contents.
 	 * 
 	 * @param file
 	 */
 	public static void setDebugOutput(File file) throws IOException {
 		Log.debugLogger.setOutput(file);
+	}
+
+	/**
+	 * Set the debug logging output stream to write to the given file, appending to
+	 * existing file contents if append is true. .
+	 * 
+	 * @param file
+	 */
+	public static void setDebugOutput(File file, boolean append) throws IOException {
+		Log.debugLogger.setOutput(file, append);
 	}
 
 	/**
@@ -127,12 +164,23 @@ public class Log {
 	}
 
 	/**
-	 * Set the exception logging output stream to write to the given file.
+	 * Set the exception logging output stream to write to the given file,
+	 * overwriting existing contents.
 	 * 
 	 * @param file
 	 */
 	public static void setExceptionOutput(File file) throws IOException {
 		Log.exceptionLogger.setOutput(file);
+	}
+
+	/**
+	 * Set the exception logging output stream to write to the given file, appending
+	 * to existing file contents if append is true.
+	 * 
+	 * @param file
+	 */
+	public static void setExceptionOutput(File file, boolean append) throws IOException {
+		Log.exceptionLogger.setOutput(file, append);
 	}
 
 	/**
@@ -145,7 +193,8 @@ public class Log {
 	}
 
 	/**
-	 * Set the info logging output stream to write to the given file.
+	 * Set the info logging output stream to write to the given file, overwriting
+	 * existing contents.
 	 * 
 	 * @param file
 	 */
@@ -154,11 +203,21 @@ public class Log {
 	}
 
 	/**
+	 * Set the info logging output stream to write to the given file, appending to
+	 * contents if append is true.
+	 * 
+	 * @param file
+	 */
+	public static void setInfoOutput(File file, boolean append) throws IOException {
+		Log.infoLogger.setOutput(file);
+	}
+
+	/**
 	 * Set all logging output streams to their default locations.
 	 * 
 	 * @param output
 	 */
-	public static void setAllToDefault(OutputStream output) {
+	public static void setAllToDefault() {
 		Log.errorLogger.setToDefaultOutput();
 		Log.exceptionLogger.setToDefaultOutput();
 		Log.debugLogger.setToDefaultOutput();

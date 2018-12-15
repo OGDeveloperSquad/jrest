@@ -64,7 +64,13 @@ abstract class BaseLogger {
 	 */
 	protected void setOutput(File file) throws IOException {
 		file.createNewFile();
-		OutputStream output = new FileOutputStream(file, true);
+		OutputStream output = new FileOutputStream(file, false);
+		this.output = output;
+	}
+	
+	protected void setOutput(File file, boolean append) throws IOException {
+		file.createNewFile();
+		OutputStream output = new FileOutputStream(file, append);
 		this.output = output;
 	}
 
