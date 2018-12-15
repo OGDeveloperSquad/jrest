@@ -9,7 +9,6 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-test/com/og/jrest/test/logging/testlogs/*.txt
 
 # External tool builders
 .externalToolBuilders/

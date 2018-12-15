@@ -2,6 +2,7 @@ package com.og.jrest.test.logging;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -14,8 +15,13 @@ class LoggingTest {
 	private static final String TEST_LOG_PATH = System.getProperty("user.dir").replace("\\", "/")
 			+ "/test/com/og/jrest/test/logging/testlogs/";
 
-	private void announce(String message) {
-		System.out.println("Expected:\n" + message + "\nActual:");
+	private void announce(String message, OutputStream output) {
+		message = "Expected:\n" + message + "\nActual:\n";
+		try {
+			output.write(message.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void printDivider() {
@@ -41,7 +47,7 @@ class LoggingTest {
 	@Test
 	void exceptionTest_Console() {
 		String textToShow = "Throwing a new test exception. Should print red with a big long indented stack trace.";
-		this.announce(textToShow);
+		this.announce(textToShow, System.err);
 		Log.exception(new Exception(textToShow));
 		this.printDivider();
 		this.resetOutputs();
@@ -63,8 +69,8 @@ class LoggingTest {
 
 	@Test
 	void exceptionTest_ConsoleLocal() {
-		String textToShow = "LOCAL:      Throwing a new local test exception. Should print red with a big long indented stack trace.";
-		this.announce(textToShow);
+		String textToShow = "LOCAL-LOG-TEST: Throwing a new local test exception. Should print red with a big long indented stack trace.";
+		this.announce(textToShow, System.err);
 		Log.Local.exception(new Exception(textToShow));
 		this.printDivider();
 	}
@@ -84,7 +90,7 @@ class LoggingTest {
 	@Test
 	void errorTest_Console() {
 		String textToShow = "Testing the error output. Should be red and stuff";
-		this.announce(textToShow);
+		this.announce(textToShow, System.err);
 		Log.error(textToShow);
 		this.printDivider();
 		this.resetOutputs();
@@ -106,8 +112,8 @@ class LoggingTest {
 
 	@Test
 	void errorTest_ConsoleLocal() {
-		String textToShow = "LOCAL:      Testing the error local output. Should be red and stuff";
-		this.announce(textToShow);
+		String textToShow = "LOCAL-LOG-TEST: Testing the error local output. Should be red and stuff";
+		this.announce(textToShow, System.err);
 		Log.Local.error(textToShow);
 		this.printDivider();
 		this.resetOutputs();
@@ -128,7 +134,7 @@ class LoggingTest {
 	@Test
 	void debugTest_Console() {
 		String textToShow = "Testing the debug output. Should be white and plain";
-		this.announce(textToShow);
+		this.announce(textToShow, System.out);
 		Log.debug(textToShow);
 		this.printDivider();
 		this.resetOutputs();
@@ -150,8 +156,8 @@ class LoggingTest {
 
 	@Test
 	void debugTest_ConsoleLocal() {
-		String textToShow = "LOCAL:      Testing the debug local output. Should be red and stuff";
-		this.announce(textToShow);
+		String textToShow = "LOCAL-LOG-TEST: Testing the debug local output. Should be plain white text";
+		this.announce(textToShow, System.out);
 		Log.Local.debug(textToShow);
 		this.printDivider();
 		this.resetOutputs();
@@ -172,7 +178,7 @@ class LoggingTest {
 	@Test
 	void infoTest_Console() {
 		String textToShow = "Testing the info output. Should be white and plain";
-		this.announce(textToShow);
+		this.announce(textToShow, System.out);
 		Log.debug(textToShow);
 		this.printDivider();
 		this.resetOutputs();
@@ -194,8 +200,8 @@ class LoggingTest {
 
 	@Test
 	void infoTest_ConsoleLocal() {
-		String textToShow = "LOCAL:      Testing the info local output. Should be red and stuff";
-		this.announce(textToShow);
+		String textToShow = "LOCAL-LOG-TEST: Testing the info local output. Should be plain white text";
+		this.announce(textToShow, System.out);
 		Log.Local.info(textToShow);
 		this.printDivider();
 		this.resetOutputs();
