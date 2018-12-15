@@ -1,3 +1,0 @@
-** 12/15/2018 02:17:56 PM **
-
-Testing the info file output. If you can read this it worked.
