@@ -26,13 +26,13 @@ class LoggingTest {
 		Log.setAllToDefault();
 	}
 
-	private String getDateTimeString() {
+	private String getTimeStamp() {
 		return new SimpleDateFormat("** MM/dd/yyyy hh:mm:ss aa **   ").format(Calendar.getInstance().getTime());
 	}
 
 	@Test
 	void exceptionTest_Console() {
-		String textToShow = this.getDateTimeString()
+		String textToShow = this.getTimeStamp()
 				+ "Throwing a new test exception. Should print red with a big long indented stack trace.";
 		this.announce(textToShow);
 		try {
@@ -46,7 +46,7 @@ class LoggingTest {
 
 	@Test
 	void exceptionTest_File() {
-		String textToShow = this.getDateTimeString() + "Throwing a new test exception";
+		String textToShow = this.getTimeStamp() + "Throwing a new test exception";
 		try {
 			String path = TEST_LOG_PATH + "exceptionLogTest.txt";
 			Log.setExceptionOutput(new File(path));
@@ -59,7 +59,7 @@ class LoggingTest {
 
 	@Test
 	void errorTest_Console() {
-		String textToShow = this.getDateTimeString() + "Testing the error output. Should be red and stuff";
+		String textToShow = this.getTimeStamp() + "Testing the error output. Should be red and stuff";
 		this.announce(textToShow);
 		Log.error(textToShow);
 		this.printDivider();
@@ -68,7 +68,7 @@ class LoggingTest {
 
 	@Test
 	void errorTest_File() {
-		String textToShow = this.getDateTimeString() + "Testing the error output to a file. yes indeedio";
+		String textToShow = this.getTimeStamp() + "Testing the error output to a file. yes indeedio";
 		boolean append = false;
 		try {
 			String path = TEST_LOG_PATH + "errorLogTest.txt";
@@ -82,7 +82,7 @@ class LoggingTest {
 
 	@Test
 	void debugTest_Consose() {
-		String textToShow = this.getDateTimeString() + "Testing the debug output. Should be white and plain";
+		String textToShow = this.getTimeStamp() + "Testing the debug output. Should be white and plain";
 		this.announce(textToShow);
 		Log.debug(textToShow);
 		this.printDivider();
@@ -91,7 +91,7 @@ class LoggingTest {
 
 	@Test
 	void debugTest_File() {
-		String textToShow = this.getDateTimeString() + "Testing the debug file output. If you can read this it worked.";
+		String textToShow = this.getTimeStamp() + "Testing the debug file output. If you can read this it worked.";
 		boolean append = false;
 		try {
 			String path = TEST_LOG_PATH + "debugLogTest.txt";
@@ -105,7 +105,7 @@ class LoggingTest {
 
 	@Test
 	void infoTest_Console() {
-		String textToShow = this.getDateTimeString() + "Testing the info output. Should be white and plain";
+		String textToShow = this.getTimeStamp() + "Testing the info output. Should be white and plain";
 		this.announce(textToShow);
 		Log.debug(textToShow);
 		this.printDivider();
@@ -114,7 +114,7 @@ class LoggingTest {
 
 	@Test
 	void infoTest_File() {
-		String textToShow = this.getDateTimeString() + "Testing the info file output. If you can read this it worked.";
+		String textToShow = this.getTimeStamp() + "Testing the info file output. If you can read this it worked.";
 		boolean append = false;
 		try {
 			String path = TEST_LOG_PATH + "infoLogTest.txt";
