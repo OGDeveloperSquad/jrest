@@ -1,5 +1,7 @@
-** 12/15/2018 06:58:09 AM **   Throwing a new test exception:
-	com.og.jrest.test.logging.LoggingTest.exceptionTest_File(LoggingTest.java:53)
+** 12/15/2018 02:17:56 PM **
+
+Throwing a new test exception
+	com.og.jrest.test.logging.LoggingTest.exceptionTest_File(LoggingTest.java:60)
 	sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -53,3 +55,4 @@
 	org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:760)
 	org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:460)
 	org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:206)
+

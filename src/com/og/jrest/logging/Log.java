@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Logging utility.
+ * Global logging utility. Singleton implementations of logging utilities for
+ * the various logging levels. For local logging (i.e. separate from the global
+ * logging scheme), use the inner class methods in Log.Local
  * 
  * @author Matthew.Shoemaker
  *
@@ -18,15 +20,98 @@ public class Log {
 	private static BaseLogger infoLogger = LoggerFactory.getInfoLogger();
 
 	/**
+	 * Logging functionality to provide logging that is independent of the global
+	 * logging scheme. These methods instantiate temporary instances of logging
+	 * level implementations, allowing the logging of data to locations other than
+	 * the globally defined scheme and without changing the global logging scheme.
+	 * 
+	 * @author Matthew.Shoemaker
+	 *
+	 */
+	public static class Local {
+
+		public static void exception(Exception ex) {
+			LoggerFactory.getExceptionLogger().log(Log.formatExceptionMessage(ex));
+		}
+
+		public static void exception(Exception ex, OutputStream output) {
+			BaseLogger logger = LoggerFactory.getExceptionLogger();
+			logger.setOutput(output);
+			logger.log(Log.formatExceptionMessage(ex));
+		}
+
+		public static void exception(Exception ex, File file) throws IOException {
+			BaseLogger logger = LoggerFactory.getExceptionLogger();
+			logger.setOutput(file);
+			logger.log(Log.formatExceptionMessage(ex));
+		}
+
+		public static void debug(String message) {
+			LoggerFactory.getDebugLogger().log(message);
+		}
+
+		public static void debug(String message, OutputStream output) {
+			BaseLogger logger = LoggerFactory.getDebugLogger();
+			logger.setOutput(output);
+			logger.log(message);
+		}
+
+		public static void debug(String message, File file) throws IOException {
+			BaseLogger logger = LoggerFactory.getDebugLogger();
+			logger.setOutput(file);
+			logger.log(message);
+		}
+
+		public static void error(String message) {
+			LoggerFactory.getErrorLogger().log(message);
+		}
+
+		public static void error(String message, OutputStream output) {
+			BaseLogger logger = LoggerFactory.getErrorLogger();
+			logger.setOutput(output);
+			logger.log(message);
+		}
+
+		public static void error(String message, File file) throws IOException {
+			BaseLogger logger = LoggerFactory.getErrorLogger();
+			logger.setOutput(file);
+			logger.log(message);
+		}
+
+		public static void info(String message) {
+			LoggerFactory.getInfoLogger().log(message);
+		}
+
+		public static void info(String message, OutputStream output) {
+			BaseLogger logger = LoggerFactory.getDebugLogger();
+			logger.setOutput(output);
+			logger.log(message);
+		}
+
+		public static void info(String message, File file) throws IOException {
+			BaseLogger logger = LoggerFactory.getInfoLogger();
+			logger.setOutput(file);
+			logger.log(message);
+		}
+
+	}
+
+	private static String formatExceptionMessage(Exception ex) {
+		StringBuilder result = new StringBuilder(ex.getMessage() + "\n");
+		for (StackTraceElement element : ex.getStackTrace()) {
+			result.append("\t" + element.toString() + "\n");
+		}
+
+		return result.toString();
+	}
+
+	/**
 	 * Log the given exception to the current OutputStream.
 	 * 
 	 * @param ex
 	 */
 	public static void exception(Exception ex) {
-		Log.exceptionLogger.log(ex.getMessage() + ":");
-		for (StackTraceElement element : ex.getStackTrace()) {
-			Log.exceptionLogger.log("\t" + element.toString());
-		}
+		Log.exceptionLogger.log(Log.formatExceptionMessage(ex));
 	}
 
 	/**

@@ -44,11 +44,15 @@ abstract class BaseLogger {
 	 * 
 	 * @param message
 	 * @param output
+	 * @throws IOException
 	 */
 	protected void log(String message, OutputStream output) {
 		try {
 			message += "\n";
 			output.write(message.getBytes());
+			// Multiple separate streams flying around could get weird, so flush after every
+			// log to mitigate the weirdness
+			output.flush();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -67,7 +71,7 @@ abstract class BaseLogger {
 		OutputStream output = new FileOutputStream(file, false);
 		this.output = output;
 	}
-	
+
 	protected void setOutput(File file, boolean append) throws IOException {
 		file.createNewFile();
 		OutputStream output = new FileOutputStream(file, append);
