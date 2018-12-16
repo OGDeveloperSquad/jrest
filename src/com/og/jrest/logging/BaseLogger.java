@@ -28,7 +28,8 @@ abstract class BaseLogger implements AutoCloseable {
 	@Override
 	public void close() throws IOException {
 		// Make sure anything still in the writer isn't lost
-		this.output.flush();
+		if (this.output != null)
+			this.output.flush();
 		// We don't want to close the system streams, java handles that. Ignore null as
 		// well
 		if (this.output != null && output != System.out && output != System.err) {
@@ -49,7 +50,15 @@ abstract class BaseLogger implements AutoCloseable {
 	 * 
 	 * @param message
 	 */
-	protected abstract void log(String message);
+	protected void log(String message) {
+		/*
+		 * Since we'll be dealing exclusively with text and never binary data, wrap the
+		 * output stream in a PrintWriter to write to log files. PrintWriter is better
+		 * at handling textual data.
+		 */
+		PrintWriter writer = new PrintWriter(this.output, true);
+		writer.println(message);
+	}
 
 	/**
 	 * Set the output stream for this to its default state.

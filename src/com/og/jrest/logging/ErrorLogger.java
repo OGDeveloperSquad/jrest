@@ -13,11 +13,6 @@ class ErrorLogger extends BaseLogger {
 	}
 
 	@Override
-	protected void log(String message) {
-		this.log(message, output);
-	}
-
-	@Override
 	protected void setToDefaultOutput() {
 		this.output = System.err;
 	}

@@ -6,15 +6,10 @@ package com.og.jrest.logging;
  * @author Matthew.Shoemaker
  *
  */
-public class DebugLogger extends BaseLogger {
+class DebugLogger extends BaseLogger {
 
 	protected DebugLogger() {
 		super();
-	}
-
-	@Override
-	public void log(String message) {
-		this.log(message, output);
 	}
 
 	@Override
