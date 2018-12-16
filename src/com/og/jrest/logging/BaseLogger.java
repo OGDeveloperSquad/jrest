@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 /**
  * Common functionality which all logging implementations must have. All loggers
@@ -12,12 +13,28 @@ import java.io.OutputStream;
  * @author Matthew.Shoemaker
  *
  */
-abstract class BaseLogger {
+abstract class BaseLogger implements AutoCloseable {
 
 	/**
 	 * The stream to which all logging output will be written.
 	 */
 	protected OutputStream output;
+
+	/**
+	 * Close the output stream for this logger.
+	 * 
+	 * @throws IOException
+	 */
+	@Override
+	public void close() throws IOException {
+		// Make sure anything still in the writer isn't lost
+		this.output.flush();
+		// We don't want to close the system streams, java handles that. Ignore null as
+		// well
+		if (this.output != null && output != System.out && output != System.err) {
+			this.output.close();
+		}
+	}
 
 	/**
 	 * Default constructor for loggers. Subclasses should call this constructor in
@@ -47,15 +64,14 @@ abstract class BaseLogger {
 	 * @throws IOException
 	 */
 	protected void log(String message, OutputStream output) {
-		try {
-			message += "\n";
-			output.write(message.getBytes());
-			// Multiple separate streams flying around could get weird, so flush after every
-			// log to mitigate the weirdness
-			output.flush();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		/*
+		 * Accept output stream for its polymorphic properties (specifically in dealing
+		 * with System.out and System.err), but since we'll be dealing exclusively with
+		 * text and never binary data, wrap the output stream in a PrintWriter to write
+		 * to log files. PrintWriter is better at handling textual data.
+		 */
+		PrintWriter writer = new PrintWriter(output, true);
+		writer.println(message);
 	}
 
 	/**

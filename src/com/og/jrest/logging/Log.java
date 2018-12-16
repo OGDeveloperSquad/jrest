@@ -14,10 +14,17 @@ import java.io.OutputStream;
  */
 public class Log {
 
-	private static BaseLogger errorLogger = LoggerFactory.getErrorLogger();
-	private static BaseLogger debugLogger = LoggerFactory.getDebugLogger();
-	private static BaseLogger exceptionLogger = LoggerFactory.getExceptionLogger();
-	private static BaseLogger infoLogger = LoggerFactory.getInfoLogger();
+	private static BaseLogger errorLogger;
+	private static BaseLogger exceptionLogger;
+	private static BaseLogger debugLogger;
+	private static BaseLogger infoLogger;
+
+	static {
+		Log.errorLogger = LoggerFactory.getErrorLogger();
+		Log.exceptionLogger = LoggerFactory.getExceptionLogger();
+		Log.debugLogger = LoggerFactory.getDebugLogger();
+		Log.infoLogger = LoggerFactory.getInfoLogger();
+	}
 
 	/**
 	 * Logging functionality to provide logging that is independent of the global
@@ -35,63 +42,109 @@ public class Log {
 		}
 
 		public static void exception(Exception ex, OutputStream output) {
-			BaseLogger logger = LoggerFactory.getExceptionLogger();
-			logger.setOutput(output);
-			logger.log(Log.formatExceptionMessage(ex));
+			// Use try-with-resource for the auto-close functionality since this is a local
+			// logging resource. We could close stream manually but that's no fun when you
+			// have cool interfaces to implement (i.e. AutoCloseable)
+			try (BaseLogger logger = LoggerFactory.getExceptionLogger()) {
+				logger.setOutput(output);
+				logger.log(Log.formatExceptionMessage(ex));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 
 		public static void exception(Exception ex, File file) throws IOException {
-			BaseLogger logger = LoggerFactory.getExceptionLogger();
-			logger.setOutput(file);
-			logger.log(Log.formatExceptionMessage(ex));
+			// Use try-with-resource for the auto-close functionality since this is a local
+			// logging resource. We could close stream manually but that's no fun when you
+			// have cool interfaces to implement (i.e. AutoCloseable)
+			try (BaseLogger logger = LoggerFactory.getExceptionLogger()) {
+				logger.setOutput(file);
+				logger.log(Log.formatExceptionMessage(ex));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void debug(String message) {
-			LoggerFactory.getDebugLogger().log(message);
+			// Use try-with-resource for the auto-close functionality since this is a local
+			// logging resource. We could close stream manually but that's no fun when you
+			// have cool interfaces to implement (i.e. AutoCloseable)
+			try (BaseLogger logger = LoggerFactory.getDebugLogger()) {
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void debug(String message, OutputStream output) {
-			BaseLogger logger = LoggerFactory.getDebugLogger();
-			logger.setOutput(output);
-			logger.log(message);
+			try (BaseLogger logger = LoggerFactory.getDebugLogger()) {
+				logger.setOutput(output);
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void debug(String message, File file) throws IOException {
-			BaseLogger logger = LoggerFactory.getDebugLogger();
-			logger.setOutput(file);
-			logger.log(message);
+			try (BaseLogger logger = LoggerFactory.getDebugLogger()) {
+				logger.setOutput(file);
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void error(String message) {
-			LoggerFactory.getErrorLogger().log(message);
+			try (BaseLogger logger = LoggerFactory.getErrorLogger()) {
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void error(String message, OutputStream output) {
-			BaseLogger logger = LoggerFactory.getErrorLogger();
-			logger.setOutput(output);
-			logger.log(message);
+			try (BaseLogger logger = LoggerFactory.getErrorLogger()) {
+				logger.setOutput(output);
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void error(String message, File file) throws IOException {
-			BaseLogger logger = LoggerFactory.getErrorLogger();
-			logger.setOutput(file);
-			logger.log(message);
+			try (BaseLogger logger = LoggerFactory.getErrorLogger()) {
+				logger.setOutput(file);
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void info(String message) {
-			LoggerFactory.getInfoLogger().log(message);
+			try (BaseLogger logger = LoggerFactory.getInfoLogger()) {
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void info(String message, OutputStream output) {
-			BaseLogger logger = LoggerFactory.getDebugLogger();
-			logger.setOutput(output);
-			logger.log(message);
+			try (BaseLogger logger = LoggerFactory.getInfoLogger()) {
+				logger.setOutput(output);
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public static void info(String message, File file) throws IOException {
-			BaseLogger logger = LoggerFactory.getInfoLogger();
-			logger.setOutput(file);
-			logger.log(message);
+			try (BaseLogger logger = LoggerFactory.getInfoLogger()) {
+				logger.setOutput(file);
+				logger.log(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
