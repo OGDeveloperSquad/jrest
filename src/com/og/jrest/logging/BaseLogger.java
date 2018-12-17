@@ -97,6 +97,15 @@ abstract class BaseLogger implements AutoCloseable {
 		this.output = output;
 	}
 
+	/**
+	 * Set this logger to write to the given file. If append is false, the contents
+	 * of the file will be overwritten. If append is true, then the logs will be
+	 * appended to the existing content.
+	 * 
+	 * @param file
+	 * @param append
+	 * @throws IOException
+	 */
 	protected void setOutput(File file, boolean append) throws IOException {
 		file.createNewFile();
 		OutputStream output = new FileOutputStream(file, append);
