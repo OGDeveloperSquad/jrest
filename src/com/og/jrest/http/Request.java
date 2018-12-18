@@ -1,5 +1,7 @@
 package com.og.jrest.http;
 
+import com.og.jrest.logging.Log;
+
 /**
  * This class is a model of an HTTP message. Contains things like Headers,
  * method (i.e. GET, POST, PUT, or DELETE), and request body. Pretty
@@ -9,5 +11,10 @@ package com.og.jrest.http;
  *
  */
 public class Request {
+
+	public Request() {
+		// Just for fun
+		Log.debug("New request class instantiated!");
+	}
 
 }

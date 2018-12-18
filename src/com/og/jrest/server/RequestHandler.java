@@ -1,5 +1,7 @@
 package com.og.jrest.server;
 
+import com.og.jrest.logging.Log;
+
 /**
  * This class handles the request received. Implements the Runnable interface so
  * that request handling can be done asynchronously (on a new thread), allowing
@@ -15,7 +17,10 @@ public class RequestHandler implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+
+		Log.debug("New thread started to handle a request! How cool is that?!");
+
+		// TODO -- Do whatever server-y things a server should do...
 
 	}
 
