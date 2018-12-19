@@ -6,9 +6,9 @@ package com.og.jrest.logging;
  * @author Matthew.Shoemaker
  *
  */
-class InfoLogger extends BaseLogger {
+class InfoLogHandler extends BaseLogHandler {
 
-	protected InfoLogger() {
+	protected InfoLogHandler() {
 		super();
 	}
 

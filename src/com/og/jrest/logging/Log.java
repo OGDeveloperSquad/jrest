@@ -14,270 +14,29 @@ import java.io.OutputStream;
  */
 public class Log {
 
-	private static BaseLogger errorLogger;
-	private static BaseLogger exceptionLogger;
-	private static BaseLogger debugLogger;
-	private static BaseLogger infoLogger;
+	private static ILogger logger;
 
 	static {
-		Log.errorLogger = LoggerFactory.getErrorLogger();
-		Log.exceptionLogger = LoggerFactory.getExceptionLogger();
-		Log.debugLogger = LoggerFactory.getDebugLogger();
-		Log.infoLogger = LoggerFactory.getInfoLogger();
+		Log.logger = LoggerFactory.getLogger();
 	}
 
 	/**
-	 * Logging functionality to provide logging that is independent of the global
-	 * logging scheme. These methods instantiate temporary instances of logging
-	 * implementations, allowing logs to be written to anywhere without affecting
-	 * the global logging scheme.
+	 * Returns a new instance an implementation of the ILogger interface.
 	 * 
-	 * @author Matthew.Shoemaker
-	 *
+	 * @return New instance of an implementation of the ILogger interface.
 	 */
-	public static class Local {
-
-		/**
-		 * Log the given exception to the default exception output stream without
-		 * affecting the output of the global logging scheme.
-		 * 
-		 * @param ex
-		 *            exception to be logged
-		 */
-		public static void exception(Exception ex) {
-			LoggerFactory.getExceptionLogger().log(Log.formatExceptionMessage(ex));
-		}
-
-		/**
-		 * Log the given exception to the given output stream without affecting the
-		 * output of the global logging scheme.
-		 * 
-		 * @param ex
-		 *            ex exception to be logged
-		 * @param output
-		 *            stream to which the exception will be written
-		 */
-		public static void exception(Exception ex, OutputStream output) {
-			// Use try-with-resource for the auto-close functionality since this is a local
-			// logging resource. We could close stream manually but that's no fun when you
-			// have cool interfaces to implement (i.e. AutoCloseable)
-			try (BaseLogger logger = LoggerFactory.getExceptionLogger()) {
-				logger.setOutput(output);
-				logger.log(Log.formatExceptionMessage(ex));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-
-		/**
-		 * Log the given exception to the given file without affecting the output of the
-		 * global logging scheme.
-		 * 
-		 * @param ex
-		 *            ex exception to be logged
-		 * @param file
-		 *            location to which the exception will be loggged
-		 * @throws IOException
-		 */
-		public static void exception(Exception ex, File file) throws IOException {
-			// Use try-with-resource for the auto-close functionality since this is a local
-			// logging resource. We could close stream manually but that's no fun when you
-			// have cool interfaces to implement (i.e. AutoCloseable)
-			try (BaseLogger logger = LoggerFactory.getExceptionLogger()) {
-				logger.setOutput(file);
-				logger.log(Log.formatExceptionMessage(ex));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the default debug output stream without affecting
-		 * the global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 */
-		public static void debug(String message) {
-			// Use try-with-resource for the auto-close functionality since this is a local
-			// logging resource. We could close stream manually but that's no fun when you
-			// have cool interfaces to implement (i.e. AutoCloseable)
-			try (BaseLogger logger = LoggerFactory.getDebugLogger()) {
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the given output stream without affecting the output
-		 * of the global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 * @param output
-		 *            stream to which the text will be written
-		 */
-		public static void debug(String message, OutputStream output) {
-			try (BaseLogger logger = LoggerFactory.getDebugLogger()) {
-				logger.setOutput(output);
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the given file without affecting the output of the
-		 * global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 * @param file
-		 *            location to which text will be written
-		 * @throws IOException
-		 */
-		public static void debug(String message, File file) throws IOException {
-			try (BaseLogger logger = LoggerFactory.getDebugLogger()) {
-				logger.setOutput(file);
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the default error output stream without affecting
-		 * the global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 */
-		public static void error(String message) {
-			try (BaseLogger logger = LoggerFactory.getErrorLogger()) {
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the given output stream without affecting the output
-		 * of the global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 * @param output
-		 *            stream to which the text will be written
-		 */
-		public static void error(String message, OutputStream output) {
-			try (BaseLogger logger = LoggerFactory.getErrorLogger()) {
-				logger.setOutput(output);
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the given file without affecting the output of the
-		 * global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 * @param file
-		 *            location to which text will be written
-		 * @throws IOException
-		 */
-		public static void error(String message, File file) throws IOException {
-			try (BaseLogger logger = LoggerFactory.getErrorLogger()) {
-				logger.setOutput(file);
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the default info output stream without affecting the
-		 * global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 */
-		public static void info(String message) {
-			try (BaseLogger logger = LoggerFactory.getInfoLogger()) {
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the given output stream without affecting the output
-		 * of the global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 * @param output
-		 *            stream to which the text will be written
-		 */
-		public static void info(String message, OutputStream output) {
-			try (BaseLogger logger = LoggerFactory.getInfoLogger()) {
-				logger.setOutput(output);
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Log the given message to the given file without affecting the output of the
-		 * global logging scheme.
-		 * 
-		 * @param message
-		 *            text to be logged
-		 * @param file
-		 *            location to which text will be written
-		 * @throws IOException
-		 */
-		public static void info(String message, File file) throws IOException {
-			try (BaseLogger logger = LoggerFactory.getInfoLogger()) {
-				logger.setOutput(file);
-				logger.log(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
+	public static ILogger getInstance() {
+		return LoggerFactory.getLogger();
 	}
 
 	/**
-	 * Given an Exception, build a string containing the text that will be logged
-	 * for the exception.
-	 * 
-	 * @param ex
-	 *            exception for which a string message will be built
-	 * @return message explaining the exception for logging purposes
-	 */
-	private static String formatExceptionMessage(Exception ex) {
-		StringBuilder result = new StringBuilder(ex.getMessage() + "\n");
-		for (StackTraceElement element : ex.getStackTrace()) {
-			result.append("\t" + element.toString() + "\n");
-		}
-
-		return result.toString();
-	}
-
-	/**
-	 * Log the given exception to the current OutputStream.
+	 * Log the given exception to the default exception output stream.
 	 * 
 	 * @param ex
 	 *            exception to be logged
 	 */
 	public static void exception(Exception ex) {
-		Log.exceptionLogger.log(Log.formatExceptionMessage(ex));
+		Log.logger.exception(ex);
 	}
 
 	/**
@@ -287,7 +46,7 @@ public class Log {
 	 *            text to be written to the log output
 	 */
 	public static void debug(String message) {
-		Log.debugLogger.log(message);
+		Log.logger.debug(message);
 	}
 
 	/**
@@ -297,7 +56,7 @@ public class Log {
 	 *            text to be written to the log output
 	 */
 	public static void error(String message) {
-		Log.errorLogger.log(message);
+		Log.logger.error(message);
 	}
 
 	/**
@@ -308,7 +67,7 @@ public class Log {
 	 *            output
 	 */
 	public static void info(String message) {
-		Log.infoLogger.log(message);
+		Log.logger.info(message);
 	}
 
 	/**
@@ -316,11 +75,8 @@ public class Log {
 	 * 
 	 * @param output
 	 */
-	public static void setAllOutput(OutputStream output) {
-		Log.errorLogger.setOutput(output);
-		Log.debugLogger.setOutput(output);
-		Log.exceptionLogger.setOutput(output);
-		Log.infoLogger.setOutput(output);
+	public static void setOutput(OutputStream output) {
+		Log.logger.setOutput(output);
 	}
 
 	/**
@@ -331,11 +87,8 @@ public class Log {
 	 *            file with the location of the output
 	 * @throws IOException
 	 */
-	public static void setAllOutput(File file) throws IOException {
-		Log.errorLogger.setOutput(file);
-		Log.debugLogger.setOutput(file);
-		Log.exceptionLogger.setOutput(file);
-		Log.infoLogger.setOutput(file);
+	public static void setOutput(File file) throws IOException {
+		Log.logger.setOutput(file);
 	}
 
 	/**
@@ -349,11 +102,8 @@ public class Log {
 	 *            contents rather than overwriting
 	 * @throws IOException
 	 */
-	public static void setAllOutput(File file, boolean append) throws IOException {
-		Log.errorLogger.setOutput(file, append);
-		Log.debugLogger.setOutput(file, append);
-		Log.exceptionLogger.setOutput(file, append);
-		Log.infoLogger.setOutput(file, append);
+	public static void setOutput(File file, boolean append) throws IOException {
+		Log.logger.setOutput(file, append);
 	}
 
 	/**
@@ -362,7 +112,7 @@ public class Log {
 	 * @param output
 	 */
 	public static void setErrorOutput(OutputStream output) {
-		Log.errorLogger.setOutput(output);
+		Log.logger.setErrorOutput(output);
 	}
 
 	/**
@@ -374,7 +124,7 @@ public class Log {
 	 * @throws IOException
 	 */
 	public static void setErrorOutput(File file) throws IOException {
-		Log.errorLogger.setOutput(file);
+		Log.logger.setErrorOutput(file);
 	}
 
 	/**
@@ -390,7 +140,7 @@ public class Log {
 	 * 
 	 */
 	public static void setErrorOutput(File file, boolean append) throws IOException {
-		Log.errorLogger.setOutput(file, append);
+		Log.logger.setErrorOutput(file, append);
 	}
 
 	/**
@@ -399,7 +149,7 @@ public class Log {
 	 * @param output
 	 */
 	public static void setDebugOutput(OutputStream output) {
-		Log.debugLogger.setOutput(output);
+		Log.logger.setDebugOutput(output);
 	}
 
 	/**
@@ -411,7 +161,7 @@ public class Log {
 	 * @throws IOException
 	 */
 	public static void setDebugOutput(File file) throws IOException {
-		Log.debugLogger.setOutput(file);
+		Log.logger.setDebugOutput(file);
 	}
 
 	/**
@@ -426,7 +176,7 @@ public class Log {
 	 * @throws IOException
 	 */
 	public static void setDebugOutput(File file, boolean append) throws IOException {
-		Log.debugLogger.setOutput(file, append);
+		Log.logger.setDebugOutput(file, append);
 	}
 
 	/**
@@ -435,7 +185,7 @@ public class Log {
 	 * @param output
 	 */
 	public static void setExceptionOutput(OutputStream output) {
-		Log.exceptionLogger.setOutput(output);
+		Log.logger.setExceptionOutput(output);
 	}
 
 	/**
@@ -447,7 +197,7 @@ public class Log {
 	 * @throws IOException
 	 */
 	public static void setExceptionOutput(File file) throws IOException {
-		Log.exceptionLogger.setOutput(file);
+		Log.logger.setExceptionOutput(file);
 	}
 
 	/**
@@ -462,7 +212,7 @@ public class Log {
 	 * @throws IOException
 	 */
 	public static void setExceptionOutput(File file, boolean append) throws IOException {
-		Log.exceptionLogger.setOutput(file, append);
+		Log.logger.setExceptionOutput(file, append);
 	}
 
 	/**
@@ -471,7 +221,7 @@ public class Log {
 	 * @param output
 	 */
 	public static void setInfoOutput(OutputStream output) {
-		Log.infoLogger.setOutput(output);
+		Log.logger.setOutput(output);
 	}
 
 	/**
@@ -483,7 +233,7 @@ public class Log {
 	 * @throws IOException
 	 */
 	public static void setInfoOutput(File file) throws IOException {
-		Log.infoLogger.setOutput(file);
+		Log.logger.setInfoOutput(file);
 	}
 
 	/**
@@ -498,45 +248,42 @@ public class Log {
 	 * @throws IOException
 	 */
 	public static void setInfoOutput(File file, boolean append) throws IOException {
-		Log.infoLogger.setOutput(file);
+		Log.logger.setInfoOutput(file);
 	}
 
 	/**
 	 * Set all logging output streams to their default locations.
 	 */
 	public static void setAllToDefault() {
-		Log.errorLogger.setToDefaultOutput();
-		Log.exceptionLogger.setToDefaultOutput();
-		Log.debugLogger.setToDefaultOutput();
-		Log.infoLogger.setToDefaultOutput();
+		Log.logger.setToDefaultOutput();
 	}
 
 	/**
 	 * Set error logging to its default output stream.
 	 */
 	public static void setErrorToDefault() {
-		Log.errorLogger.setToDefaultOutput();
+		Log.logger.setErrorToDefaultOutput();
 	}
 
 	/**
 	 * Set debug message logging to its default output stream.
 	 */
 	public static void setDebugToDefault() {
-		Log.debugLogger.setToDefaultOutput();
+		Log.logger.setDebugToDefaultOutput();
 	}
 
 	/**
 	 * Set exception logging to its default output stream.
 	 */
 	public static void setExceptionToDefault() {
-		Log.exceptionLogger.setToDefaultOutput();
+		Log.logger.setExceptionToDefaultOutput();
 	}
 
 	/**
 	 * Set info logging to its deafults output stream.
 	 */
 	public static void setInfoToDefault() {
-		Log.infoLogger.setToDefaultOutput();
+		Log.logger.setInfoToDefaultOutput();
 	}
 
 }
