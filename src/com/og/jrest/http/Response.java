@@ -1,5 +1,7 @@
 package com.og.jrest.http;
 
+import java.util.Map;
+
 import com.og.jrest.logging.Log;
 
 /**
@@ -8,11 +10,13 @@ import com.og.jrest.logging.Log;
  * @author matthew.shoemaker
  *
  */
-public class Response {
+public abstract class Response {
 
 	public Response() {
 		// Just for fun
 		Log.debug("Response class instantiated!");
 	}
+
+	public Map<String, String> headers;
 
 }
