@@ -23,7 +23,7 @@ public class HttpClientErrorException extends HttpException{
 	}
 	
 	public String getErrorResponseMessage() {
-		return errorResponses.get(this.errorCode);
+		return errorResponses.get(this.getErrorCode());
 	}
 
 }

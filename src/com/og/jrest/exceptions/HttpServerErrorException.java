@@ -18,5 +18,9 @@ public class HttpServerErrorException extends HttpException{
 		super(status);
 		
 	}
+	
+	public String getErrorResponseMessage() {
+		return errorResponses.get(this.getErrorCode());
+	}
 
 }

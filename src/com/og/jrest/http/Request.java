@@ -19,11 +19,11 @@ import java.util.Scanner;
 public class Request {
 
 	
-	public String verb;
-	public String uri;
-	public String httpVersion;
-	public Map<String, String[]> headers;
-	public String body;
+	private String verb;
+	private String uri;
+	private String httpVersion;
+	private Map<String, String[]> headers;
+	private String body;
 	
 	
 	
@@ -53,57 +53,76 @@ public class Request {
 	 * 
 	 */
 	private void  parseRequest(String httpRequest) throws HttpClientErrorException{
-		Scanner req  = new Scanner(httpRequest);
-
-		//parse request line assuming format request-method-name request-URI HTTP-version
-		this.verb = req.next();
-		this.uri = req.next();
-		this.httpVersion = req.next();
-
-		req.nextLine();
-
-		//parse request headers into map
-		String headerLine = req.nextLine();
-		while (!headerLine.equals("")){
-			
-			int colonI = headerLine.indexOf(":");
-			String name = headerLine.substring(0, colonI);
-			String vals = headerLine.substring(colonI + 1);
-
-			String[] values = vals.split(",");
-			
-			//trim values of whitespaces
-			for(int i = 0; i < values.length; i++) {
-				values[i] = values[i].trim();
+		try {
+			Scanner req  = new Scanner(httpRequest);
+	
+			//parse request line assuming format request-method-name request-URI HTTP-version
+			this.verb = req.next();
+			this.uri = req.next();
+			this.httpVersion = req.next();
+	
+			req.nextLine();
+	
+			//parse request headers into map
+			String headerLine = req.nextLine();
+			while (!headerLine.equals("")){
+				
+				int colonI = headerLine.indexOf(":");
+				String name = headerLine.substring(0, colonI);
+				String vals = headerLine.substring(colonI + 1);
+	
+				String[] values = vals.split(",");
+				
+				//trim values of whitespaces
+				for(int i = 0; i < values.length; i++) {
+					values[i] = values[i].trim();
+				}
+	
+				this.headers.put(name, values);
+	
+				headerLine = req.nextLine();
+				
 			}
-
-			this.headers.put(name, values);
-
-			headerLine = req.nextLine();
+	
+			//parse body into string if there is one
+			String body = "";
+			while(req.hasNext()){
+				body = body + req.nextLine();
+			}
 			
-		}
-
-		//parse body into string if there is one
-		String body = "";
-		while(req.hasNext()){
-			body = body + req.nextLine();
-		}
-		
-		this.body = body;
-
-		if(this.verb.equals("POST")) {
+			this.body = body;
 			req.close();
+		}catch(Exception e) {
 			throw new HttpClientErrorException(400);
-
 		}
 		
 	
+		
 
-
-		req.close();
+		
 	}
 
-
+	public String getVerb() {
+		return this.verb;
+	}
+	
+	public String getURI() {
+		return this.uri;
+	}
+	
+	public String getHttpVersion() {
+		return this.httpVersion;
+	}
+	
+	public Map<String, String[]> getHeaders(){
+		return this.headers;
+	}
+	
+	public String getBody() {
+		return this.body;
+	}
+	
+	
 	
 
 }
