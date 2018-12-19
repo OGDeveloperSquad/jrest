@@ -16,8 +16,8 @@ class LoggerFactory {
 	 * @return new instance of a class implemented specifically to handle error
 	 *         logging
 	 */
-	protected static BaseLogger getErrorLogger() {
-		return new ErrorLogger();
+	protected static BaseLogHandler getErrorLogger() {
+		return new ErrorLogHandler();
 	}
 
 	/**
@@ -27,8 +27,8 @@ class LoggerFactory {
 	 * @return new instance of a class implemented specifically to handle exception
 	 *         logging.
 	 */
-	protected static BaseLogger getExceptionLogger() {
-		return new ExceptionLogger();
+	protected static BaseLogHandler getExceptionLogger() {
+		return new ExceptionLogHandler();
 	}
 
 	/**
@@ -38,8 +38,8 @@ class LoggerFactory {
 	 * @return new instance of a class implemented specifically to handle debug
 	 *         logging.
 	 */
-	protected static BaseLogger getDebugLogger() {
-		return new DebugLogger();
+	protected static BaseLogHandler getDebugLogger() {
+		return new DebugLogHandler();
 	}
 
 	/**
@@ -49,8 +49,17 @@ class LoggerFactory {
 	 * @return new instance of a class implemented specifically to handle info
 	 *         logging.
 	 */
-	protected static BaseLogger getInfoLogger() {
-		return new InfoLogger();
+	protected static BaseLogHandler getInfoLogger() {
+		return new InfoLogHandler();
+	}
+
+	/**
+	 * Returns a new instance of an implementation of the ILogger interface.
+	 * 
+	 * @return new instance of an ILogger implementation.
+	 */
+	public static ILogger getLogger() {
+		return new StandardLogger();
 	}
 
 }
