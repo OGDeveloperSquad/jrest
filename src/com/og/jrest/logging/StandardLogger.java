@@ -143,4 +143,12 @@ public class StandardLogger extends BaseLogger {
 		this.errorLogHandler.setOutput(file, append);
 	}
 
+	@Override
+	public void close() throws IOException {
+		this.exceptionLogHandler.close();
+		this.errorLogHandler.close();
+		this.debugLogHandler.close();
+		this.errorLogHandler.close();
+	}
+
 }

@@ -4,7 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public interface ILogger {
+public interface ILogger extends AutoCloseable {
+
+	/**
+	 * Close all connections and relinquish resources.
+	 * 
+	 * @throws IOException
+	 */
+	@Override
+	public void close() throws IOException;
 
 	/**
 	 * Log the given exception to the current exception OutputStream. Defaults to
