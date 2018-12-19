@@ -30,7 +30,8 @@ public class RequestListener {
 			// to some kind of request handler class
 			try {
 				Log.info("Listening for requests.....");
-
+				
+					// ?????????? does this need to have a port number?
 				ServerSocket socket = new ServerSocket();
 
 				// Probably just accept requests here then hand them off to some kind of request
