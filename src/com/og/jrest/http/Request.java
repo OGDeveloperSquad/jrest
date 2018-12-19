@@ -17,4 +17,7 @@ public class Request {
 		Log.debug("New request class instantiated!");
 	}
 
+	public String host;
+	public String verb = "GET";
+
 }

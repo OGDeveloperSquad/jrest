@@ -16,6 +16,14 @@ public class RequestListener {
 
 	public static void main(String[] args) {
 
+		Log.info("");
+		Log.setAllOutput(System.out);
+		Log.error("");
+		Log.exception(new Exception());
+		Log.debug("");
+
+		Log.Local.info("");
+
 		Log.Local.info("Oh hey the program has begun (btw this is a local log)");
 
 		// Just listen forever!
@@ -28,6 +36,18 @@ public class RequestListener {
 				Log.info("Listening for requests.....");
 
 				ServerSocket socket = new ServerSocket();
+
+				socket.accept();
+
+				/*
+				 * 
+				 * 
+				 */
+
+				RequestHandler handler = new RequestHandler();
+
+				Thread thread = new Thread(handler);
+				thread.start();
 
 				// Probably just accept requests here then hand them off to some kind of request
 				// handler and listen for the next request?
