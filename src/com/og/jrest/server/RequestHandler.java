@@ -1,5 +1,11 @@
 package com.og.jrest.server;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 import com.og.jrest.logging.Log;
 
 /**
@@ -10,18 +16,46 @@ import com.og.jrest.logging.Log;
  * @author matthew.shoemaker
  *
  */
-public class RequestHandler implements Runnable {
+public class RequestHandler extends Thread {
 
-	/**
-	 * This method runs when the new thread is started.
-	 */
-	@Override
-	public void run() {
+	private Socket socket;
 
-		Log.debug("New thread started to handle a request! How cool is that?!");
+    public RequestHandler(Socket socket) {
+        this.socket = socket;
+    }
 
-		// TODO -- Do whatever server-y things a server should do...
+    /**
+     * Services this thread's client by first sending the
+     * client a welcome message then repeatedly reading strings
+     * and sending back the capitalized version of the string.
+     */
+    public void run() {
+        try {
 
-	}
+            // Decorate the streams so we can send characters
+            // and not just bytes.  Ensure output is flushed
+            // after every newline.
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
+ 
+            /*
+             * DO something with HTTP request. 
+             * 
+             * 
+             */
+            
+        } catch (IOException e) {
+            Log.debug("Error handling client");
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                Log.debug("Couldn't close a socket, what's going on?");
+            }
+            Log.info("Connection with client closed");
+        }
+
+    }
+    
 }
