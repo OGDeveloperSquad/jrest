@@ -35,11 +35,6 @@ public class RequestHandler implements Runnable {
 				 while (true) {
 	                    String input = inStream.readLine();
 	                   Request req = new Request(input);
-	                   /*make a request 
-	                    * 
-	                    * Then send a responce
-	                    * 
-	                    */
 	                   
 	                }
 				
