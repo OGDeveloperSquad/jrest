@@ -1,5 +1,12 @@
 package com.og.jrest.server;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+import com.og.jrest.http.Request;
 import com.og.jrest.logging.Log;
 
 /**
@@ -12,16 +19,33 @@ import com.og.jrest.logging.Log;
  */
 public class RequestHandler implements Runnable {
 
-	/**
-	 * This method runs when the new thread is started.
-	 */
-	@Override
-	public void run() {
+	 private Socket socket;
 
-		Log.debug("New thread started to handle a request! How cool is that?!");
+     public RequestHandler(Socket socket) {
+         this.socket = socket;
+        // log("New connection with client# " + clientNumber + " at " + socket);
+     }
 
-		// TODO -- Do whatever server-y things a server should do...
+		@Override
+		public void run() {
+			try {
+				BufferedReader inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+				 
+				 while (true) {
+	                    String input = inStream.readLine();
+	                   Request req = new Request(input);
+	                   /*make a request 
+	                    * 
+	                    * Then send a responce
+	                    * 
+	                    */
+	                   
+	                }
+				
+			}catch(IOException c) {
+				Log.info(" IO ERROR");
+			}
 
-	}
-
+		}
 }
