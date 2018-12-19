@@ -1,5 +1,6 @@
 package com.og.jrest.http;
 
+import com.og.jrest.exceptions.HttpClientErrorException;
 import com.og.jrest.logging.Log;
 
 import java.util.HashMap;
@@ -29,7 +30,16 @@ public class Request {
 	public Request(String httpRequest ) {
 		
 		this.headers = new HashMap<String, String[]>();
-		this.parseRequest(httpRequest);
+		try {
+			this.parseRequest(httpRequest);
+		} catch (HttpClientErrorException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.errorCode);
+			System.out.println(e.getErrorResponseMessage());
+
+			
+		}
+		//for fun
 		Log.debug("New request class instantiated!");
 		
 	}
@@ -42,7 +52,7 @@ public class Request {
 	 * @param httpRequest
 	 * 
 	 */
-	private void  parseRequest(String httpRequest) {
+	private void  parseRequest(String httpRequest) throws HttpClientErrorException{
 		Scanner req  = new Scanner(httpRequest);
 
 		//parse request line assuming format request-method-name request-URI HTTP-version
@@ -73,6 +83,7 @@ public class Request {
 			
 		}
 
+		//parse body into string if there is one
 		String body = "";
 		while(req.hasNext()){
 			body = body + req.nextLine();
@@ -80,6 +91,11 @@ public class Request {
 		
 		this.body = body;
 
+		if(this.verb.equals("POST")) {
+			req.close();
+			throw new HttpClientErrorException(400);
+
+		}
 		
 	
 
