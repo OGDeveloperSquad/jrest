@@ -29,11 +29,19 @@ public class RequestHandler implements Runnable {
 		@Override
 		public void run() {
 			try {
+				
+				
+				
+				/*
+				 * Do something to get the HTTP request and pass it into the Request class
+				 * 
+				 * 
+				 */
 				BufferedReader inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 				 
 				 while (true) {
-	                    String input = inStream.readLine();
+	                   String input = inStream.readLine();
 	                   Request req = new Request(input);
 	                   
 	                }
