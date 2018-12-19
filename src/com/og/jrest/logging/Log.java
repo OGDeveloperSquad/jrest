@@ -39,6 +39,28 @@ public class Log {
 		Log.logger.exception(ex);
 	}
 
+	public static void exception(Exception ex, OutputStream output) {
+		ILogger log = Log.getInstance();
+		log.setOutput(output);
+		log.exception(ex);
+		try {
+			log.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void exception(Exception ex, File file) {
+		ILogger log = Log.getInstance();
+		try {
+			log.setOutput(file);
+			log.exception(ex);
+			log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Log the given message to the current debug output stream.
 	 * 
@@ -50,6 +72,44 @@ public class Log {
 	}
 
 	/**
+	 * Log the given debug message to the given output stream.
+	 * 
+	 * @param message
+	 *            text to be logged
+	 * @param output
+	 *            stream to which the log will be written
+	 */
+	public static void debug(String message, OutputStream output) {
+		ILogger log = Log.getInstance();
+		log.setOutput(output);
+		log.debug(message);
+		try {
+			log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Log the given debug message to the given file.
+	 * 
+	 * @param message
+	 *            text to be logged
+	 * @param file
+	 *            location to which the log will be written
+	 */
+	public static void debug(String message, File file) {
+		ILogger log = Log.getInstance();
+		try {
+			log.setOutput(file);
+			log.debug(message);
+			log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * Log the given message to the current error output stream.
 	 * 
 	 * @param message
@@ -57,6 +117,44 @@ public class Log {
 	 */
 	public static void error(String message) {
 		Log.logger.error(message);
+	}
+
+	/**
+	 * Log the given error message to the given output stream.
+	 * 
+	 * @param message
+	 *            text to be logged
+	 * @param output
+	 *            stream to which the log will be written
+	 */
+	public static void error(String message, OutputStream output) {
+		ILogger log = Log.getInstance();
+		log.setOutput(output);
+		log.error(message);
+		try {
+			log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Log the given error message to the given file.
+	 * 
+	 * @param message
+	 *            text to be logged
+	 * @param file
+	 *            location to which the log will be written
+	 */
+	public static void error(String message, File file) {
+		ILogger log = Log.getInstance();
+		try {
+			log.setOutput(file);
+			log.error(message);
+			log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -71,219 +169,40 @@ public class Log {
 	}
 
 	/**
-	 * Set all logging output streams to the given output.
+	 * Log the given info message to the given output stream.
 	 * 
+	 * @param message
+	 *            text to be logged
 	 * @param output
+	 *            stream to which the log will be written
 	 */
-	public static void setOutput(OutputStream output) {
-		Log.logger.setOutput(output);
+	public static void info(String message, OutputStream output) {
+		ILogger log = Log.getInstance();
+		log.setOutput(output);
+		log.info(message);
+		try {
+			log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
-	 * Set all logging output streams to write to the given file, overwriting any
-	 * existing contents.
+	 * Log the given info message to the given file.
 	 * 
+	 * @param message
+	 *            text to be logged
 	 * @param file
-	 *            file with the location of the output
-	 * @throws IOException
+	 *            location to which the log will be written
 	 */
-	public static void setOutput(File file) throws IOException {
-		Log.logger.setOutput(file);
+	public static void info(String message, File file) {
+		ILogger log = Log.getInstance();
+		try {
+			log.setOutput(file);
+			log.info(message);
+			log.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-
-	/**
-	 * Set all logging output streams to write to the given file, appending to
-	 * existing contents if append is true.
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @param append
-	 *            if true, contents of log will be appended to existing file
-	 *            contents rather than overwriting
-	 * @throws IOException
-	 */
-	public static void setOutput(File file, boolean append) throws IOException {
-		Log.logger.setOutput(file, append);
-	}
-
-	/**
-	 * Set the error logging output stream to the given output stream.
-	 * 
-	 * @param output
-	 */
-	public static void setErrorOutput(OutputStream output) {
-		Log.logger.setErrorOutput(output);
-	}
-
-	/**
-	 * Set the error logging output stream to write to the given file, overwriting
-	 * existing file contents.
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @throws IOException
-	 */
-	public static void setErrorOutput(File file) throws IOException {
-		Log.logger.setErrorOutput(file);
-	}
-
-	/**
-	 * Set the error logging output stream to write to the given file, appending to
-	 * existing file contents if append is true.
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @param append
-	 *            if true, contents of log will be appended to existing file
-	 *            contents rather than overwriting
-	 * @throws IOException
-	 * 
-	 */
-	public static void setErrorOutput(File file, boolean append) throws IOException {
-		Log.logger.setErrorOutput(file, append);
-	}
-
-	/**
-	 * Set the error logging output stream to the given output stream.
-	 * 
-	 * @param output
-	 */
-	public static void setDebugOutput(OutputStream output) {
-		Log.logger.setDebugOutput(output);
-	}
-
-	/**
-	 * Set the debug logging output stream to write to the given file, overwriting
-	 * existing contents.
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @throws IOException
-	 */
-	public static void setDebugOutput(File file) throws IOException {
-		Log.logger.setDebugOutput(file);
-	}
-
-	/**
-	 * Set the debug logging output stream to write to the given file, appending to
-	 * existing file contents if append is true. .
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @param append
-	 *            if true, contents of log will be appended to existing file
-	 *            contents rather than overwriting
-	 * @throws IOException
-	 */
-	public static void setDebugOutput(File file, boolean append) throws IOException {
-		Log.logger.setDebugOutput(file, append);
-	}
-
-	/**
-	 * Set the exception logging output stream to the given output stream.
-	 * 
-	 * @param output
-	 */
-	public static void setExceptionOutput(OutputStream output) {
-		Log.logger.setExceptionOutput(output);
-	}
-
-	/**
-	 * Set the exception logging output stream to write to the given file,
-	 * overwriting existing contents.
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @throws IOException
-	 */
-	public static void setExceptionOutput(File file) throws IOException {
-		Log.logger.setExceptionOutput(file);
-	}
-
-	/**
-	 * Set the exception logging output stream to write to the given file, appending
-	 * to existing file contents if append is true.
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @param append
-	 *            if true, contents of log will be appended to existing file
-	 *            contents rather than overwriting
-	 * @throws IOException
-	 */
-	public static void setExceptionOutput(File file, boolean append) throws IOException {
-		Log.logger.setExceptionOutput(file, append);
-	}
-
-	/**
-	 * Set the info logging output stream to the given output stream.
-	 * 
-	 * @param output
-	 */
-	public static void setInfoOutput(OutputStream output) {
-		Log.logger.setOutput(output);
-	}
-
-	/**
-	 * Set the info logging output stream to write to the given file, overwriting
-	 * existing contents.
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @throws IOException
-	 */
-	public static void setInfoOutput(File file) throws IOException {
-		Log.logger.setInfoOutput(file);
-	}
-
-	/**
-	 * Set the info logging output stream to write to the given file, appending to
-	 * contents if append is true.
-	 * 
-	 * @param file
-	 *            file with the location of the output
-	 * @param append
-	 *            if true, contents of log will be appended to existing file
-	 *            contents rather than overwriting
-	 * @throws IOException
-	 */
-	public static void setInfoOutput(File file, boolean append) throws IOException {
-		Log.logger.setInfoOutput(file);
-	}
-
-	/**
-	 * Set all logging output streams to their default locations.
-	 */
-	public static void setAllToDefault() {
-		Log.logger.setToDefaultOutput();
-	}
-
-	/**
-	 * Set error logging to its default output stream.
-	 */
-	public static void setErrorToDefault() {
-		Log.logger.setErrorToDefaultOutput();
-	}
-
-	/**
-	 * Set debug message logging to its default output stream.
-	 */
-	public static void setDebugToDefault() {
-		Log.logger.setDebugToDefaultOutput();
-	}
-
-	/**
-	 * Set exception logging to its default output stream.
-	 */
-	public static void setExceptionToDefault() {
-		Log.logger.setExceptionToDefaultOutput();
-	}
-
-	/**
-	 * Set info logging to its deafults output stream.
-	 */
-	public static void setInfoToDefault() {
-		Log.logger.setInfoToDefaultOutput();
-	}
-
 }
