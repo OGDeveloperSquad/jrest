@@ -15,3 +15,55 @@ Therefore I just adopted the package naming scheme of:
 		Log.error, 
 		Log.exception
 
+
+
+
+
+PUT /example/key/value HTTP/1.1
+Host: www.something.com
+Header: value1,value2
+Header-2: value3
+Content-Type: application/zip
+Cookie: cookie1=value&cook
+
+{
+	"KEY": "VALUE",
+	"KEY2": {
+		"NESTED": 1
+	}
+}
+
+
+HTTP/1.1 200 OK
+
+HTTP/1.1 404 NOT FOUND
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
