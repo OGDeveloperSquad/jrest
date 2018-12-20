@@ -103,6 +103,7 @@ public class RequestHandler implements Runnable {
 			out.close();
 			this.socket.close();
 		} catch (IOException e) {
+			// Use Log.exception for exceptions
 			Log.exception(e);
 		}
 	}
