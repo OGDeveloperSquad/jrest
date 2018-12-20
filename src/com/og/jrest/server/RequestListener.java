@@ -40,11 +40,9 @@ public class RequestListener {
 				// new Thread(new RequestHandler(listener.accept(), clientNumber)).start();
 
 				Socket socket = listener.accept();
-				listener.close();
 				RequestHandler handler = new RequestHandler(socket, clientNumber);
 				Thread thread = new Thread(handler);
 				thread.start();
-
 			} finally {
 				listener.close();
 				Log.info("Connection with client #" + clientNumber + " closed");
