@@ -16,29 +16,37 @@ import com.og.jrest.logging.Log;
  * @author matthew.shoemaker
  *
  */
-public class RequestHandler extends Thread {
+public class RequestHandler implements Runnable {
 
 	private Socket socket;
+	private int clientNumber;
 
-    public RequestHandler(Socket socket) {
-        this.socket = socket;
-    }
+   
+	public RequestHandler(Socket socket, int clientNumber) {
+		this.socket = socket;
+        this.clientNumber = clientNumber;
+	}
 
-    /**
+
+	/**
      * Services this thread's client by first sending the
      * client a welcome message then repeatedly reading strings
      * and sending back the capitalized version of the string.
      */
     public void run() {
         try {
-
+        	
             // Decorate the streams so we can send characters
             // and not just bytes.  Ensure output is flushed
             // after every newline.
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
- 
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
+            
+            
+            /*this will need manual input or a file to get things. How to test this?*/
+            String temp = in.readLine();
+        
+            Log.debug("....handling client");
             /*
              * DO something with HTTP request. 
              * 
@@ -47,15 +55,7 @@ public class RequestHandler extends Thread {
             
         } catch (IOException e) {
             Log.debug("Error handling client");
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                Log.debug("Couldn't close a socket, what's going on?");
-            }
-            Log.info("Connection with client closed");
         }
-
     }
     
 }
