@@ -2,6 +2,7 @@ package com.og.jrest.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -39,13 +40,18 @@ public class RequestHandler implements Runnable {
             // Decorate the streams so we can send characters
             // and not just bytes.  Ensure output is flushed
             // after every newline.
-            BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+          //  BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
             
+            InputStream readRequest = socket.getInputStream();
             
+           
             /*this will need manual input or a file to get things. How to test a file??*/
-            String temp = in.readLine();
+            byte[] buf = new byte[4096];
+            readRequest.read(buf);
         
+            String httpPayload = new String(buf, "UTF-8");
+
             Log.debug("....handling client");
             /*
              * DO something with HTTP request. 
