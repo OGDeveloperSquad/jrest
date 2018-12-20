@@ -31,7 +31,7 @@ public class RequestListener {
 			// TODO -- Use ServerSocket to listen on any port you like and wait for a
 			// request to come in, then do something cool with it like hand off the request
 			// to some kind of request handler class
-			ServerSocket listener = new ServerSocket(9091);
+			ServerSocket listener = new ServerSocket(9090);
 			try {
 				Log.info(" Getting new thread for client #." + clientNumber);
 
