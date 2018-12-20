@@ -27,18 +27,12 @@ public class Request {
 	
 	
 	
-	public Request(String httpRequest ) {
+	public Request(String httpRequest ) throws HttpClientErrorException{
 		
 		this.headers = new HashMap<String, String[]>();
-		try {
-			this.parseRequest(httpRequest);
-		} catch (HttpClientErrorException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.errorCode);
-			System.out.println(e.getErrorResponseMessage());
-
-			
-		}
+		
+		this.parseRequest(httpRequest);
+		
 		//for fun
 		Log.debug("New request class instantiated!");
 		
