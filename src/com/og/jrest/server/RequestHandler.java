@@ -43,7 +43,7 @@ public class RequestHandler implements Runnable {
             PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
             
             
-            /*this will need manual input or a file to get things. How to test this?*/
+            /*this will need manual input or a file to get things. How to test a file??*/
             String temp = in.readLine();
         
             Log.debug("....handling client");
