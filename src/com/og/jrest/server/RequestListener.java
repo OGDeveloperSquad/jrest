@@ -35,8 +35,8 @@ public class RequestListener {
 			try {
 				Log.info(" Getting new thread for client #." + clientNumber);
 
-				// Don't daisy-chain things together like this. Makes debugging difficult and
-				// its really hard to read. Generally frowned upon
+				// Don't daisy-chain things together like this. Makes debugging really difficult
+				// and its really hard to read. Universally frowned upon
 				// new Thread(new RequestHandler(listener.accept(), clientNumber)).start();
 
 				Socket socket = listener.accept();

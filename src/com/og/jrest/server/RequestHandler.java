@@ -66,12 +66,12 @@ public class RequestHandler implements Runnable {
 
 			// Read the header lines
 			String line = in.readLine();
-			String httpRaw = line;
+			String httpRaw = line + "\n";
 			while (line != null && line.length() > 0) {
-				httpRaw += line + "\n";
 				line = in.readLine();
+				httpRaw += line + "\n";
 				/*
-				 * Check to see if this line is the Content-Length header, and if so, get the
+				 * Check to see if this line is the 'Content-Length' header, and if so, get the
 				 * content length and save to bodyLength
 				 */
 				if (line.toLowerCase().startsWith("content-length:")) {
@@ -88,7 +88,7 @@ public class RequestHandler implements Runnable {
 			if (bodyLength > 0) {
 				char[] charArray = new char[bodyLength];
 				in.read(charArray, 0, bodyLength);
-				httpRaw += "\n" + new String(charArray);
+				httpRaw += new String(charArray);
 			}
 
 			// Making the request object
