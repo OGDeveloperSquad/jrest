@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.og.jrest.http.Request;
 import com.og.jrest.logging.Log;
 
 /**
@@ -75,9 +74,10 @@ public class RequestHandler implements Runnable {
 				 * Check to see if this line is the Content-Length header, and if so, get the
 				 * content length and save to bodyLength
 				 */
-				if (line.indexOf("Content-Length:") > -1) {
-					bodyLength = new Integer(line.substring(line.indexOf("Content-Length:") + 16, line.length()))
-							.intValue();
+				if (line.toLowerCase().startsWith("content-length:")) {
+					int endOfHeader = line.indexOf(":") + 1;
+					String contentLength = line.substring(endOfHeader, line.length()).trim();
+					bodyLength = Integer.parseInt(contentLength);
 				}
 			}
 
@@ -88,11 +88,11 @@ public class RequestHandler implements Runnable {
 			if (bodyLength > 0) {
 				char[] charArray = new char[bodyLength];
 				in.read(charArray, 0, bodyLength);
-				httpRaw = "\n" + new String(charArray);
+				httpRaw += "\n" + new String(charArray);
 			}
 
 			// Making the request object
-			Request request = new Request(httpRaw);
+			// Request request = new Request(httpRaw);
 
 			// Just echoing back the reqeust for now. This is just for fun until we actually
 			// make it do something lol
