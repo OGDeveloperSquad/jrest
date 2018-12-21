@@ -27,35 +27,38 @@ public class RouteResult {
 
 		// Look at all the methods for the controller
 		for (Method method : methods) {
-			/*
-			 * If the method name matches the action name and the list of parameters is the
-			 * same size, then check to see if the parameters of the method match the
-			 * parameters for this route
-			 */
 			String methodName = method.getName();
 			int paramCount = method.getParameterCount();
-			if (method.getName().equals(actionName) && method.getParameterCount() == this.params.size()) {
-				// Check to see all parameters of the current method match the route
-				Parameter[] methodParams = method.getParameters();
-				for (int i = 0; i < method.getParameterCount(); i++) {
-					Parameter methodParam = methodParams[i];
-					// If the parameters dont match, move on to the next method
-					if (!this.params.get(i).getName().equals(methodParam.getName())) {
-						break;
-					} else {
-						// If the parameters do match, set the type
-						this.params.get(i).setType(methodParam.getClass());
-					}
-					// We've matched all the parameters successfully, return
-					if (i == method.getParameterCount() - 1 && this.params.get(i).equals(methodParam)) {
-						this.action = method;
-						return;
+			if (methodName.equals(actionName) && paramCount == this.params.size()) {
+				// If the current method has no parameters, then we've found our method
+				if (paramCount < 1) {
+					this.action = method;
+				} else {
+					// Check to see if all parameters of the current method match the route
+					Parameter[] methodParams = method.getParameters();
+					for (int i = 0; i < method.getParameterCount(); i++) {
+						Parameter methodParam = methodParams[i];
+						// If the parameters dont match, move on to the next method
+						String methodParamName = methodParam.getName();
+						String routeParamName = this.params.get(i).getName();
+						if (!methodParamName.equals(routeParamName)) {
+							break;
+						} else {
+							// If the parameters do match, set the type
+							this.params.get(i).setType(methodParam.getClass());
+							// We've matched all the parameters successfully, so we've found our method
+							if (i == method.getParameterCount() - 1 && this.params.get(i).equals(methodParam)) {
+								this.action = method;
+							}
+						}
 					}
 				}
 			}
 		}
-		// No method was found, so throw exception up the stack
-		throw new NoSuchMethodException();
+
+		// If no method was found, throw exception up the stack
+		if (this.action == null)
+			throw new NoSuchMethodException();
 	}
 
 	public void setParams(List<ActionParameter> params) {

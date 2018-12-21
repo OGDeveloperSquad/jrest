@@ -15,8 +15,10 @@ public class RouteCollection {
 		RouteResult result = new RouteResult();
 		String[] segments = uri.split("/");
 		for (int i = 0; i < routes.size(); i++) {
-			if (isMatchingRoute(routes.get(i).getSegments(), segments)) {
+			RouteTemplate route = RouteCollection.routes.get(i);
+			if (isMatchingRoute(route.getSegments(), segments)) {
 				result = generateRouteResult(routes.get(i), segments);
+				break;
 			}
 		}
 
