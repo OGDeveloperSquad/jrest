@@ -17,20 +17,11 @@ public class RequestListener {
 
 	public static void main(String[] args) throws IOException {
 		int clientNumber = 0;
-		// Log.info("");
-		// Log.setAllOutput(System.out);
-		// Log.error("");
-		// Log.exception(new Exception());
-		// Log.debug("");
 
 		Log.info("Oh hey the program has begun ");
 
-		// Just listen forever!
 		while (true) {
 			clientNumber++;
-			// TODO -- Use ServerSocket to listen on any port you like and wait for a
-			// request to come in, then do something cool with it like hand off the request
-			// to some kind of request handler class
 			ServerSocket listener = new ServerSocket(9090);
 			try {
 				Log.info(" Getting new thread for client #." + clientNumber);

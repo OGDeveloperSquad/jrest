@@ -1,10 +1,14 @@
 package com.og.jrest.server;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import javax.imageio.ImageIO;
 
 import com.og.jrest.logging.Log;
 
@@ -90,6 +94,10 @@ public class RequestHandler implements Runnable {
 				in.read(charArray, 0, bodyLength);
 				httpRaw += new String(charArray);
 			}
+
+			byte[] bytes = "some strintg".getBytes();
+
+			BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
 
 			// Making the request object
 			// Request request = new Request(httpRaw);

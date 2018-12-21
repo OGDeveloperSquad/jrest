@@ -19,7 +19,8 @@ Therefore I just adopted the package naming scheme of:
 
 
 
-PUT /example/key/value HTTP/1.1
+
+PUT api/example/key/value HTTP/1.1
 Host: www.something.com
 Header: value1,value2
 Header-2: value3
