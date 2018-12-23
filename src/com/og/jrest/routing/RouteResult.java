@@ -38,7 +38,7 @@ public class RouteResult {
 	private void syncParameterTypes(Parameter[] methodParams) {
 		for (int i = 0; i < methodParams.length; i++) {
 			ActionParameter param = this.params.get(i);
-			param.setType(methodParams[i].getClass());
+			param.setType(methodParams[i].getType());
 		}
 	}
 

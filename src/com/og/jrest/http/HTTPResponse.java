@@ -27,21 +27,21 @@ public abstract class HTTPResponse {
 		reasonPhrases.put(200, "OK");
 		reasonPhrases.put(201, "Created");
 		reasonPhrases.put(204, "No Content");
-
 		reasonPhrases.put(304, "Not Modified");
-
 		reasonPhrases.put(400, "Bad Request");
 		reasonPhrases.put(401, "Unauthorized");
 		reasonPhrases.put(403, "Forbidden");
 		reasonPhrases.put(404, "Not Found");
 		reasonPhrases.put(409, "Conflict");
-
 		reasonPhrases.put(500, "Internal Server Error");
 	}
 
 	public HTTPResponse() {
 		this.headers = new HashMap<String, String[]>();
 		this.body = null;
+		this.httpVersion = "HTTP/1.1";
+		this.statusCode = 200;
+		this.reasonPhrase = "OK";
 		// Just for fun
 		Log.debug("Response class instantiated!");
 	}
@@ -106,6 +106,12 @@ public abstract class HTTPResponse {
 		System.arraycopy(body, 0, result, headers.length, body.length);
 
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		String response = this.getReponseLineAndHeaders() + this.body.toString();
+		return response;
 	}
 
 	public abstract void setBody(Object body);

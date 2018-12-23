@@ -29,11 +29,12 @@ public class RequestListener {
 				Log.info(" Getting new thread for client #." + clientNumber);
 
 				Socket socket = listener.accept();
+				listener.close();
 				RequestHandler handler = new RequestHandler(socket, clientNumber);
 				Thread thread = new Thread(handler);
 				thread.start();
 			} finally {
-				listener.close();
+				// listener.close();
 				Log.info("Connection with client #" + clientNumber + " closed");
 			}
 		}

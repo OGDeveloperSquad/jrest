@@ -48,4 +48,9 @@ public class ActionParameter<T> {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("Type: '%s', Value: '%s'", this.type.toString(), this.value.toString());
+	}
+
 }

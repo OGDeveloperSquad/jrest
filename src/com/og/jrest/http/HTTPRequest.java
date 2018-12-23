@@ -81,11 +81,11 @@ public class HTTPRequest {
 
 	@Override
 	public String toString() {
-		String result = String.format("{0} {1} {2}\n", this.verb, this.uri, this.httpVersion);
+		String result = String.format("%s %s %s\n", this.verb, this.uri, this.httpVersion);
 		for (Map.Entry<String, String[]> entry : this.headers.entrySet()) {
 			String header = entry.getKey();
 			String values = String.join(",", entry.getValue());
-			result += String.format("{0}: {1}\n", header, values);
+			result += String.format("%s: %s\n", header, values);
 		}
 
 		result += "\n" + body.toString();

@@ -18,7 +18,7 @@ public class RouteTable {
 		IRouteTemplate route = findRoute(uri);
 		RouteResult result = null;
 		if (route != null) {
-			result = generateRouteResult(route, uri.split("/"));
+			result = generateRouteResult(route, RouteBuilder.splitSegments(uri));
 		}
 
 		return result;
@@ -26,8 +26,7 @@ public class RouteTable {
 
 	public static IRouteTemplate findRoute(String uri) {
 		IRouteTemplate result = null;
-		uri = uri.substring(uri.indexOf("/"));
-		String[] segments = uri.split("/");
+		String[] segments = RouteBuilder.splitSegments("/");
 		for (int i = 0; i < routes.size(); i++) {
 			IRouteTemplate route = RouteTable.routes.get(i);
 			if (isMatchingRoute(route.getSegments(), segments)) {
@@ -54,12 +53,12 @@ public class RouteTable {
 		for (int i = 0; i < segments.length; i++) {
 			String urlSegment = segments[i];
 			String templateSegment = templateSegments[i];
-			if (templateSegment.toLowerCase().equals("{controller}")) {
+			if (RouteBuilder.isControllerSegment(templateSegment)) {
 				result.setController(urlSegment);
-			} else if (templateSegment.toLowerCase().equals("{action}")) {
+			} else if (RouteBuilder.isActionSegment(templateSegment)) {
 				action = urlSegment;
-			} else if (templateSegment.startsWith("{")) {
-				templateSegment = templateSegment.replace("{", "").replace("}", "");
+			} else if (RouteBuilder.isParameterSegment(templateSegment)) {
+				templateSegment = templateSegment.replace("{", "").replace("}", "").replace("?", "");
 				result.addParam(templateSegment, urlSegment);
 			}
 		}

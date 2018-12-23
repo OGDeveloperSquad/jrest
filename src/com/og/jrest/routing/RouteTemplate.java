@@ -26,7 +26,10 @@ public class RouteTemplate implements IRouteTemplate {
 	@Override
 	public String[] getSegments() {
 		String[] array = new String[this.pathSegments.size()];
-		return this.pathSegments.toArray(array);
+		for (int i = 0; i < array.length; i++) {
+			array[i] = this.pathSegments.get(i).getText();
+		}
+		return array;
 	}
 
 	@Override

@@ -40,22 +40,6 @@ public class RequestHandler implements Runnable {
 	 */
 	public void run() {
 		try {
-
-			// Decorate the streams so we can send characters
-			// and not just bytes. Ensure output is flushed
-			// after every newline.
-			// BufferedReader in = new BufferedReader(new
-			// InputStreamReader(this.socket.getInputStream()));
-			// InputStream readRequest = socket.getInputStream();
-			// /*this will need manual input or a file to get things. How to test a file??*/
-			// byte[] buf = new byte[4096];
-			// readRequest.read(buf);
-			//
-			// String httpPayload = new String(buf, "UTF-8");
-
-			/*****************************************************************************************
-			 * How about this instead?
-			 *****************************************************************************************/
 			BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 			OutputStream out = this.socket.getOutputStream();
 
@@ -97,20 +81,25 @@ public class RequestHandler implements Runnable {
 				in.read(charArray, 0, bodyLength);
 				httpRaw += new String(charArray);
 			}
+			if (!httpRaw.startsWith("null")) {
+				// Build the request object
+				HTTPRequest request = new HTTPRequest(httpRaw);
+				// Evaulate the route based on the uri requested
+				RouteResult routeResult = RouteTable.evaluateRoute(request.uri);
+				// Get the controller that was called by the request
+				Controller controller = routeResult.getController();
+				// Give the controller access to the request object
+				controller.request = request;
 
-			HTTPRequest request = new HTTPRequest(httpRaw);
-			RouteResult routeResult = RouteTable.evaluateRoute(request.uri);
-			Controller controller = routeResult.getController();
-			controller.request = request;
+				HTTPResponse response = new TextResponse();
 
-			HTTPResponse response = new TextResponse();
+				if (routeResult.getParams().length > 0) {
+					Object[] params = routeResult.getParams();
+					response = (HTTPResponse) routeResult.getAction().invoke(controller, params);
+				}
 
-			if (routeResult.getParams().length > 0) {
-				Object[] params = routeResult.getParams();
-				response = (HTTPResponse) routeResult.getAction().invoke(controller, params);
+				out.write(response.getBytes());
 			}
-
-			out.write(response.getBytes());
 
 			out.flush();
 			out.close();

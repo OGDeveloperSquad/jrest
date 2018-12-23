@@ -2,6 +2,10 @@ package com.og.jrest.http;
 
 public class TextResponse extends HTTPResponse {
 
+	public TextResponse() {
+		super();
+	}
+
 	@Override
 	public byte[] getBytes() {
 		byte[] headers = this.getReponseLineAndHeaders().getBytes();

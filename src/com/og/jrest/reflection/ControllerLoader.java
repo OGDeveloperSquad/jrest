@@ -36,8 +36,9 @@ public class ControllerLoader {
 
 		// If no method was found, throw exception up the stack
 		if (action == null)
-			throw new NoSuchMethodException();
-
+			throw new NoSuchMethodException(
+					String.format("Unable to load method '%s' in controller '%s' with parameters %s", actionName,
+							controller.getClass().toString(), params.toArray().toString()));
 		return action;
 	}
 
@@ -56,7 +57,7 @@ public class ControllerLoader {
 				// If the parameter names do match, set the type of the parameter
 				// params.get(i).setType(methodParam.getClass());
 				// We've matched all the parameters successfully, so we've found our method
-				if (i == method.getParameterCount() - 1 && params.get(i).equals(methodParam)) {
+				if (i == method.getParameterCount() - 1) {
 					result = true;
 				}
 			}

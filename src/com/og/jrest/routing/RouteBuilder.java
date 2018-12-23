@@ -8,7 +8,7 @@ class RouteBuilder {
 		Log.info("Route '" + routeText + "' has begun its build");
 		IRouteTemplate route = RoutingFactory.newTemplate();
 		// Split the given ruote template text into its constituent segments
-		String[] segments = routeText.split("/");
+		String[] segments = RouteBuilder.splitSegments(routeText);
 		/*
 		 * Add every segment to the route, setting the necessary fields along the way
 		 */
@@ -42,30 +42,36 @@ class RouteBuilder {
 		return route;
 	}
 
-	private static boolean isActionSegment(String segment) {
+	public static String[] splitSegments(String template) {
+		if (template.startsWith("/"))
+			template = template.substring(1);
+		return template.split("/");
+	}
+
+	protected static boolean isActionSegment(String segment) {
 		boolean result = segment.startsWith("{") && segment.endsWith("}");
 		result = result && segment.toLowerCase().contains("action");
 		return result;
 	}
 
-	private static boolean isParameterSegment(String segment) {
+	protected static boolean isParameterSegment(String segment) {
 		return segment.startsWith("{") && segment.endsWith("}") && !isControllerSegment(segment)
 				&& !isActionSegment(segment);
 	}
 
-	private static boolean isControllerSegment(String segment) {
+	protected static boolean isControllerSegment(String segment) {
 		boolean result = segment.startsWith("{") && segment.endsWith("}");
 		result = result && segment.toLowerCase().contains("controller");
 		return result;
 	}
 
-	private static String getDefault(String segment) {
+	protected static String getDefault(String segment) {
 		int start = segment.indexOf("=") + 1;
 		int end = segment.indexOf("}");
 		return segment.substring(start, end);
 	}
 
-	private static boolean specifiesDefault(String segment) {
+	protected static boolean specifiesDefault(String segment) {
 		return segment.contains("=");
 	}
 
