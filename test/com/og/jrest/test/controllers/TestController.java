@@ -1,18 +1,18 @@
 package com.og.jrest.test.controllers;
 
+import com.og.jrest.api.Controller;
+import com.og.jrest.http.HTTPResponse;
+import com.og.jrest.http.TextResponse;
 import com.og.jrest.logging.Log;
 
-public class TestController {
-	public String variable = "empty";
+public class TestController extends Controller {
 
-	public void stuff() {
-		Log.info("Empty parameter stuff method called");
-	}
+	public HTTPResponse testMethod(String id) {
+		Log.info("Controller method 'testMethod' has been invoked");
+		TextResponse response = new TextResponse();
+		response.setBody(this.request.toString());
 
-	public void stuff(String id) {
-
-		Log.info("Success!!!!! Method was invoked with a variable value of " + variable);
-
+		return response;
 	}
 
 }

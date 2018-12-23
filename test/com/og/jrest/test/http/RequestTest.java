@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.og.jrest.http.Request;
+import com.og.jrest.http.HTTPRequest;
 
 class RequestTest {
 
@@ -17,7 +17,7 @@ class RequestTest {
         testRequest = testRequest + "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + 
         		"<string xmlns=\"http://clearforest.com/\">string</string>";
 
-        Request test = new Request(testRequest);
+        HTTPRequest test = new HTTPRequest(testRequest);
         
         //test request line
         assertEquals( "POST", test.verb);
@@ -44,7 +44,7 @@ class RequestTest {
         testRequest = testRequest + "Connection: Keep-Alive\n\n";
         
 
-        Request test = new Request(testRequest);
+        HTTPRequest test = new HTTPRequest(testRequest);
         
         //test request line
         assertEquals( "POST", test.verb);

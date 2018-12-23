@@ -1,16 +1,19 @@
 package com.og.jrest.server;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 
-import javax.imageio.ImageIO;
-
+import com.og.jrest.api.Controller;
+import com.og.jrest.http.HTTPRequest;
+import com.og.jrest.http.HTTPResponse;
+import com.og.jrest.http.TextResponse;
 import com.og.jrest.logging.Log;
+import com.og.jrest.routing.RouteResult;
+import com.og.jrest.routing.RouteTable;
 
 /**
  * This class handles the request received. Implements the Runnable interface so
@@ -54,7 +57,7 @@ public class RequestHandler implements Runnable {
 			 * How about this instead?
 			 *****************************************************************************************/
 			BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-			PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
+			OutputStream out = this.socket.getOutputStream();
 
 			/*
 			 * The way input stream works is kinda dumb, becuase we can only use readLine()
@@ -95,17 +98,19 @@ public class RequestHandler implements Runnable {
 				httpRaw += new String(charArray);
 			}
 
-			byte[] bytes = "some strintg".getBytes();
+			HTTPRequest request = new HTTPRequest(httpRaw);
+			RouteResult routeResult = RouteTable.evaluateRoute(request.uri);
+			Controller controller = routeResult.getController();
+			controller.request = request;
 
-			BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+			HTTPResponse response = new TextResponse();
 
-			// Making the request object
-			// Request request = new Request(httpRaw);
+			if (routeResult.getParams().length > 0) {
+				Object[] params = routeResult.getParams();
+				response = (HTTPResponse) routeResult.getAction().invoke(controller, params);
+			}
 
-			// Just echoing back the reqeust for now. This is just for fun until we actually
-			// make it do something lol
-			String responseHeader = "HTTP/1.1 200 OK \n\n";
-			out.write(responseHeader + httpRaw);
+			out.write(response.getBytes());
 
 			out.flush();
 			out.close();
@@ -113,6 +118,24 @@ public class RequestHandler implements Runnable {
 		} catch (IOException e) {
 			// Use Log.exception for exceptions
 			Log.exception(e);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

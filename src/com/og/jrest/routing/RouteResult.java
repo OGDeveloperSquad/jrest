@@ -2,12 +2,17 @@ package com.og.jrest.routing;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.og.jrest.api.Controller;
+import com.og.jrest.reflection.ActionParameter;
+import com.og.jrest.reflection.ControllerLoader;
+
 public class RouteResult {
 
-	private Class<?> controller;
+	private Controller controller;
 	private Method action;
 	private List<ActionParameter> params;
 
@@ -17,48 +22,24 @@ public class RouteResult {
 		this.params = new LinkedList<>();
 	}
 
-	public void setController(String controllerName) throws ClassNotFoundException {
-		this.controller = Class.forName(controllerName + "Controller");
+	public void setController(String controllerName)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		this.controller = ControllerLoader.loadController(controllerName);
+	}
+
+	public <T> void setAction(String actionName) throws NoSuchMethodException {
+		this.action = ControllerLoader.loadAction(this.controller, actionName, this.params);
+		// Kind of a kluge but whatever
+		this.syncParameterTypes(this.action.getParameters());
+
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> void setAction(String actionName) throws NoSuchMethodException {
-		Method[] methods = this.controller.getDeclaredMethods();
-
-		// Look at all the methods for the controller
-		for (Method method : methods) {
-			String methodName = method.getName();
-			int paramCount = method.getParameterCount();
-			if (methodName.equals(actionName) && paramCount == this.params.size()) {
-				// If the current method has no parameters, then we've found our method
-				if (paramCount < 1) {
-					this.action = method;
-				} else {
-					// Check to see if all parameters of the current method match the route
-					Parameter[] methodParams = method.getParameters();
-					for (int i = 0; i < method.getParameterCount(); i++) {
-						Parameter methodParam = methodParams[i];
-						// If the parameters dont match, move on to the next method
-						String methodParamName = methodParam.getName();
-						String routeParamName = this.params.get(i).getName();
-						if (!methodParamName.equals(routeParamName)) {
-							break;
-						} else {
-							// If the parameters do match, set the type
-							this.params.get(i).setType(methodParam.getClass());
-							// We've matched all the parameters successfully, so we've found our method
-							if (i == method.getParameterCount() - 1 && this.params.get(i).equals(methodParam)) {
-								this.action = method;
-							}
-						}
-					}
-				}
-			}
+	private void syncParameterTypes(Parameter[] methodParams) {
+		for (int i = 0; i < methodParams.length; i++) {
+			ActionParameter param = this.params.get(i);
+			param.setType(methodParams[i].getClass());
 		}
-
-		// If no method was found, throw exception up the stack
-		if (this.action == null)
-			throw new NoSuchMethodException();
 	}
 
 	public void setParams(List<ActionParameter> params) {
@@ -69,11 +50,15 @@ public class RouteResult {
 		this.params.add(new ActionParameter<T>(name, value));
 	}
 
-	public List<ActionParameter> getParams() {
-		return this.params;
+	public Object[] getParams() {
+		List<Object> params = new ArrayList<>();
+		for (ActionParameter param : this.params) {
+			params.add(param.getValue());
+		}
+		return params.toArray();
 	}
 
-	public Class<?> getController() {
+	public Controller getController() {
 		return this.controller;
 	}
 

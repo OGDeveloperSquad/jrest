@@ -12,14 +12,15 @@ import com.og.jrest.logging.Log;
  * @param <T>
  *
  */
-public abstract class Response {
+public abstract class HTTPResponse {
 
-	private String httpVersion;
-	private int statusCode;
-	private String reasonPhrase;
-	private Map<String, String[]> headers;
+	protected String httpVersion;
+	protected int statusCode;
+	protected String reasonPhrase;
+	protected Map<String, String[]> headers;
+	protected Object body;
+	protected static Map<Integer, String> reasonPhrases;
 
-	private static Map<Integer, String> reasonPhrases;
 	static {
 		reasonPhrases = new HashMap<Integer, String>();
 
@@ -38,8 +39,9 @@ public abstract class Response {
 		reasonPhrases.put(500, "Internal Server Error");
 	}
 
-	public Response() {
+	public HTTPResponse() {
 		this.headers = new HashMap<String, String[]>();
+		this.body = null;
 		// Just for fun
 		Log.debug("Response class instantiated!");
 	}
@@ -47,10 +49,8 @@ public abstract class Response {
 	/**
 	 * Set the headers
 	 * 
-	 * @param name
-	 *            the key for the header
-	 * @param values
-	 *            the values for the header
+	 * @param name   the key for the header
+	 * @param values the values for the header
 	 * 
 	 */
 	public void addHeader(String name, String[] values) {
@@ -60,8 +60,7 @@ public abstract class Response {
 	/**
 	 * Set the Http version
 	 * 
-	 * @param version
-	 *            the version of http to have in the response
+	 * @param version the version of http to have in the response
 	 * 
 	 */
 	public void setHttpVersion(String version) {
@@ -71,8 +70,7 @@ public abstract class Response {
 	/**
 	 * Set status code
 	 * 
-	 * @param statusCode
-	 *            status code to set this to
+	 * @param statusCode status code to set this to
 	 * 
 	 */
 	public void setStatusCode(int statusCode) {
@@ -101,6 +99,16 @@ public abstract class Response {
 		return resLineAndHeaders;
 
 	}
+
+	public byte[] concatenateBytes(byte[] headers, byte[] body) {
+		byte[] result = new byte[headers.length + body.length];
+		System.arraycopy(headers, 0, result, 0, headers.length);
+		System.arraycopy(body, 0, result, headers.length, body.length);
+
+		return result;
+	}
+
+	public abstract void setBody(Object body);
 
 	/*
 	 * turn the body of this into an output Stream
