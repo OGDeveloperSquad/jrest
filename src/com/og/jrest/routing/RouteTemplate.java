@@ -8,8 +8,9 @@ public class RouteTemplate implements IRouteTemplate {
 	private List<IPathSegment> pathSegments;
 	private String defaultController = "Default";
 	private String defaultAction = "get";
+	private String name;
 
-	public RouteTemplate() {
+	public RouteTemplate(String name) {
 		this.pathSegments = new LinkedList<>();
 	}
 
@@ -46,6 +47,16 @@ public class RouteTemplate implements IRouteTemplate {
 	public void addSegment(IPathSegment segment) {
 		this.pathSegments.add(segment);
 
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return this.name;
 	}
 
 }

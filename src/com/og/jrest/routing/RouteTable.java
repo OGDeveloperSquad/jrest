@@ -5,6 +5,12 @@ import java.util.List;
 
 import com.og.jrest.logging.Log;
 
+/**
+ * Holds the routes for this application.
+ * 
+ * @author Matthew.Shoemaker
+ *
+ */
 public class RouteTable {
 
 	protected static List<IRouteTemplate> routes;
@@ -13,6 +19,18 @@ public class RouteTable {
 		RouteTable.routes = new LinkedList<>();
 	}
 
+	/**
+	 * Given a uri from a request, will evaluate the route against the route table
+	 * and if it finds a route, will find the controller and action specified by the
+	 * request. Throws exception if no matching route could be found
+	 * 
+	 * @param uri reqeusted route
+	 * @return The controller, method, and list of params requested by the route.
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public static RouteResult evaluateRoute(String uri)
 			throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 		IRouteTemplate route = findRoute(uri);
@@ -24,7 +42,7 @@ public class RouteTable {
 		return result;
 	}
 
-	public static IRouteTemplate findRoute(String uri) {
+	private static IRouteTemplate findRoute(String uri) {
 		IRouteTemplate result = null;
 		String[] segments = RouteBuilder.splitSegments("/");
 		for (int i = 0; i < routes.size(); i++) {
@@ -38,9 +56,9 @@ public class RouteTable {
 		return result;
 	}
 
-	public static void registerRoute(String template) {
+	public static void registerRoute(String name, String template) {
 		Log.info("Registering Route:  '" + template + "'");
-		IRouteTemplate route = RouteBuilder.build(template);
+		IRouteTemplate route = RouteBuilder.build(name, template);
 		RouteTable.routes.add(route);
 		Log.info("Route has been successfully registered\n");
 	}

@@ -16,26 +16,28 @@ import com.og.jrest.routing.RouteTable;
  */
 public class RequestListener {
 
+	public static int openConnections;
+
+	static {
+		RequestListener.openConnections = 0;
+	}
+
 	public static void main(String[] args) throws IOException {
-		int clientNumber = 0;
 
 		Log.info("Building Routes:\n");
-		RouteTable.registerRoute("api/{controller=Test}/{action=testMethod}/{id?}");
+		RouteTable.registerRoute("Default", "api/{controller=Test}/{action=testMethod}/{id?}");
 
 		while (true) {
-			clientNumber++;
 			ServerSocket listener = new ServerSocket(9090);
 			try {
-				Log.info(" Getting new thread for client #." + clientNumber);
-
 				Socket socket = listener.accept();
 				listener.close();
-				RequestHandler handler = new RequestHandler(socket, clientNumber);
+				RequestHandler handler = new RequestHandler(socket);
 				Thread thread = new Thread(handler);
+				Log.info("Request received, starting new thread.");
 				thread.start();
 			} finally {
-				// listener.close();
-				Log.info("Connection with client #" + clientNumber + " closed");
+				listener.close();
 			}
 		}
 	}

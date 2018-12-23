@@ -1,5 +1,11 @@
 package com.og.jrest.routing;
 
+/**
+ * Implementation of a path segment.
+ * 
+ * @author Matthew.Shoemaker
+ *
+ */
 class PathSegment implements IPathSegment {
 
 	private String text;
@@ -14,6 +20,12 @@ class PathSegment implements IPathSegment {
 		}
 	}
 
+	@Override
+	public void setOptional(boolean isOptional) {
+		this.optional = isOptional;
+	}
+
+	@Override
 	public boolean isOptional() {
 		return this.optional;
 	}

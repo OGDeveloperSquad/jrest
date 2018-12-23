@@ -14,9 +14,4 @@ public class TextResponse extends HTTPResponse {
 		return this.concatenateBytes(headers, body);
 	}
 
-	@Override
-	public void setBody(Object body) {
-		this.body = body;
-	}
-
 }

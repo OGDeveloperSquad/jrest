@@ -23,7 +23,6 @@ public abstract class HTTPResponse {
 
 	static {
 		reasonPhrases = new HashMap<Integer, String>();
-
 		reasonPhrases.put(200, "OK");
 		reasonPhrases.put(201, "Created");
 		reasonPhrases.put(204, "No Content");
@@ -114,10 +113,16 @@ public abstract class HTTPResponse {
 		return response;
 	}
 
-	public abstract void setBody(Object body);
+	public void setBody(Object body) {
+		this.body = body;
+	}
 
-	/*
-	 * turn the body of this into an output Stream
+	/**
+	 * Convert this into an array of bytes representing the HTTP response message
+	 * that will be sent back to the web client.
+	 * 
+	 * @return the array of bytes that will be streamed back to the web client as a
+	 *         fully formed HTTP response.
 	 */
 	public abstract byte[] getBytes();
 }
