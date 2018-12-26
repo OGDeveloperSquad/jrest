@@ -1,7 +1,7 @@
 package com.og.jrest.http;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is a model for the http response sent back to the end user.
@@ -12,105 +12,16 @@ import java.util.Map;
  */
 public abstract class HTTPResponse {
 
-	protected String httpVersion;
-	protected int statusCode;
-	protected String reasonPhrase;
-	protected Map<String, String[]> headers;
+	protected HTTPVersion httpVersion;
+	protected HTTPResponseCode responseCode;
+	protected List<HTTPHeader> headers;
 	protected Object body;
-	protected static Map<Integer, String> reasonPhrases;
-
-	static {
-		reasonPhrases = new HashMap<Integer, String>();
-		reasonPhrases.put(200, "OK");
-		reasonPhrases.put(201, "Created");
-		reasonPhrases.put(204, "No Content");
-		reasonPhrases.put(304, "Not Modified");
-		reasonPhrases.put(400, "Bad Request");
-		reasonPhrases.put(401, "Unauthorized");
-		reasonPhrases.put(403, "Forbidden");
-		reasonPhrases.put(404, "Not Found");
-		reasonPhrases.put(409, "Conflict");
-		reasonPhrases.put(500, "Internal Server Error");
-	}
 
 	public HTTPResponse() {
-		this.headers = new HashMap<String, String[]>();
+		this.headers = new ArrayList<>();
 		this.body = null;
-		this.httpVersion = "HTTP/1.1";
-		this.statusCode = 200;
-		this.reasonPhrase = "OK";
-	}
-
-	/**
-	 * Set the headers
-	 * 
-	 * @param name   the key for the header
-	 * @param values the values for the header
-	 * 
-	 */
-	public void addHeader(String name, String[] values) {
-		this.headers.put(name, values);
-	}
-
-	/**
-	 * Set the Http version
-	 * 
-	 * @param version the version of http to have in the response
-	 * 
-	 */
-	public void setHttpVersion(String version) {
-		this.httpVersion = version;
-	}
-
-	/**
-	 * Set status code
-	 * 
-	 * @param statusCode status code to set this to
-	 * 
-	 */
-	public void setStatusCode(int statusCode) {
-		this.statusCode = statusCode;
-		this.reasonPhrase = reasonPhrases.get(statusCode);
-	}
-
-	protected String getReponseLineAndHeaders() {
-
-		// stringify res line
-		String resLineAndHeaders = this.httpVersion + " " + this.statusCode + " " + this.reasonPhrase + "\n";
-		// stringify headers
-		for (String key : this.headers.keySet()) {
-			resLineAndHeaders = resLineAndHeaders + key + ": ";
-			String[] values = this.headers.get(key);
-			for (int i = 0; i < values.length; i++) {
-				resLineAndHeaders = resLineAndHeaders + values[i];
-				if (i != (values.length - 1)) {
-					resLineAndHeaders = resLineAndHeaders + ", ";
-				}
-			}
-			resLineAndHeaders = resLineAndHeaders + "\n";
-		}
-		// add empty line at the end
-		resLineAndHeaders = resLineAndHeaders + "\n";
-		return resLineAndHeaders;
-
-	}
-
-	public byte[] concatenateBytes(byte[] headers, byte[] body) {
-		byte[] result = new byte[headers.length + body.length];
-		System.arraycopy(headers, 0, result, 0, headers.length);
-		System.arraycopy(body, 0, result, headers.length, body.length);
-
-		return result;
-	}
-
-	@Override
-	public String toString() {
-		String response = this.getReponseLineAndHeaders() + this.body.toString();
-		return response;
-	}
-
-	public void setBody(Object body) {
-		this.body = body;
+		this.httpVersion = HTTPVersion.HTTP11;
+		this.responseCode = new HTTPResponseCode(200);
 	}
 
 	/**
@@ -121,4 +32,88 @@ public abstract class HTTPResponse {
 	 *         fully formed HTTP response.
 	 */
 	public abstract byte[] getBytes();
+
+	/**
+	 * Set the headers
+	 * 
+	 * @param key    the key for the header
+	 * @param values the values for the header
+	 * 
+	 */
+	public void addHeader(String key, String[] values) {
+		this.headers.add(new HTTPHeader(key, values));
+	}
+
+	/**
+	 * Set the Http version
+	 * 
+	 * @param version the version of http to have in the response
+	 * 
+	 */
+	public void setHttpVersion(HTTPVersion version) {
+		this.httpVersion = version;
+	}
+
+	/**
+	 * Set status code
+	 * 
+	 * @param statusCode status code to set this to
+	 * 
+	 */
+	public void setStatusCode(int statusCode) {
+		this.responseCode = new HTTPResponseCode(statusCode);
+	}
+
+	/**
+	 * Convenient method for subclasses to concatenate the byte arrays for the body
+	 * and the headers/responseline. Concatenating primitive arrays is weirdly
+	 * difficult to do.
+	 * 
+	 * @param headers byte array for the response line and headers
+	 * @param body    byte array for the response body
+	 * @return byte array with headers array and body array concatenated together
+	 */
+	public byte[] concatenateBytes(byte[] headers, byte[] body) {
+		byte[] result = new byte[headers.length + body.length];
+		System.arraycopy(headers, 0, result, 0, headers.length);
+		System.arraycopy(body, 0, result, headers.length, body.length);
+
+		return result;
+	}
+
+	/**
+	 * Set the body of this response message.
+	 * 
+	 * @param body
+	 */
+	public void setBody(Object body) {
+		this.body = body;
+	}
+
+	@Override
+	public String toString() {
+		String response = this.getReponseLineAndHeaders();
+		if (this.body != null)
+			response += this.body.toString();
+		return response;
+	}
+
+	/**
+	 * Returns the response line and headers as they would appear in the HTTP
+	 * response message, appended with a blank line to separate the body and the
+	 * headers.
+	 * 
+	 * @return response line and headers formatted as HTTP response message
+	 */
+	protected String getReponseLineAndHeaders() {
+		// stringify res line
+		String resLineAndHeaders = this.httpVersion + " " + this.responseCode + System.lineSeparator();
+		// stringify headers
+		for (HTTPHeader header : this.headers) {
+			resLineAndHeaders += header.toString() + System.lineSeparator();
+		}
+		// add empty line at the end
+		resLineAndHeaders += System.lineSeparator();
+		return resLineAndHeaders;
+	}
 }

@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 
 import com.og.jrest.api.Controller;
+import com.og.jrest.http.ErrorResponse;
 import com.og.jrest.http.HTTPRequest;
 import com.og.jrest.http.HTTPResponse;
 import com.og.jrest.http.TextResponse;
@@ -38,7 +40,7 @@ public class RequestHandler implements Runnable {
 	 * response to the web client.
 	 */
 	public void run() {
-		// Declare this output stream here so we can access in the catch blocks and
+		// Declare the output stream here so we can access it in the catch blocks and
 		// return error HTTPResponse
 		OutputStream out = null;
 		try {
@@ -63,10 +65,10 @@ public class RequestHandler implements Runnable {
 
 			// Read the header lines
 			String line = in.readLine();
-			String httpRaw = line + "\n";
+			String httpRaw = line + System.lineSeparator();
 			while (line != null && line.length() > 0) {
 				line = in.readLine();
-				httpRaw += line + "\n";
+				httpRaw += line + System.lineSeparator();
 				/*
 				 * Check to see if this line is the 'Content-Length' header, and if so, get the
 				 * content length and save to bodyLength
@@ -116,44 +118,52 @@ public class RequestHandler implements Runnable {
 				out.write(response.getBytes());
 			}
 
-			out.flush();
-			out.close();
 			this.socket.close();
 
-//		} catch (IOException e) {
-//			/*
-//			 * TODO : Return an ErrorResponse to the web client for each one of these cases
-//			 */
-//			// Use this.log.exception for exceptions
-//			this.log.exception(e);
-//		} catch (ClassNotFoundException e) {
-//			this.log.exception(e);
-//		} catch (NoSuchMethodException e) {
-//			this.log.exception(e);
-//		} catch (InstantiationException e) {
-//			this.log.exception(e);
-//		} catch (IllegalAccessException e) {
-//			this.log.exception(e);
-//		} catch (IllegalArgumentException e) {
-//			this.log.exception(e);
-//		} catch (InvocationTargetException e) {
-//			this.log.exception(e);
-
-		} catch (Exception e) {
-			// Just a catchall for 500 response erros
+		} catch (IOException e) {
+			this.sendErrorResponse(out, 500);
 			this.log.exception(e);
-			try {
-				if (out != null)
-					out.write("HTTP/1.1 500 Internal Server Error".getBytes());
-				else
-					this.log.error("Could not send response to client. Null Output Stream after exception.");
-			} catch (IOException e1) {
-				this.log.exception(e1);
-			}
+		} catch (ClassNotFoundException e) {
+			this.sendErrorResponse(out, 404);
+			this.log.exception(e);
+		} catch (NoSuchMethodException e) {
+			this.sendErrorResponse(out, 404);
+			this.log.exception(e);
+		} catch (InstantiationException e) {
+			this.sendErrorResponse(out, 404);
+			this.log.exception(e);
+		} catch (IllegalAccessException e) {
+			this.sendErrorResponse(out, 403);
+			this.log.exception(e);
+		} catch (IllegalArgumentException e) {
+			this.sendErrorResponse(out, 500);
+			this.log.exception(e);
+		} catch (InvocationTargetException e) {
+			this.sendErrorResponse(out, 500);
+			this.log.exception(e);
+		} catch (Exception e) {
+			this.sendErrorResponse(out, 500);
+			this.log.exception(e);
 		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				this.log.exception(e);
+			}
 			// Connection has ended, reduce the counter
 			RequestListener.openConnections--;
-			this.log.info("Connection Closed. " + RequestListener.openConnections + " connections are still open.\n");
+			this.log.info("Connection Closed. " + RequestListener.openConnections + " connections are still open."
+					+ System.lineSeparator());
+		}
+	}
+
+	private void sendErrorResponse(OutputStream out, int responseCode) {
+		HTTPResponse errorResponse = new ErrorResponse(responseCode);
+		try {
+			out.write(errorResponse.getBytes());
+			out.flush();
+		} catch (IOException e) {
+			this.log.exception(e);
 		}
 	}
 

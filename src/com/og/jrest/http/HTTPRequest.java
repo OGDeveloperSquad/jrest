@@ -26,22 +26,48 @@ public class HTTPRequest {
 		this.parseRequest(httpRequest);
 	}
 
+	/**
+	 * Get the uri for this HTTP request.
+	 * 
+	 * @return uri string for this HTTP request
+	 */
 	public String getUri() {
 		return this.uri;
 	}
 
+	/**
+	 * Get the verb for this HTTP request.
+	 * 
+	 * @return HTTPVerb for this HTTP request
+	 */
 	public HTTPVerb getVerb() {
 		return this.verb;
 	}
 
+	/**
+	 * Get the HTTP version of this request.
+	 * 
+	 * @return HTTPVersion of this request
+	 */
 	public HTTPVersion getVersion() {
 		return this.httpVersion;
 	}
 
+	/**
+	 * Returns a list of HTTPHeader object containing all of the headers for this
+	 * request.
+	 * 
+	 * @return list of headers for this request
+	 */
 	public List<HTTPHeader> getHeaders() {
 		return this.headers;
 	}
 
+	/**
+	 * Returns the body of this HTTP request.
+	 * 
+	 * @return body of this HTTP request
+	 */
 	public String getBody() {
 		return this.body;
 	}
@@ -52,8 +78,10 @@ public class HTTPRequest {
 		for (HTTPHeader header : this.headers) {
 			result += header.toString() + System.lineSeparator();
 		}
-
-		result += System.lineSeparator() + body.toString();
+		// Insert space between headers and body
+		result += System.lineSeparator();
+		if (this.body != null)
+			result += this.body.toString();
 
 		return result;
 	}
@@ -68,19 +96,18 @@ public class HTTPRequest {
 	private void parseRequest(String httpRequest) {
 		Scanner request = new Scanner(httpRequest);
 
-		// parse request line assuming format request-method-name request-URI
-		// HTTP-version
+		// parse request line assuming format 'verb uri version\n'
 		this.verb = HTTPVerb.valueOf(request.next());
 		this.uri = request.next();
 		this.httpVersion = HTTPVersion.fromString(request.next());
-
-		// Consume line separator
+		// Consume line separator \n
 		request.nextLine();
 
-		// parse request headers into map
+		// Add each header to the list
 		String headerLine = request.nextLine();
 		while (!headerLine.equals("")) {
-			this.headers.add(new HTTPHeader(headerLine));
+			HTTPHeader header = new HTTPHeader(headerLine);
+			this.headers.add(header);
 			headerLine = request.nextLine();
 		}
 
@@ -89,7 +116,11 @@ public class HTTPRequest {
 			body = body + request.nextLine();
 		}
 
-		this.body = body;
+		// If there was no body, set this.body to null
+		if (body.length() > 0)
+			this.body = body;
+		else
+			this.body = null;
 
 		request.close();
 	}

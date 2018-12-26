@@ -18,14 +18,13 @@ abstract class BaseLogger implements ILogger {
 	 * Given an Exception, build a string containing the text that will be logged
 	 * for the exception.
 	 * 
-	 * @param ex
-	 *            exception for which a string message will be built
+	 * @param ex exception for which a string message will be built
 	 * @return message explaining the exception for logging purposes
 	 */
 	protected String formatExceptionMessage(Exception ex) {
-		StringBuilder result = new StringBuilder(ex.getMessage() + "\n");
+		StringBuilder result = new StringBuilder(ex.getMessage() + System.lineSeparator());
 		for (StackTraceElement element : ex.getStackTrace()) {
-			result.append("\t" + element.toString() + "\n");
+			result.append("\t" + element.toString() + System.lineSeparator());
 		}
 
 		return result.toString();

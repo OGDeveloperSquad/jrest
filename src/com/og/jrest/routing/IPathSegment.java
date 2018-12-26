@@ -9,8 +9,8 @@ package com.og.jrest.routing;
 public interface IPathSegment {
 
 	/**
-	 * Reports whether this parameter was specified in the template as optional.
-	 * This only applies to parameter segments, as actions or controllers cannot be
+	 * Reports whether this segment was specified in the template as optional. This
+	 * only applies to parameter segments, as actions or controllers cannot be
 	 * optional, and static segments are never optional.
 	 * 
 	 * @return Whether the parameter is optional

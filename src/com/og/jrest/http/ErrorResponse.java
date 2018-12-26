@@ -1,21 +1,20 @@
 package com.og.jrest.http;
 
-public class TextResponse extends HTTPResponse {
+public class ErrorResponse extends HTTPResponse {
 
-	public TextResponse() {
+	public ErrorResponse(int statusCode) {
 		super();
+		this.responseCode = new HTTPResponseCode(statusCode);
 	}
 
 	@Override
 	public byte[] getBytes() {
 		byte[] headers = this.getReponseLineAndHeaders().getBytes();
 		byte[] result = headers;
-		// If there is a body, concatenate to the headers
-		if (this.body != null) {
+		if (body != null) {
 			byte[] body = ((String) this.body).getBytes();
-			result = this.concatenateBytes(headers, body);
+			this.concatenateBytes(headers, body);
 		}
-
 		return result;
 	}
 
