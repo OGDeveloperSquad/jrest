@@ -4,13 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 
 import com.og.jrest.api.Controller;
 import com.og.jrest.http.HTTPRequest;
 import com.og.jrest.http.HTTPResponse;
 import com.og.jrest.http.TextResponse;
+import com.og.jrest.logging.ILogger;
 import com.og.jrest.logging.Log;
 import com.og.jrest.routing.RouteResult;
 import com.og.jrest.routing.RouteTable;
@@ -26,23 +26,26 @@ import com.og.jrest.routing.RouteTable;
 public class RequestHandler implements Runnable {
 
 	private Socket socket;
+	private ILogger log;
 
 	public RequestHandler(Socket socket) {
 		this.socket = socket;
+		this.log = Log.getInstance();
 	}
 
 	/**
-	 * Services this thread's client by first sending the client a welcome message
-	 * then repeatedly reading strings and sending back the capitalized version of
-	 * the string.
+	 * Asynchronously handles a request, processing it and returning the appropriate
+	 * response to the web client.
 	 */
 	public void run() {
-		// Declare this out here so we can access in the catch blocks
-		OutputStream out;
+		// Declare this output stream here so we can access in the catch blocks and
+		// return error HTTPResponse
+		OutputStream out = null;
 		try {
 			// New Connection opened, update the counter
 			RequestListener.openConnections++;
-			Log.info("New connection opened. " + RequestListener.openConnections + " connections are currently open.");
+			this.log.info(
+					"New connection opened. " + RequestListener.openConnections + " connections are currently open.");
 			BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 			out = this.socket.getOutputStream();
 
@@ -88,7 +91,7 @@ public class RequestHandler implements Runnable {
 				// Build the request object
 				HTTPRequest request = new HTTPRequest(httpRaw);
 				// Evaulate the route based on the uri requested
-				RouteResult routeResult = RouteTable.evaluateRoute(request.uri);
+				RouteResult routeResult = RouteTable.evaluateRoute(request.getUri());
 				// Get the controller that was called by the request
 				Controller controller = routeResult.getController();
 				// Give the controller access to the request object we built
@@ -116,31 +119,41 @@ public class RequestHandler implements Runnable {
 			out.flush();
 			out.close();
 			this.socket.close();
-		} catch (IOException e) {
-			/*
-			 * TODO : Return an ErrorResponse to the web client for each one of these cases
-			 */
-			// Use Log.exception for exceptions
-			Log.exception(e);
-		} catch (ClassNotFoundException e) {
-			Log.exception(e);
-		} catch (NoSuchMethodException e) {
-			Log.exception(e);
-		} catch (InstantiationException e) {
-			Log.exception(e);
-		} catch (IllegalAccessException e) {
-			Log.exception(e);
-		} catch (IllegalArgumentException e) {
-			Log.exception(e);
-		} catch (InvocationTargetException e) {
-			Log.exception(e);
+
+//		} catch (IOException e) {
+//			/*
+//			 * TODO : Return an ErrorResponse to the web client for each one of these cases
+//			 */
+//			// Use this.log.exception for exceptions
+//			this.log.exception(e);
+//		} catch (ClassNotFoundException e) {
+//			this.log.exception(e);
+//		} catch (NoSuchMethodException e) {
+//			this.log.exception(e);
+//		} catch (InstantiationException e) {
+//			this.log.exception(e);
+//		} catch (IllegalAccessException e) {
+//			this.log.exception(e);
+//		} catch (IllegalArgumentException e) {
+//			this.log.exception(e);
+//		} catch (InvocationTargetException e) {
+//			this.log.exception(e);
+
 		} catch (Exception e) {
 			// Just a catchall for 500 response erros
-			Log.exception(e);
+			this.log.exception(e);
+			try {
+				if (out != null)
+					out.write("HTTP/1.1 500 Internal Server Error".getBytes());
+				else
+					this.log.error("Could not send response to client. Null Output Stream after exception.");
+			} catch (IOException e1) {
+				this.log.exception(e1);
+			}
 		} finally {
 			// Connection has ended, reduce the counter
 			RequestListener.openConnections--;
-			Log.info("Connection Closed. " + RequestListener.openConnections + " connections are still open.");
+			this.log.info("Connection Closed. " + RequestListener.openConnections + " connections are still open.\n");
 		}
 	}
 

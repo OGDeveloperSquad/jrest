@@ -1,10 +1,8 @@
 package com.og.jrest.http;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-
-import com.og.jrest.logging.Log;
 
 /**
  * This class is a model of an HTTP message. Contains things like Headers,
@@ -17,80 +15,83 @@ import com.og.jrest.logging.Log;
  */
 public class HTTPRequest {
 
-	public String verb;
-	public String uri;
-	public String httpVersion;
-	public Map<String, String[]> headers;
-	public String body;
+	private HTTPVerb verb;
+	private HTTPVersion httpVersion;
+	private List<HTTPHeader> headers;
+	private String uri;
+	private String body;
 
 	public HTTPRequest(String httpRequest) {
-
-		this.headers = new HashMap<String, String[]>();
+		this.headers = new ArrayList<>();
 		this.parseRequest(httpRequest);
-		Log.debug("New request class instantiated!");
-
 	}
 
-	/*
-	 * 
-	 * Parses a given string http request
-	 * 
-	 * @param httpRequest
-	 * 
-	 */
-	private void parseRequest(String httpRequest) {
-		Scanner req = new Scanner(httpRequest);
+	public String getUri() {
+		return this.uri;
+	}
 
-		// parse request line assuming format request-method-name request-URI
-		// HTTP-version
-		this.verb = req.next();
-		this.uri = req.next();
-		this.httpVersion = req.next();
+	public HTTPVerb getVerb() {
+		return this.verb;
+	}
 
-		req.nextLine();
+	public HTTPVersion getVersion() {
+		return this.httpVersion;
+	}
 
-		// parse request headers into map
-		String headerLine = req.nextLine();
-		while (!headerLine.equals("")) {
+	public List<HTTPHeader> getHeaders() {
+		return this.headers;
+	}
 
-			int colonI = headerLine.indexOf(":");
-			String name = headerLine.substring(0, colonI);
-			String vals = headerLine.substring(colonI + 1);
-
-			String[] values = vals.split(",");
-
-			// trim values of whitespaces
-			for (int i = 0; i < values.length; i++) {
-				values[i] = values[i].trim();
-			}
-
-			this.headers.put(name, values);
-
-			headerLine = req.nextLine();
-		}
-
-		String body = "";
-		while (req.hasNext()) {
-			body = body + req.nextLine();
-		}
-
-		this.body = body;
-
-		req.close();
+	public String getBody() {
+		return this.body;
 	}
 
 	@Override
 	public String toString() {
-		String result = String.format("%s %s %s\n", this.verb, this.uri, this.httpVersion);
-		for (Map.Entry<String, String[]> entry : this.headers.entrySet()) {
-			String header = entry.getKey();
-			String values = String.join(",", entry.getValue());
-			result += String.format("%s: %s\n", header, values);
+		String result = String.format("%s %s %s%s", this.verb, this.uri, this.httpVersion, System.lineSeparator());
+		for (HTTPHeader header : this.headers) {
+			result += header.toString() + System.lineSeparator();
 		}
 
-		result += "\n" + body.toString();
+		result += System.lineSeparator() + body.toString();
 
 		return result;
+	}
+
+	/*
+	 * Given a raw HTTP request, parses through the text and populates the fields of
+	 * this according to the contents of the request.
+	 * 
+	 * @param httpRequest raw Http request text
+	 * 
+	 */
+	private void parseRequest(String httpRequest) {
+		Scanner request = new Scanner(httpRequest);
+
+		// parse request line assuming format request-method-name request-URI
+		// HTTP-version
+		this.verb = HTTPVerb.valueOf(request.next());
+		this.uri = request.next();
+		this.httpVersion = HTTPVersion.fromString(request.next());
+
+		// Consume line separator
+		request.nextLine();
+
+		// parse request headers into map
+		String headerLine = request.nextLine();
+		while (!headerLine.equals("")) {
+			this.headers.add(new HTTPHeader(headerLine));
+			headerLine = request.nextLine();
+		}
+
+		String body = "";
+		while (request.hasNext()) {
+			body = body + request.nextLine();
+		}
+
+		this.body = body;
+
+		request.close();
 	}
 
 }

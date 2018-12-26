@@ -3,8 +3,6 @@ package com.og.jrest.http;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.og.jrest.logging.Log;
-
 /**
  * This class is a model for the http response sent back to the end user.
  * 
@@ -41,8 +39,6 @@ public abstract class HTTPResponse {
 		this.httpVersion = "HTTP/1.1";
 		this.statusCode = 200;
 		this.reasonPhrase = "OK";
-		// Just for fun
-		Log.debug("Response class instantiated!");
 	}
 
 	/**
