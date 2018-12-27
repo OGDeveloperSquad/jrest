@@ -151,4 +151,34 @@ public class StandardLogger extends BaseLogger {
 		this.errorLogHandler.close();
 	}
 
+	@Override
+	public void error(Error error) {
+		this.errorLogHandler.log(this.formatErrorMessage(error));
+	}
+
+	@Override
+	public void throwable(Throwable throwable) {
+		this.throwableLogHandler.log(this.formatThrowableMessage(throwable));
+	}
+
+	@Override
+	public void setThrowableOutput(OutputStream output) {
+		this.throwableLogHandler.setOutput(output);
+	}
+
+	@Override
+	public void setThrowableOutput(File file) throws IOException {
+		this.throwableLogHandler.setOutput(file);
+	}
+
+	@Override
+	public void setThrowableToDefaultOutput() {
+		this.throwableLogHandler.setToDefaultOutput();
+	}
+
+	@Override
+	public void setThrowableOutput(File file, boolean append) throws IOException {
+		this.setThrowableOutput(file, append);
+	}
+
 }

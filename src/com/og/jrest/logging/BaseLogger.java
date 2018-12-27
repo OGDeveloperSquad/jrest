@@ -6,6 +6,7 @@ abstract class BaseLogger implements ILogger {
 	protected BaseLogHandler errorLogHandler;
 	protected BaseLogHandler debugLogHandler;
 	protected BaseLogHandler infoLogHandler;
+	protected BaseLogHandler throwableLogHandler;
 
 	public BaseLogger() {
 		this.exceptionLogHandler = LoggerFactory.getExceptionLogger();
@@ -27,6 +28,23 @@ abstract class BaseLogger implements ILogger {
 			result.append("\t" + element.toString() + System.lineSeparator());
 		}
 
+		return result.toString();
+	}
+
+	protected String formatErrorMessage(Error error) {
+		StringBuilder result = new StringBuilder(error.getMessage() + System.lineSeparator());
+		for (StackTraceElement element : error.getStackTrace()) {
+			result.append("\t" + element.toString() + System.lineSeparator());
+		}
+
+		return result.toString();
+	}
+
+	protected String formatThrowableMessage(Throwable throwable) {
+		StringBuilder result = new StringBuilder(throwable.getMessage() + System.lineSeparator());
+		for (StackTraceElement element : throwable.getStackTrace()) {
+			result.append("\t" + element.toString() + System.lineSeparator());
+		}
 		return result.toString();
 	}
 

@@ -146,6 +146,7 @@ public class RequestHandler implements Runnable {
 			this.log.exception(e);
 		} catch (Throwable e) {
 			this.sendErrorResponse(out, 500);
+			this.log.throwable(e);
 		} finally {
 			try {
 				out.close();
