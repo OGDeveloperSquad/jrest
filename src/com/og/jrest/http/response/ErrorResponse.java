@@ -1,4 +1,7 @@
-package com.og.jrest.http;
+package com.og.jrest.http.response;
+
+import com.og.jrest.http.Header;
+import com.og.jrest.http.ResponseCode;
 
 /**
  * Subclass of HTTPResponse used to send an Error response back to the web
@@ -8,12 +11,12 @@ package com.og.jrest.http;
  * @author matthew.shoemaker
  *
  */
-public class ErrorResponse extends HTTPResponse {
+public class ErrorResponse extends BaseResponse {
 
 	public ErrorResponse(int statusCode) {
 		super();
-		this.responseCode = new HTTPResponseCode(statusCode);
-		this.headers.add(new HTTPHeader("Content-Type: text/html"));
+		this.responseCode = new ResponseCode(statusCode);
+		this.headers.add(new Header("Content-Type: text/html"));
 		this.body = this.getErrorBody(statusCode);
 	}
 

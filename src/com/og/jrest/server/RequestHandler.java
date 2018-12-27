@@ -73,7 +73,7 @@ public class RequestHandler implements Runnable {
 				 * Check to see if this line is the 'Content-Length' header, and if so, get the
 				 * content length and save to bodyLength
 				 */
-				if (line.toLowerCase().startsWith("content-length:")) {
+				if (line != null && line.toLowerCase().startsWith("content-length:")) {
 					int endOfHeader = line.indexOf(":") + 1;
 					String contentLength = line.substring(endOfHeader, line.length()).trim();
 					bodyLength = Integer.parseInt(contentLength);
@@ -165,9 +165,9 @@ public class RequestHandler implements Runnable {
 	 * Creates an ErrorResponse object with the given error code and writes it to
 	 * the given output stream.
 	 * 
-	 * @param out          output stream to which the response will be written
+	 * @param out       output stream to which the response will be written
 	 * @param errorCode the response code with which to instantiate the error
-	 *                     response
+	 *                  response
 	 */
 	private void sendErrorResponse(OutputStream out, int errorCode) {
 		BaseResponse errorResponse = new ErrorResponse(errorCode);

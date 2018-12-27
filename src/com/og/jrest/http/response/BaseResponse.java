@@ -1,7 +1,11 @@
-package com.og.jrest.http;
+package com.og.jrest.http.response;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.og.jrest.http.Header;
+import com.og.jrest.http.ResponseCode;
+import com.og.jrest.http.Version;
 
 /**
  * This class is a model for the http response sent back to the end user.
@@ -9,18 +13,18 @@ import java.util.List;
  * @author matthew.shoemaker
  *
  */
-public abstract class HTTPResponse {
+public abstract class BaseResponse {
 
-	protected HTTPVersion httpVersion;
-	protected HTTPResponseCode responseCode;
-	protected List<HTTPHeader> headers;
+	protected Version httpVersion;
+	protected ResponseCode responseCode;
+	protected List<Header> headers;
 	protected Object body;
 
-	public HTTPResponse() {
+	public BaseResponse() {
 		this.headers = new ArrayList<>();
 		this.body = null;
-		this.httpVersion = HTTPVersion.HTTP11;
-		this.responseCode = new HTTPResponseCode(200);
+		this.httpVersion = Version.HTTP11;
+		this.responseCode = new ResponseCode(200);
 	}
 
 	/**
@@ -40,7 +44,7 @@ public abstract class HTTPResponse {
 	 * 
 	 */
 	public void addHeader(String key, String[] values) {
-		this.headers.add(new HTTPHeader(key, values));
+		this.headers.add(new Header(key, values));
 	}
 
 	/**
@@ -49,7 +53,7 @@ public abstract class HTTPResponse {
 	 * @param version the version of http to have in the response
 	 * 
 	 */
-	public void setHttpVersion(HTTPVersion version) {
+	public void setHttpVersion(Version version) {
 		this.httpVersion = version;
 	}
 
@@ -60,7 +64,7 @@ public abstract class HTTPResponse {
 	 * 
 	 */
 	public void setStatusCode(int statusCode) {
-		this.responseCode = new HTTPResponseCode(statusCode);
+		this.responseCode = new ResponseCode(statusCode);
 	}
 
 	/**
@@ -108,7 +112,7 @@ public abstract class HTTPResponse {
 		// stringify res line
 		String resLineAndHeaders = this.httpVersion + " " + this.responseCode + System.lineSeparator();
 		// stringify headers
-		for (HTTPHeader header : this.headers) {
+		for (Header header : this.headers) {
 			resLineAndHeaders += header.toString() + System.lineSeparator();
 		}
 		// add empty line at the end

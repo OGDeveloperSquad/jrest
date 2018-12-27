@@ -178,7 +178,7 @@ public class StandardLogger extends BaseLogger {
 
 	@Override
 	public void setThrowableOutput(File file, boolean append) throws IOException {
-		this.setThrowableOutput(file, append);
+		this.throwableLogHandler.setOutput(file, append);
 	}
 
 }
