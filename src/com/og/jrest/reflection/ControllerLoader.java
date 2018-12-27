@@ -2,16 +2,40 @@ package com.og.jrest.reflection;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import org.reflections.Reflections;
 
 import com.og.jrest.api.Controller;
 
 public class ControllerLoader {
 
-	public static Controller loadController(String name)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		Class<?> controller = Class.forName(name + "Controller");
-		return (Controller) controller.newInstance();
+	public static Controller loadController(String name) throws InstantiationException, IllegalAccessException {
+		// Initialize to null so the result will be null if no class found
+		Controller controller = null;
+		// Name of the package containing all of the controllers
+		String packageName = "com.og.jrest.test.controllers";
+		// Open a reflection utility for the package containing the controllers
+		Reflections reflections = new Reflections(packageName);
+
+		// Get all classes in the package that extend the Controller class
+		Set<Class<? extends Controller>> allClasses = reflections.getSubTypesOf(Controller.class);
+
+		// Iterate over the controllers and look for one with a matching name to the one
+		// requested
+		Iterator<Class<? extends Controller>> iterator = allClasses.iterator();
+		while (iterator.hasNext()) {
+			Class<? extends Controller> clazz = iterator.next();
+			String className = clazz.getName();
+			// If find a match. instantiate it and return the instance
+			if (className.equalsIgnoreCase(String.format("%s.%scontroller", packageName, name))) {
+				controller = clazz.newInstance();
+			}
+		}
+
+		return controller;
 	}
 
 	public static Method loadAction(Controller controller, String actionName, List<ActionParameter> params)

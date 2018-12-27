@@ -14,9 +14,10 @@ public interface IRouteResult {
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
+	 * @throws Exception
 	 */
 	void setController(String controllerName)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException;
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, Exception;
 
 	/**
 	 * Given the name of a method belonging to this.controller and matches the list

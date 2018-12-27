@@ -34,7 +34,11 @@ public class RouteResult implements IRouteResult {
 	@Override
 	public void setController(String controllerName)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		this.controller = ControllerLoader.loadController(controllerName);
+		Controller controller = ControllerLoader.loadController(controllerName);
+		if (controller != null)
+			this.controller = ControllerLoader.loadController(controllerName);
+		else
+			throw new ClassNotFoundException(String.format("Unable to find %scontroller", controllerName));
 	}
 
 	@Override

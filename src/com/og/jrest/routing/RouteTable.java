@@ -31,8 +31,8 @@ public class RouteTable {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public static RouteResult evaluateRoute(String uri)
-			throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+	public static RouteResult evaluateRoute(String uri) throws ClassNotFoundException, NoSuchMethodException,
+			InstantiationException, IllegalAccessException, Exception {
 		IRouteTemplate route = findRoute(uri);
 		RouteResult result = null;
 		if (route != null) {
@@ -64,7 +64,8 @@ public class RouteTable {
 	}
 
 	private static RouteResult generateRouteResult(IRouteTemplate route, String[] segments)
-			throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+			throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException,
+			Exception {
 		RouteResult result = new RouteResult();
 		String[] templateSegments = route.getSegments();
 		String action = null;
