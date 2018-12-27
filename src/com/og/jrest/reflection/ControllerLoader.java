@@ -81,7 +81,7 @@ public class ControllerLoader {
 			String methodName = method.getName();
 			int paramCount = method.getParameterCount();
 			// If the method names match and the number of parameters match, proceed
-			if (methodName.equals(actionName) && paramCount == params.size()) {
+			if (methodName.equalsIgnoreCase(actionName) && paramCount == params.size()) {
 				// If the current method has no parameters, then we've found our method
 				if (paramCount < 1) {
 					action = method;

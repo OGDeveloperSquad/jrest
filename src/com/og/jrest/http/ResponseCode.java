@@ -16,7 +16,7 @@ public class ResponseCode {
 	private String reasonPhrase;
 
 	/**
-	 * Repository to hold response codes and their corresponding reason phrases.
+	 * Repository for response codes and their corresponding reason phrases.
 	 */
 	static Map<Integer, String> statusCodeMap;
 

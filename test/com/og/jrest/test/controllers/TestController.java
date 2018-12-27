@@ -7,8 +7,8 @@ import com.og.jrest.logging.Log;
 
 public class TestController extends Controller {
 
-	public BaseResponse testMethod(String id) {
-		Log.info("Controller method 'testMethod' has been invoked");
+	public BaseResponse actionTest(String id) {
+		Log.info("Controller method 'actionTest' has been invoked");
 		TextResponse response = new TextResponse();
 		response.setBody(this.request.toString());
 

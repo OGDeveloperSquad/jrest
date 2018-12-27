@@ -46,7 +46,7 @@ public class ActionParameter<T> {
 		}
 		if (obj instanceof ActionParameter) {
 			ActionParameter param = (ActionParameter) obj;
-			if (param.getClass().equals(this.type) && param.getName().equals(this.name)
+			if (param.getClass().equals(this.type) && param.getName().equalsIgnoreCase(this.name)
 					&& param.value.equals(this.value))
 				return true;
 		}
@@ -56,7 +56,9 @@ public class ActionParameter<T> {
 
 	@Override
 	public String toString() {
-		return String.format("Type: '%s', Value: '%s'", this.type.toString(), this.value.toString());
+		String type = this.type == null ? "null" : this.type.toString();
+		String value = this.value.toString();
+		return "('" + type + "', " + value + ")";
 	}
 
 }
