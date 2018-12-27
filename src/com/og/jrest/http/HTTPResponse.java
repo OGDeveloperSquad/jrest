@@ -7,7 +7,6 @@ import java.util.List;
  * This class is a model for the http response sent back to the end user.
  * 
  * @author matthew.shoemaker
- * @param <T>
  *
  */
 public abstract class HTTPResponse {

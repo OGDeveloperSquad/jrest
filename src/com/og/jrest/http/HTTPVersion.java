@@ -1,5 +1,11 @@
 package com.og.jrest.http;
 
+/**
+ * Enum to represent supported HTTP Versions.
+ * 
+ * @author matthew.shoemaker
+ *
+ */
 public enum HTTPVersion {
 
 	HTTP11 {

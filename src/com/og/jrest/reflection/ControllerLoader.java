@@ -34,7 +34,10 @@ public class ControllerLoader {
 	public static Controller loadController(String name) throws InstantiationException, IllegalAccessException {
 		// Initialize to null so the result will be null if no class found
 		Controller controller = null;
-		// Name of the package containing all of the controllers
+		/*
+		 * TODO When configuration tools are complete, load the package name from the
+		 * ConfigurationManager instead of hard-coding
+		 */
 		String packageName = "com.og.jrest.test.controllers";
 		// Open a reflection utility for the package containing the controllers
 		Reflections reflections = new Reflections(packageName);

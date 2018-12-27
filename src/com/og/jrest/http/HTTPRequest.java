@@ -100,7 +100,7 @@ public class HTTPRequest {
 		this.verb = HTTPVerb.valueOf(request.next());
 		this.uri = request.next();
 		this.httpVersion = HTTPVersion.fromString(request.next());
-		// Consume line separator \n
+		// Consume line separator '\n'
 		request.nextLine();
 
 		// Add each header to the list

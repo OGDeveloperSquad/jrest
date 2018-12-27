@@ -3,12 +3,22 @@ package com.og.jrest.http;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is a model for an HTTP response code. It contains the response
+ * code and its corresponding reason phrase.
+ * 
+ * @author matthew.shoemaker
+ *
+ */
 public class HTTPResponseCode {
 
 	private int statusCode;
 	private String reasonPhrase;
 
-	private static Map<Integer, String> statusCodeMap;
+	/**
+	 * Repository to hold response codes and their corresponding reason phrases.
+	 */
+	static Map<Integer, String> statusCodeMap;
 
 	static {
 		statusCodeMap = new HashMap<Integer, String>();

@@ -44,6 +44,12 @@ public class ActionParameter<T> {
 				return true;
 			}
 		}
+		if (obj instanceof ActionParameter) {
+			ActionParameter param = (ActionParameter) obj;
+			if (param.getClass().equals(this.type) && param.getName().equals(this.name)
+					&& param.value.equals(this.value))
+				return true;
+		}
 
 		return false;
 	}

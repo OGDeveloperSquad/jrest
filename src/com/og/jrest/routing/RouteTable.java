@@ -42,6 +42,14 @@ public class RouteTable {
 		return result;
 	}
 
+	/**
+	 * Given a uri, will return the corresponding route template. If no template is
+	 * found, null is returned.
+	 * 
+	 * @param uri the uri from the http request
+	 * @return The route template corresponding to the given uri. If no route
+	 *         exists, null is returned.
+	 */
 	private static IRouteTemplate findRoute(String uri) {
 		IRouteTemplate result = null;
 		String[] segments = RouteBuilder.splitSegments("/");
@@ -56,6 +64,13 @@ public class RouteTable {
 		return result;
 	}
 
+	/**
+	 * Given a template name and a route template, registers the template with the
+	 * routing engine for use in the application.
+	 * 
+	 * @param name     the name of the route
+	 * @param template the string template to describe the route
+	 */
 	public static void registerRoute(String name, String template) {
 		Log.info("Registering Route:  '" + template + "'");
 		IRouteTemplate route = RouteBuilder.build(name, template);
@@ -63,6 +78,19 @@ public class RouteTable {
 		Log.info("Route has been successfully registered\n");
 	}
 
+	/**
+	 * Given an array of uri segments and its corresponding template, will attempt
+	 * to generate a RouteResult based on the template provided.
+	 * 
+	 * @param route    the route against which the segments will be evaluated
+	 * @param segments the segments of a requested uri
+	 * @return a RouteResult if the route is able to be generated.
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws Exception
+	 */
 	private static RouteResult generateRouteResult(IRouteTemplate route, String[] segments)
 			throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException,
 			Exception {
@@ -91,6 +119,15 @@ public class RouteTable {
 
 	}
 
+	/**
+	 * Given an array of segments with template data, will report whether the uri
+	 * segments are a match for the given route.
+	 * 
+	 * @param templateSegments the segments of a route template
+	 * @param urlSegments      the segments of a requested uri
+	 * @return true if the uri segments are a match for the given route template.
+	 *         False otherwise
+	 */
 	private static boolean isMatchingRoute(String[] templateSegments, String[] urlSegments) {
 		boolean result = true;
 		if (templateSegments.length == urlSegments.length) {

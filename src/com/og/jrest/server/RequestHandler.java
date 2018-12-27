@@ -89,6 +89,7 @@ public class RequestHandler implements Runnable {
 				in.read(charArray, 0, bodyLength);
 				httpRaw += new String(charArray);
 			}
+			// Don't really know why some phantom requests appear with "null" but whatever
 			if (!httpRaw.startsWith("null")) {
 				// Build the request object
 				HTTPRequest request = new HTTPRequest(httpRaw);
@@ -160,8 +161,16 @@ public class RequestHandler implements Runnable {
 		}
 	}
 
-	private void sendErrorResponse(OutputStream out, int responseCode) {
-		HTTPResponse errorResponse = new ErrorResponse(responseCode);
+	/**
+	 * Creates an ErrorResponse object with the given error code and writes it to
+	 * the given output stream.
+	 * 
+	 * @param out          output stream to which the response will be written
+	 * @param errorCode the response code with which to instantiate the error
+	 *                     response
+	 */
+	private void sendErrorResponse(OutputStream out, int errorCode) {
+		HTTPResponse errorResponse = new ErrorResponse(errorCode);
 		try {
 			out.write(errorResponse.getBytes());
 			out.flush();

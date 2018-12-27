@@ -1,5 +1,11 @@
 package com.og.jrest.http;
 
+/**
+ * Enum to represent supported HTTP verbs.
+ * 
+ * @author matthew.shoemaker
+ *
+ */
 public enum HTTPVerb {
 
 	GET {

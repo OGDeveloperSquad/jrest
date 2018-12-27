@@ -11,8 +11,9 @@ import com.og.jrest.http.HTTPRequest;
  */
 public abstract class Controller {
 
+	/**
+	 * The request object that was received from the web client calling the api.
+	 */
 	public HTTPRequest request;
-
-	public String reflectionTest;
 
 }
