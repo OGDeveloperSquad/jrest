@@ -13,15 +13,15 @@ import java.util.Scanner;
  * @author Hussain
  *
  */
-public class HTTPRequest {
+public class Request {
 
-	private HTTPVerb verb;
-	private HTTPVersion httpVersion;
-	private List<HTTPHeader> headers;
+	private Verb verb;
+	private Version httpVersion;
+	private List<Header> headers;
 	private String uri;
 	private String body;
 
-	public HTTPRequest(String httpRequest) {
+	public Request(String httpRequest) {
 		this.headers = new ArrayList<>();
 		this.parseRequest(httpRequest);
 	}
@@ -40,7 +40,7 @@ public class HTTPRequest {
 	 * 
 	 * @return HTTPVerb for this HTTP request
 	 */
-	public HTTPVerb getVerb() {
+	public Verb getVerb() {
 		return this.verb;
 	}
 
@@ -49,7 +49,7 @@ public class HTTPRequest {
 	 * 
 	 * @return HTTPVersion of this request
 	 */
-	public HTTPVersion getVersion() {
+	public Version getVersion() {
 		return this.httpVersion;
 	}
 
@@ -59,7 +59,7 @@ public class HTTPRequest {
 	 * 
 	 * @return list of headers for this request
 	 */
-	public List<HTTPHeader> getHeaders() {
+	public List<Header> getHeaders() {
 		return this.headers;
 	}
 
@@ -75,7 +75,7 @@ public class HTTPRequest {
 	@Override
 	public String toString() {
 		String result = String.format("%s %s %s%s", this.verb, this.uri, this.httpVersion, System.lineSeparator());
-		for (HTTPHeader header : this.headers) {
+		for (Header header : this.headers) {
 			result += header.toString() + System.lineSeparator();
 		}
 		// Insert space between headers and body
@@ -97,16 +97,16 @@ public class HTTPRequest {
 		Scanner request = new Scanner(httpRequest);
 
 		// parse request line assuming format 'verb uri version\n'
-		this.verb = HTTPVerb.valueOf(request.next());
+		this.verb = Verb.valueOf(request.next());
 		this.uri = request.next();
-		this.httpVersion = HTTPVersion.fromString(request.next());
+		this.httpVersion = Version.fromString(request.next());
 		// Consume line separator '\n'
 		request.nextLine();
 
 		// Add each header to the list
 		String headerLine = request.nextLine();
 		while (!headerLine.equals("")) {
-			HTTPHeader header = new HTTPHeader(headerLine);
+			Header header = new Header(headerLine);
 			this.headers.add(header);
 			headerLine = request.nextLine();
 		}

@@ -6,7 +6,7 @@ package com.og.jrest.http;
  * @author matthew.shoemaker
  *
  */
-public enum HTTPVersion {
+public enum Version {
 
 	HTTP11 {
 		@Override
@@ -36,8 +36,8 @@ public enum HTTPVersion {
 	 * @param version HTTP Version as it appears in the request
 	 * @return enum corresponding to the version
 	 */
-	public static HTTPVersion fromString(String version) {
-		HTTPVersion enumVersion = null;
+	public static Version fromString(String version) {
+		Version enumVersion = null;
 		// Why wont eclipse let me indent the cases -___-
 		switch (version) {
 		case "HTTP/1.1":

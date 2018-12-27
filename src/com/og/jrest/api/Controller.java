@@ -1,6 +1,6 @@
 package com.og.jrest.api;
 
-import com.og.jrest.http.HTTPRequest;
+import com.og.jrest.http.Request;
 
 /**
  * This is the base class for all Controller classes implemented by the client.
@@ -14,6 +14,6 @@ public abstract class Controller {
 	/**
 	 * The request object that was received from the web client calling the api.
 	 */
-	public HTTPRequest request;
+	public Request request;
 
 }

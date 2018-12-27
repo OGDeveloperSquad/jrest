@@ -8,10 +8,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 
 import com.og.jrest.api.Controller;
-import com.og.jrest.http.ErrorResponse;
-import com.og.jrest.http.HTTPRequest;
-import com.og.jrest.http.HTTPResponse;
-import com.og.jrest.http.TextResponse;
+import com.og.jrest.http.Request;
+import com.og.jrest.http.response.BaseResponse;
+import com.og.jrest.http.response.ErrorResponse;
+import com.og.jrest.http.response.TextResponse;
 import com.og.jrest.logging.ILogger;
 import com.og.jrest.logging.Log;
 import com.og.jrest.routing.RouteResult;
@@ -92,7 +92,7 @@ public class RequestHandler implements Runnable {
 			// Don't really know why some phantom requests appear with "null" but whatever
 			if (!httpRaw.startsWith("null")) {
 				// Build the request object
-				HTTPRequest request = new HTTPRequest(httpRaw);
+				Request request = new Request(httpRaw);
 				// Evaulate the route based on the uri requested
 				RouteResult routeResult = RouteTable.evaluateRoute(request.getUri());
 				// Get the controller that was called by the request
@@ -101,7 +101,7 @@ public class RequestHandler implements Runnable {
 				controller.request = request;
 
 				// Plain response in case the controller doesnt return a nice response
-				HTTPResponse response = new TextResponse();
+				BaseResponse response = new TextResponse();
 
 				/*
 				 * Invoke the action specified by the request. If/else just checks whether it
@@ -109,9 +109,9 @@ public class RequestHandler implements Runnable {
 				 */
 				if (routeResult.getParameters().length > 0) {
 					Object[] params = routeResult.getParameters();
-					response = (HTTPResponse) routeResult.getAction().invoke(controller, params);
+					response = (BaseResponse) routeResult.getAction().invoke(controller, params);
 				} else {
-					response = (HTTPResponse) routeResult.getAction().invoke(controller);
+					response = (BaseResponse) routeResult.getAction().invoke(controller);
 				}
 
 				// We've done our job and gotten the response back from the api client, so let's
@@ -170,7 +170,7 @@ public class RequestHandler implements Runnable {
 	 *                     response
 	 */
 	private void sendErrorResponse(OutputStream out, int errorCode) {
-		HTTPResponse errorResponse = new ErrorResponse(errorCode);
+		BaseResponse errorResponse = new ErrorResponse(errorCode);
 		try {
 			out.write(errorResponse.getBytes());
 			out.flush();

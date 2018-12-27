@@ -7,7 +7,7 @@ package com.og.jrest.http;
  * @author matthew.shoemaker
  *
  */
-public class HTTPHeader {
+public class Header {
 
 	private String key;
 
@@ -23,7 +23,7 @@ public class HTTPHeader {
 	 * 
 	 * @param headerLine raw HTTP line declaring a header
 	 */
-	public HTTPHeader(String headerLine) {
+	public Header(String headerLine) {
 		int colonIndex = headerLine.indexOf(KEY_SEPARATOR);
 		String key = headerLine.substring(0, colonIndex);
 		String vals = headerLine.substring(colonIndex + 2);
@@ -38,7 +38,7 @@ public class HTTPHeader {
 	 * @param key    the key of this header
 	 * @param values the values of this header
 	 */
-	public HTTPHeader(String key, String[] values) {
+	public Header(String key, String[] values) {
 		this.key = key;
 		this.values = values;
 	}

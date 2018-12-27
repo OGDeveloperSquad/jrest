@@ -6,7 +6,7 @@ package com.og.jrest.http;
  * @author matthew.shoemaker
  *
  */
-public enum HTTPVerb {
+public enum Verb {
 
 	GET {
 		@Override
