@@ -56,7 +56,7 @@ public class ActionParameter<T> {
 
 	@Override
 	public String toString() {
-		String type = this.type == null ? "null" : this.type.toString();
+		String type = this.type == null ? "null" : this.type.getSimpleName();
 		String value = this.value.toString();
 		return "('" + type + "', " + value + ")";
 	}
