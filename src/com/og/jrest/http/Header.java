@@ -26,10 +26,10 @@ public class Header {
 	public Header(String headerLine) {
 		int colonIndex = headerLine.indexOf(KEY_SEPARATOR);
 		String key = headerLine.substring(0, colonIndex);
-		String vals = headerLine.substring(colonIndex + 2);
+		String values = headerLine.substring(colonIndex + 1).trim();
 
 		this.key = key;
-		this.values = vals.split(VALUE_SEPARATOR);
+		this.values = this.splitValues(values);
 	}
 
 	/**
@@ -41,6 +41,17 @@ public class Header {
 	public Header(String key, String[] values) {
 		this.key = key;
 		this.values = values;
+	}
+
+	/**
+	 * Constructor to initialize this header with the given key and values.
+	 * 
+	 * @param key    the key of this header
+	 * @param values the values of this header
+	 */
+	public Header(String key, String values) {
+		this.key = key;
+		this.values = this.splitValues(values);
 	}
 
 	/**
@@ -75,6 +86,17 @@ public class Header {
 		String key = this.getKey();
 		String values = this.getValuesJoined();
 		return String.format("%s%s %s", key, KEY_SEPARATOR, values);
+	}
+
+	/**
+	 * Given a string of header values as they would appear in a raw HTTP message,
+	 * will return an array of values as strings.
+	 * 
+	 * @param values string of values as they would appear in a raw HTTP message
+	 * @return array of header values as strings
+	 */
+	private String[] splitValues(String values) {
+		return values.split(VALUE_SEPARATOR);
 	}
 
 }

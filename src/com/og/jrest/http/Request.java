@@ -21,6 +21,12 @@ public class Request {
 	private String uri;
 	private String body;
 
+	/**
+	 * Constructor to parse through a raw HTTP request and populate the fields of
+	 * this with the information contained in the request.
+	 * 
+	 * @param httpRequest raw HTTP request
+	 */
 	public Request(String httpRequest) {
 		this.headers = new ArrayList<>();
 		this.parseRequest(httpRequest);
