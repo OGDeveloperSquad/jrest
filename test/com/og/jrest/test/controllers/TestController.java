@@ -24,7 +24,7 @@ public class TestController extends Controller {
 	}
 
 	@Get
-	public Response actionTestGet(int id) {
+	public Response actionTestGet(String id) {
 		return getResponse("actionTestGet", "GET", id);
 	}
 
