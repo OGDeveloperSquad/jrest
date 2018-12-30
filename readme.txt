@@ -1,3 +1,20 @@
+**********************************
+**          IMPORTANT           **
+**********************************
+In order for the reflection necessary to inoke the controllers at runtime, you must do the following:
+In eclipse, navigate to:
+	Window
+		Preferences
+			Java
+				Compiler
+	
+Then check the box at the bottom that says:
+	"Store information about method parameters (usable via reflection)"
+	
+Done!	
+
+
+
 
 **************************
 ** Example HTTP Message **
