@@ -9,7 +9,7 @@ import java.net.Socket;
 
 import com.og.jrest.api.Controller;
 import com.og.jrest.http.Request;
-import com.og.jrest.http.response.BaseResponse;
+import com.og.jrest.http.response.Response;
 import com.og.jrest.http.response.ErrorResponse;
 import com.og.jrest.http.response.TextResponse;
 import com.og.jrest.logging.ILogger;
@@ -101,7 +101,7 @@ public class RequestHandler implements Runnable {
 				controller.request = request;
 
 				// Plain response in case the controller doesnt return a nice response
-				BaseResponse response = new TextResponse();
+				Response response = new TextResponse();
 
 				/*
 				 * Invoke the action specified by the request. If/else just checks whether it
@@ -109,9 +109,9 @@ public class RequestHandler implements Runnable {
 				 */
 				if (routeResult.getParameters().length > 0) {
 					Object[] params = routeResult.getParameters();
-					response = (BaseResponse) routeResult.getAction().invoke(controller, params);
+					response = (Response) routeResult.getAction().invoke(controller, params);
 				} else {
-					response = (BaseResponse) routeResult.getAction().invoke(controller);
+					response = (Response) routeResult.getAction().invoke(controller);
 				}
 
 				// We've done our job and gotten the response back from the api client, so let's
@@ -170,7 +170,7 @@ public class RequestHandler implements Runnable {
 	 *                  response
 	 */
 	private void sendErrorResponse(OutputStream out, int errorCode) {
-		BaseResponse errorResponse = new ErrorResponse(errorCode);
+		Response errorResponse = new ErrorResponse(errorCode);
 		try {
 			out.write(errorResponse.getBytes());
 			out.flush();

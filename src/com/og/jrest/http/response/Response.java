@@ -13,14 +13,14 @@ import com.og.jrest.http.Version;
  * @author matthew.shoemaker
  *
  */
-public abstract class BaseResponse {
+public abstract class Response {
 
 	protected Version httpVersion;
 	protected ResponseCode responseCode;
 	protected List<Header> headers;
 	protected Object body;
 
-	public BaseResponse() {
+	public Response() {
 		this.headers = new ArrayList<>();
 		this.body = null;
 		this.httpVersion = Version.HTTP11;

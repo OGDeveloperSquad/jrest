@@ -17,7 +17,7 @@ public class Log {
 	private static ILogger logger;
 
 	static {
-		Log.logger = LoggerFactory.getLogger();
+		Log.logger = Logger.getLogger();
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class Log {
 	 * @return New instance of an implementation of the ILogger interface.
 	 */
 	public static ILogger getInstance() {
-		return LoggerFactory.getLogger();
+		return Logger.getLogger();
 	}
 
 	/**

@@ -54,9 +54,10 @@ public class RouteResult implements IRouteResult {
 	 * parameter based on the names of the parameters in the action method. Bit of a
 	 * kluge but whatever.
 	 * 
-	 * @param methodParams the parameters of the action method
+	 * @param methodParams
+	 *            the parameters of the action method
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void syncParameterTypes(Parameter[] methodParams) {
 		for (int i = 0; i < methodParams.length; i++) {
 			ActionParameter param = this.params.get(i);
@@ -72,7 +73,7 @@ public class RouteResult implements IRouteResult {
 	@Override
 	public Object[] getParameters() {
 		List<Object> params = new ArrayList<>();
-		for (ActionParameter param : this.params) {
+		for (ActionParameter<?> param : this.params) {
 			params.add(param.getValue());
 		}
 		return params.toArray();

@@ -11,7 +11,7 @@ import com.og.jrest.http.ResponseCode;
  * @author matthew.shoemaker
  *
  */
-public class ErrorResponse extends BaseResponse {
+public class ErrorResponse extends Response {
 
 	public ErrorResponse(int statusCode) {
 		super();

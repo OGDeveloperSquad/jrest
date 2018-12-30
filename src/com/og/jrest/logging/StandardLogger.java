@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class StandardLogger extends BaseLogger {
+public class StandardLogger extends Logger {
 
 	public StandardLogger() {
 		super();

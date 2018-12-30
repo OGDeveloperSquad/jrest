@@ -1,24 +1,7 @@
-Java package naming conventions are to use kind of a "reverse web site name".
-For example, "com.domain_name.some_package"
-Therefore I just adopted the package naming scheme of:
 
-"com.og.jrest.your_package_name"
-
-	Oracle docs here:
-	https://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html
-	
-
-**Do not use System.out or System.err anywhere in the program**
-	We have a logging framework implemented, so always use one of these instead:
-		Log.info, 
-		Log.debug, 
-		Log.error, 
-		Log.exception
-
-
-
-
-
+**************************
+** Example HTTP Message **
+**************************
 
 PUT api/example/key/value HTTP/1.1
 Host: www.something.com
@@ -35,11 +18,45 @@ Cookie: cookie1=value&cook
 }
 
 
-HTTP/1.1 200 OK
-
-HTTP/1.1 404 NOT FOUND
 
 
+***********************************
+**    Notes on response types    **
+***********************************
+
+	XML:
+		- The API implementer will build the XML, but this is likely how they will do it
+			- https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
+		- Constructor will simply accept a Document object
+			- Should overload to have constructor for string as well
+	
+	IMAGES:
+		- This will be helpful:
+			- BufferedImage image = ImageIO.read(new ByteArrayInputStream(bytes));
+			- https://stackoverflow.com/questions/25086868/how-to-send-images-through-sockets-in-java
+			- Piece of cake. All images will be read as BufferedImage, then will be converted to byte array 
+			  during response, where we can set the image type to jpg, png, gif, etc.
+		- Constructors will simply accept a BufferedImage object. 
+			- The file type will be set by us when we send the response (in the Content-Type header)
+		- I think an ImageResponse abstract base class may be helpful. It should extend Response and then
+		  all the specific image response types will implement it. Like PNGResponse, JPGResponse, GIFResponse
+	
+	JSON:
+		- Very simple. Just use "JSONParser" and "JSONObject"
+		- There will be at least 2 Constructors for this one
+			- One will accept a JSONObject, the other will accept a JSONArray
+			- Maybe overload to have another constructor for a string
+	
+	Response Types:
+		- HTMLResponse
+		- TextResponse
+		- XMLResponse
+		- JSONResponse
+		- PNGResponse
+		- JPGResponse
+		- GIFResponse
+		- PDFResponse
+		- This should be enough for now. We can expand later or as needed
 
 
 

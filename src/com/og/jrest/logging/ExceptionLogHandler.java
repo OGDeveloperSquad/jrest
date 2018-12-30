@@ -6,7 +6,7 @@ package com.og.jrest.logging;
  * @author Matthew.Shoemaker
  *
  */
-class ExceptionLogHandler extends BaseLogHandler {
+class ExceptionLogHandler extends LogHandler {
 
 	protected ExceptionLogHandler() {
 		super();

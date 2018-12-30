@@ -6,7 +6,7 @@ package com.og.jrest.logging;
  * @author Matthew.Shoemaker
  *
  */
-class DebugLogHandler extends BaseLogHandler {
+class DebugLogHandler extends LogHandler {
 
 	protected DebugLogHandler() {
 		super();

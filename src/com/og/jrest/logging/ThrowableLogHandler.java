@@ -1,6 +1,6 @@
 package com.og.jrest.logging;
 
-public class ThrowableLogHandler extends BaseLogHandler {
+public class ThrowableLogHandler extends LogHandler {
 
 	public ThrowableLogHandler() {
 		super();
