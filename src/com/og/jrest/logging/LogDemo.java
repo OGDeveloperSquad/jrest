@@ -11,7 +11,7 @@ public class LogDemo {
 		 * To instantiate use ILogger and Log.getInstance() This will typically be used
 		 * as a private instance variable within classes
 		 */
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 
 		// There are 4 different logging levels to use at your discretion
 		log.debug("Some message that will be logged");
@@ -42,7 +42,7 @@ public class LogDemo {
 		log.setExceptionOutput(new File("another/path/to/some/file.txt")); // NOTE: this can throw IOException
 
 		/*
-		 * You can also set logging outputs back to their default output state.
+		 * You can set logging outputs back to their default output state.
 		 */
 
 		// Set ALL log levels to their default state
@@ -54,21 +54,23 @@ public class LogDemo {
 		log.setInfoToDefaultOutput();
 
 		/*
-		 * If you don't need to use the logger extensively for a class or you just don't
-		 * need to customize it as heavily, then you can use the static logging methods
-		 * to save time and efficiency.
-		 */
-		Log.error("Some message");
-		Log.exception(new Exception("pass some thrown exception into this"));
-		Log.info("message");
-		Log.debug("another message");
-
-		/*
 		 * You can also use the static logger to write to a specific file or output
 		 * stream.
 		 */
 		Log.error("Error message", System.err);
 		Log.error("Error message", new File("path/to/the/file.txt"));
+
+		/*
+		 * If you don't need to use the logger extensively for a class or you just don't
+		 * need to customize it as heavily, then you can use the static logging methods
+		 * to save time and efficiency.
+		 */
+		Log.error("Some message");
+		Log.error(new Error("pass some error into this"));
+		Log.exception(new Exception("pass some thrown exception into this"));
+		Log.exception(new Throwable("use this as a catchall if necessary"));
+		Log.info("message");
+		Log.debug("another message");
 
 	}
 

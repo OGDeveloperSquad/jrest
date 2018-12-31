@@ -1,6 +1,6 @@
 package com.og.jrest.http.response;
 
-public class TextResponse extends BaseResponse {
+public class TextResponse extends Response {
 
 	public TextResponse() {
 		super();

@@ -13,7 +13,7 @@ import java.io.PrintWriter;
  * @author Matthew.Shoemaker
  *
  */
-abstract class BaseLogHandler implements AutoCloseable {
+abstract class LogWriter implements AutoCloseable {
 
 	/**
 	 * The stream to which all logging output will be written.
@@ -41,7 +41,7 @@ abstract class BaseLogHandler implements AutoCloseable {
 	 * Default constructor for loggers. Subclasses should call this constructor in
 	 * addition to any work they do in their own constructors.
 	 */
-	protected BaseLogHandler() {
+	protected LogWriter() {
 		this.setToDefaultOutput();
 	}
 
