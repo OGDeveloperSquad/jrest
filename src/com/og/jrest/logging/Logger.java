@@ -1,25 +1,26 @@
 package com.og.jrest.logging;
 
-abstract class BaseLogger implements ILogger {
+abstract class Logger implements ILogger {
 
-	protected BaseLogHandler exceptionLogHandler;
-	protected BaseLogHandler errorLogHandler;
-	protected BaseLogHandler debugLogHandler;
-	protected BaseLogHandler infoLogHandler;
-	protected BaseLogHandler throwableLogHandler;
+	protected LogWriter exceptionLogWriter;
+	protected LogWriter errorLogWriter;
+	protected LogWriter debugLogWriter;
+	protected LogWriter infoLogWriter;
+	protected LogWriter throwableLogWriter;
 
-	public BaseLogger() {
-		this.exceptionLogHandler = LoggerFactory.getExceptionLogger();
-		this.errorLogHandler = LoggerFactory.getErrorLogger();
-		this.debugLogHandler = LoggerFactory.getDebugLogger();
-		this.infoLogHandler = LoggerFactory.getInfoLogger();
+	public Logger() {
+		this.exceptionLogWriter = Log.getExceptionLogger();
+		this.errorLogWriter = Log.getErrorLogger();
+		this.debugLogWriter = Log.getDebugLogger();
+		this.infoLogWriter = Log.getInfoLogger();
 	}
 
 	/**
 	 * Given an Exception, build a string containing the text that will be logged
 	 * for the exception.
 	 * 
-	 * @param ex exception for which a string message will be built
+	 * @param ex
+	 *            exception for which a string message will be built
 	 * @return message explaining the exception for logging purposes
 	 */
 	protected String formatExceptionMessage(Exception ex) {

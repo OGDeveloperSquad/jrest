@@ -12,148 +12,148 @@ public class DefaultLogger extends Logger {
 
 	@Override
 	public void exception(Throwable ex) {
-		this.exceptionLogHandler.log(ExceptionLogWriter.formatExceptionMessage(ex));
+		this.exceptionLogWriter.log(ExceptionLogWriter.formatExceptionMessage(ex));
 	}
 
 	@Override
 	public void error(String message) {
-		this.errorLogHandler.log(message);
+		this.errorLogWriter.log(message);
 	}
 
 	@Override
 	public void debug(String message) {
-		this.debugLogHandler.log(message);
+		this.debugLogWriter.log(message);
 	}
 
 	@Override
 	public void info(String message) {
-		this.infoLogHandler.log(message);
+		this.infoLogWriter.log(message);
 	}
 
 	@Override
 	public void setOutput(OutputStream output) {
-		this.exceptionLogHandler.setOutput(output);
-		this.errorLogHandler.setOutput(output);
-		this.debugLogHandler.setOutput(output);
-		this.infoLogHandler.setOutput(output);
+		this.exceptionLogWriter.setOutput(output);
+		this.errorLogWriter.setOutput(output);
+		this.debugLogWriter.setOutput(output);
+		this.infoLogWriter.setOutput(output);
 	}
 
 	@Override
 	public void setOutput(File file) throws IOException {
-		this.exceptionLogHandler.setOutput(file);
-		this.errorLogHandler.setOutput(file);
-		this.debugLogHandler.setOutput(file);
-		this.infoLogHandler.setOutput(file);
+		this.exceptionLogWriter.setOutput(file);
+		this.errorLogWriter.setOutput(file);
+		this.debugLogWriter.setOutput(file);
+		this.infoLogWriter.setOutput(file);
 	}
 
 	@Override
 	public void setExceptionOutput(OutputStream output) {
-		this.exceptionLogHandler.setOutput(output);
+		this.exceptionLogWriter.setOutput(output);
 	}
 
 	@Override
 	public void setExceptionOutput(File file) throws IOException {
-		this.exceptionLogHandler.setOutput(file);
+		this.exceptionLogWriter.setOutput(file);
 	}
 
 	@Override
 	public void setErrorOutput(OutputStream output) {
-		this.errorLogHandler.setOutput(output);
+		this.errorLogWriter.setOutput(output);
 	}
 
 	@Override
 	public void setErrorOutput(File file) throws IOException {
-		this.errorLogHandler.setOutput(file);
+		this.errorLogWriter.setOutput(file);
 	}
 
 	@Override
 	public void setDebugOutput(OutputStream output) {
-		this.debugLogHandler.setOutput(output);
+		this.debugLogWriter.setOutput(output);
 	}
 
 	@Override
 	public void setDebugOutput(File file) throws IOException {
-		this.debugLogHandler.setOutput(file);
+		this.debugLogWriter.setOutput(file);
 	}
 
 	@Override
 	public void setInfoOutput(OutputStream output) {
-		this.infoLogHandler.setOutput(output);
+		this.infoLogWriter.setOutput(output);
 	}
 
 	@Override
 	public void setInfoOutput(File file) throws IOException {
-		this.infoLogHandler.setOutput(file);
+		this.infoLogWriter.setOutput(file);
 	}
 
 	@Override
 	public void setToDefaultOutput() {
-		this.exceptionLogHandler.setToDefaultOutput();
-		this.errorLogHandler.setToDefaultOutput();
-		this.debugLogHandler.setToDefaultOutput();
-		this.infoLogHandler.setToDefaultOutput();
+		this.exceptionLogWriter.setToDefaultOutput();
+		this.errorLogWriter.setToDefaultOutput();
+		this.debugLogWriter.setToDefaultOutput();
+		this.infoLogWriter.setToDefaultOutput();
 
 	}
 
 	@Override
 	public void setErrorToDefaultOutput() {
-		this.errorLogHandler.setToDefaultOutput();
+		this.errorLogWriter.setToDefaultOutput();
 	}
 
 	@Override
 	public void setDebugToDefaultOutput() {
-		this.debugLogHandler.setToDefaultOutput();
+		this.debugLogWriter.setToDefaultOutput();
 	}
 
 	@Override
 	public void setExceptionToDefaultOutput() {
-		this.exceptionLogHandler.setToDefaultOutput();
+		this.exceptionLogWriter.setToDefaultOutput();
 	}
 
 	@Override
 	public void setInfoToDefaultOutput() {
-		this.infoLogHandler.setToDefaultOutput();
+		this.infoLogWriter.setToDefaultOutput();
 	}
 
 	@Override
 	public void setExceptionOutput(File file, boolean append) throws IOException {
-		this.exceptionLogHandler.setOutput(file, append);
+		this.exceptionLogWriter.setOutput(file, append);
 	}
 
 	@Override
 	public void setDebugOutput(File file, boolean append) throws IOException {
-		this.debugLogHandler.setOutput(file, append);
+		this.debugLogWriter.setOutput(file, append);
 	}
 
 	@Override
 	public void setErrorOutput(File file, boolean append) throws IOException {
-		this.errorLogHandler.setOutput(file, append);
+		this.errorLogWriter.setOutput(file, append);
 	}
 
 	@Override
 	public void setInfoOutput(File file, boolean append) throws IOException {
-		this.infoLogHandler.setOutput(file, append);
+		this.infoLogWriter.setOutput(file, append);
 	}
 
 	@Override
 	public void setOutput(File file, boolean append) throws IOException {
-		this.exceptionLogHandler.setOutput(file, append);
-		this.errorLogHandler.setOutput(file, append);
-		this.debugLogHandler.setOutput(file, append);
-		this.errorLogHandler.setOutput(file, append);
+		this.exceptionLogWriter.setOutput(file, append);
+		this.errorLogWriter.setOutput(file, append);
+		this.debugLogWriter.setOutput(file, append);
+		this.errorLogWriter.setOutput(file, append);
 	}
 
 	@Override
 	public void close() throws IOException {
-		this.exceptionLogHandler.close();
-		this.errorLogHandler.close();
-		this.debugLogHandler.close();
-		this.errorLogHandler.close();
+		this.exceptionLogWriter.close();
+		this.errorLogWriter.close();
+		this.debugLogWriter.close();
+		this.errorLogWriter.close();
 	}
 
 	@Override
 	public void error(Error error) {
-		this.errorLogHandler.log(ErrorLogWriter.formatErrorMessage(error));
+		this.errorLogWriter.log(ErrorLogWriter.formatErrorMessage(error));
 	}
 
 }
