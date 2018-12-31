@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Global logging utility. Singleton implementations of logging utilities for
- * the various logging levels. For local logging (i.e. separate from the global
- * logging scheme), use the inner class methods in Log.Local
+ * Global logging api. Singleton implementations of logging utilities for the
+ * various logging levels. For local logging (i.e. separate from the global
+ * logging scheme), use the factory methods in this class to obtain new
+ * instances of the logger.
  * 
  * @author Matthew.Shoemaker
  *
@@ -17,29 +18,20 @@ public class Log {
 	private static ILogger logger;
 
 	static {
-		Log.logger = Logger.getLogger();
+		Log.logger = Log.newInstance();
 	}
 
 	/**
-	 * Returns a new instance an implementation of the ILogger interface.
+	 * Log the given exception to the exception output stream.
 	 * 
-	 * @return New instance of an implementation of the ILogger interface.
+	 * @param throwable exception to be logged
 	 */
-	public static ILogger getInstance() {
-		return Logger.getLogger();
-	}
-
-	/**
-	 * Log the given exception to the default exception output stream.
-	 * 
-	 * @param ex exception to be logged
-	 */
-	public static void exception(Exception ex) {
-		Log.logger.exception(ex);
+	public static void exception(Throwable throwable) {
+		Log.logger.exception(throwable);
 	}
 
 	public static void exception(Exception ex, OutputStream output) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		log.setOutput(output);
 		log.exception(ex);
 		try {
@@ -50,7 +42,7 @@ public class Log {
 	}
 
 	public static void exception(Exception ex, File file) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		try {
 			log.setOutput(file);
 			log.exception(ex);
@@ -76,7 +68,7 @@ public class Log {
 	 * @param output  stream to which the log will be written
 	 */
 	public static void debug(String message, OutputStream output) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		log.setOutput(output);
 		log.debug(message);
 		try {
@@ -93,7 +85,7 @@ public class Log {
 	 * @param file    location to which the log will be written
 	 */
 	public static void debug(String message, File file) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		try {
 			log.setOutput(file);
 			log.debug(message);
@@ -128,7 +120,7 @@ public class Log {
 	 * @param output  stream to which the log will be written
 	 */
 	public static void error(String message, OutputStream output) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		log.setOutput(output);
 		log.error(message);
 		try {
@@ -145,7 +137,7 @@ public class Log {
 	 * @param output stream to which the log will be written
 	 */
 	public static void error(Error error, OutputStream output) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		log.setOutput(output);
 		log.error(error);
 		try {
@@ -162,7 +154,7 @@ public class Log {
 	 * @param file    location to which the log will be written
 	 */
 	public static void error(String message, File file) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		try {
 			log.setOutput(file);
 			log.error(message);
@@ -179,53 +171,10 @@ public class Log {
 	 * @param file  location to which the log will be written
 	 */
 	public static void error(Error error, File file) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		try {
 			log.setOutput(file);
 			log.error(error);
-			log.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Log the given throwable to the current throwable output stream.
-	 * 
-	 * @param message throwable to be written to the log output
-	 */
-	public static void throwable(Throwable throwable) {
-		Log.logger.throwable(throwable);
-	}
-
-	/**
-	 * Log the given throwable to the given output stream.
-	 * 
-	 * @param throwable throwable to be logged
-	 * @param output    stream to which the log will be written
-	 */
-	public static void throwable(Throwable throwable, OutputStream output) {
-		ILogger log = Log.getInstance();
-		log.setOutput(output);
-		log.throwable(throwable);
-		try {
-			log.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Log the given throwable to the given file.
-	 * 
-	 * @param throwable throwable to be logged
-	 * @param file      location to which the log will be written
-	 */
-	public static void throwable(Throwable throwable, File file) {
-		ILogger log = Log.getInstance();
-		try {
-			log.setOutput(file);
-			log.throwable(throwable);
 			log.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -249,7 +198,7 @@ public class Log {
 	 * @param output  stream to which the log will be written
 	 */
 	public static void info(String message, OutputStream output) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		log.setOutput(output);
 		log.info(message);
 		try {
@@ -266,7 +215,7 @@ public class Log {
 	 * @param file    location to which the log will be written
 	 */
 	public static void info(String message, File file) {
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		try {
 			log.setOutput(file);
 			log.info(message);
@@ -274,5 +223,62 @@ public class Log {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/****************************************
+	 * Factory Methods
+	 ***************************************/
+
+	/**
+	 * Returns a new instance of a class implemented specifically to handle error
+	 * logging.
+	 * 
+	 * @return new instance of a class implemented specifically to handle error
+	 *         logging
+	 */
+	protected static LogWriter getErrorLogger() {
+		return new ErrorLogWriter();
+	}
+
+	/**
+	 * Returns a new instance of a class implemented specifically to handle
+	 * exception logging.
+	 * 
+	 * @return new instance of a class implemented specifically to handle exception
+	 *         logging.
+	 */
+	protected static LogWriter getExceptionLogger() {
+		return new ExceptionLogWriter();
+	}
+
+	/**
+	 * Returns a new instance of a class implemented specifically to handle debug
+	 * logging.
+	 * 
+	 * @return new instance of a class implemented specifically to handle debug
+	 *         logging.
+	 */
+	protected static LogWriter getDebugLogger() {
+		return new DebugLogWriter();
+	}
+
+	/**
+	 * Returns a new instance of a class implemented specifically to handle info
+	 * logging.
+	 * 
+	 * @return new instance of a class implemented specifically to handle info
+	 *         logging.
+	 */
+	protected static LogWriter getInfoLogger() {
+		return new InfoLogWriter();
+	}
+
+	/**
+	 * Returns a new instance of an implementation of the ILogger interface.
+	 * 
+	 * @return new instance of an ILogger implementation.
+	 */
+	public static ILogger newInstance() {
+		return new DefaultLogger();
 	}
 }

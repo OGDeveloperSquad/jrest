@@ -11,6 +11,7 @@ import com.og.jrest.api.Controller;
 import com.og.jrest.http.Request;
 import com.og.jrest.http.response.Response;
 import com.og.jrest.http.response.ErrorResponse;
+import com.og.jrest.http.response.Response;
 import com.og.jrest.http.response.TextResponse;
 import com.og.jrest.logging.ILogger;
 import com.og.jrest.logging.Log;
@@ -32,7 +33,7 @@ public class RequestHandler implements Runnable {
 
 	public RequestHandler(Socket socket) {
 		this.socket = socket;
-		this.log = Log.getInstance();
+		this.log = Log.newInstance();
 	}
 
 	/**
@@ -147,7 +148,7 @@ public class RequestHandler implements Runnable {
 			this.log.exception(e);
 		} catch (Throwable e) {
 			this.sendErrorResponse(out, 500);
-			this.log.throwable(e);
+			this.log.exception(e);
 		} finally {
 			try {
 				out.close();

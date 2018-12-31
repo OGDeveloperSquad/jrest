@@ -35,7 +35,7 @@ class LoggingTest {
 	 * globally.
 	 */
 	private void resetOutputs() {
-		Log.setAllToDefault();
+		// Log.setAllToDefault();
 	}
 
 	private String getTimeStamp() {
@@ -48,7 +48,7 @@ class LoggingTest {
 	@Test
 	void exceptionTest_Console() {
 		String textToShow = "Throwing a new test exception. Should print red with a big long indented stack trace.";
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		this.announce(textToShow, System.err);
 		log.exception(new Exception(textToShow));
 		this.printDivider();
@@ -60,7 +60,7 @@ class LoggingTest {
 	void exceptionTest_File() {
 		String textToShow = this.getTimeStamp() + "Throwing a new test exception";
 		String path = TEST_LOG_PATH + "exceptionLogTest.txt";
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		try {
 			log.setExceptionOutput(new File(path));
 		} catch (IOException e) {
@@ -86,13 +86,7 @@ class LoggingTest {
 	void exceptionTest_FileStatic() {
 		String textToShow = this.getTimeStamp() + "Throwing a new static test exception";
 		String path = TEST_LOG_PATH + "exceptionLogStaticTest.txt";
-		try {
-			Log.setExceptionOutput(new File(path));
-			Log.exception(new Exception(textToShow));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Log.exception(new Exception(textToShow), new File(path));
 
 		this.resetOutputs();
 	}
@@ -100,7 +94,7 @@ class LoggingTest {
 	@Test
 	void errorTest_Console() {
 		String textToShow = "Testing the error output. Should be red and stuff";
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		this.announce(textToShow, System.err);
 		log.error(textToShow);
 		this.printDivider();
@@ -111,7 +105,7 @@ class LoggingTest {
 	@Test
 	void errorTest_File() {
 		String textToShow = this.getTimeStamp() + "Testing the error output to a file. yes indeedio";
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		boolean append = false;
 		try {
 			String path = TEST_LOG_PATH + "errorLogTest.txt";
@@ -138,12 +132,7 @@ class LoggingTest {
 	void errorTest_FileStatic() {
 		String textToShow = this.getTimeStamp() + "Testing the static error output to a file. yes indeedio";
 		String path = TEST_LOG_PATH + "errorLogStaticTest.txt";
-		try {
-			Log.setErrorOutput(new File(path));
-			Log.error(textToShow);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Log.error(textToShow, new File(path));
 
 		this.resetOutputs();
 	}
@@ -151,7 +140,7 @@ class LoggingTest {
 	@Test
 	void debugTest_Console() {
 		String textToShow = "Testing the debug output. Should be white and plain";
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		this.announce(textToShow, System.out);
 		log.debug(textToShow);
 		this.printDivider();
@@ -162,7 +151,7 @@ class LoggingTest {
 	@Test
 	void debugTest_File() {
 		String textToShow = this.getTimeStamp() + "Testing the debug file output. If you can read this it worked.";
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		String path = TEST_LOG_PATH + "debugLogTest.txt";
 		boolean append = false;
 		try {
@@ -189,12 +178,7 @@ class LoggingTest {
 	void debugTest_FileStatic() {
 		String textToShow = this.getTimeStamp() + "Testing the static debug output to a file. yes indeedio";
 		String path = TEST_LOG_PATH + "debugLogStaticTest.txt";
-		try {
-			Log.setDebugOutput(new File(path));
-			Log.debug(textToShow);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Log.debug(textToShow, new File(path));
 
 		this.resetOutputs();
 	}
@@ -202,7 +186,7 @@ class LoggingTest {
 	@Test
 	void infoTest_Console() {
 		String textToShow = "Testing the info output. Should be white and plain";
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		this.announce(textToShow, System.out);
 		log.debug(textToShow);
 		this.printDivider();
@@ -213,7 +197,7 @@ class LoggingTest {
 	@Test
 	void infoTest_File() {
 		String textToShow = this.getTimeStamp() + "Testing the info file output. If you can read this it worked.";
-		ILogger log = Log.getInstance();
+		ILogger log = Log.newInstance();
 		boolean append = false;
 		try {
 			String path = TEST_LOG_PATH + "infoLogTest.txt";
@@ -240,12 +224,7 @@ class LoggingTest {
 	void infoTest_FileStatic() {
 		String textToShow = this.getTimeStamp() + "Testing the static info output to a file. yes indeedio";
 		String path = TEST_LOG_PATH + "infoLogStaticTest.txt";
-		try {
-			Log.setInfoOutput(new File(path));
-			Log.info(textToShow);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Log.info(textToShow, new File(path));
 
 		this.resetOutputs();
 	}

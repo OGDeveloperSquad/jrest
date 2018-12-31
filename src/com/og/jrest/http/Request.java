@@ -107,14 +107,17 @@ public class Request {
 		this.uri = request.next();
 		this.httpVersion = Version.fromString(request.next());
 		// Consume line separator '\n'
-		request.nextLine();
+		if (request.hasNext())
+			request.nextLine();
 
 		// Add each header to the list
-		String headerLine = request.nextLine();
-		while (!headerLine.equals("")) {
-			Header header = new Header(headerLine);
-			this.headers.add(header);
-			headerLine = request.nextLine();
+		if (request.hasNext()) {
+			String headerLine = request.nextLine();
+			while (!headerLine.equals("")) {
+				Header header = new Header(headerLine);
+				this.headers.add(header);
+				headerLine = request.nextLine();
+			}
 		}
 
 		String body = "";

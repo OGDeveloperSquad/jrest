@@ -1,6 +1,7 @@
 ****************************************************
 *   Context-Free Grammar for jRest RouteTemplate   *
 ****************************************************
+
 /*
  * For simplicity, just know that there can 
  * only be 1 ControllerSegment and 1 ActionSegment.
@@ -8,6 +9,7 @@
  * All RouteTemplates must specify a ControllerSegment.
  * Showing that in the CFG would be really complicated.
  */
+
 
 RouteTemplate         =>  PathSegment < / PathSegment > < / OptionalParamSegment >
 PathSegment           ->  StaticSegment | ControllerSegment | ActionSegment | ParameterSegment
@@ -28,7 +30,7 @@ Number                ->  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
 Some valid RouteTemplates for reference:
 
-	api/{controller=name123}/{action=anotherName789}/{param1}/{param2?}
+	api/{controller=name123}/{action=actionName42}/{param1}/{param2?}
 	foo/{controller}/{action=bar}/{param1?}
 	{controller=foo}
 	{controller}/{action}
