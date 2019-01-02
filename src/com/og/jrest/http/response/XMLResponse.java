@@ -17,11 +17,20 @@ public class XMLResponse extends Response {
 
 	public XMLResponse(Document document) {
 		super();
+		String xml = xmlDocumentToString(document);
+		this.initialize(xml);
+	}
 
-		this.setBody(xmlDocumentToString(document));
+	public XMLResponse(String xml) {
+		super();
+		this.initialize(xml);
+	}
 
+	protected void initialize(Object body) {
 		Header contentType = new Header(CONTENT_TYPE_KEY, "text/xml");
 		this.addHeader(contentType);
+
+		this.setBody(body);
 	}
 
 	/**

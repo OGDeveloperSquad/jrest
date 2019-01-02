@@ -78,9 +78,6 @@ public abstract class Response implements IResponse {
 	}
 
 	@Override
-	public abstract byte[] getBytes();
-
-	@Override
 	public void setResponseCode(int statusCode) {
 		this.responseCode = new ResponseCode(statusCode);
 	}

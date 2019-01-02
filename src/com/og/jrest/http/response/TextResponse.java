@@ -10,11 +10,7 @@ public class TextResponse extends Response {
 
 	public TextResponse(String text) {
 		super();
-
-		this.setBody(text);
-
-		Header contentType = new Header(CONTENT_TYPE_KEY, "text/plain");
-		this.addHeader(contentType);
+		this.initialize(text);
 	}
 
 	@Override
@@ -28,6 +24,13 @@ public class TextResponse extends Response {
 		}
 
 		return result;
+	}
+
+	protected void initialize(Object body) {
+		Header contentType = new Header(CONTENT_TYPE_KEY, "text/plain");
+		this.addHeader(contentType);
+
+		this.setBody(body);
 	}
 
 }
