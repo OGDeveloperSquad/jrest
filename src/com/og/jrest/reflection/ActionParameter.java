@@ -32,6 +32,7 @@ public class ActionParameter<T> {
 		this.type = type;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)

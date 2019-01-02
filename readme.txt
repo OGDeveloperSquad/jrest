@@ -43,7 +43,7 @@ Cookie: cookie1=value&cook
 
 	XML:
 		- The API implementer will build the XML, but this is likely how they will do it
-			- https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
+			- https://www.tutorialspoint.com/java_xml/java_dom_parse_document.htm
 		- Constructor will simply accept a Document object
 			- Should overload to have constructor for string as well
 	

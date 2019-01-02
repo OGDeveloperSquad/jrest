@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.og.jrest.api.Controller;
 import com.og.jrest.http.Request;
-import com.og.jrest.http.response.Response;
+import com.og.jrest.http.response.IResponse;
 import com.og.jrest.logging.Log;
 import com.og.jrest.routing.RouteResult;
 import com.og.jrest.routing.RouteTable;
@@ -28,12 +28,12 @@ class RoutingTest {
 			RouteResult routeResult = RouteTable.evaluateRoute("api/test/actionTestGet/foobar");
 			Controller controller = routeResult.getController();
 			controller.request = new Request("GET / HTTP/1.1");
-			Response response;
+			IResponse response;
 			if (routeResult.getParameters().length > 0) {
 				Object[] params = routeResult.getParameters();
-				response = (Response) routeResult.getAction().invoke(controller, params);
+				response = (IResponse) routeResult.getAction().invoke(controller, params);
 			} else {
-				response = (Response) routeResult.getAction().invoke(controller);
+				response = (IResponse) routeResult.getAction().invoke(controller);
 			}
 			Log.debug(response.toString());
 		} catch (ClassNotFoundException e) {

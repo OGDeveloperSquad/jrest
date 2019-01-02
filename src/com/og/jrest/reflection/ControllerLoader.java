@@ -26,7 +26,8 @@ public class ControllerLoader {
 	 * return a new instance of the controller. Returns null if no controller with
 	 * the given name can be found.
 	 * 
-	 * @param name name of the controller. The word "Controller" will be appended
+	 * @param name
+	 *            name of the controller. The word "Controller" will be appended
 	 * @return New instance of the controller if it is found, null otherwise
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
@@ -65,10 +66,12 @@ public class ControllerLoader {
 	 * will search the given controller's methods to find one with the given
 	 * actionName and whose parameter names match those of params.
 	 * 
-	 * @param controller the controller under reflection
-	 * @param actionName name of the action method to be searched for
-	 * @param params     list of parameters to which the action method will be
-	 *                   compared
+	 * @param controller
+	 *            the controller under reflection
+	 * @param actionName
+	 *            name of the action method to be searched for
+	 * @param params
+	 *            list of parameters to which the action method will be compared
 	 * @return Method that can be invoked with the list of parameters
 	 * @throws NoSuchMethodException
 	 */
@@ -105,11 +108,14 @@ public class ControllerLoader {
 	 * Reports whether the names of the parameters for the given method match those
 	 * of the names of the parameters in params in the same order.
 	 * 
-	 * @param method the method whose parameters will be inspected
-	 * @param params the parameters to which the method will be compared
+	 * @param method
+	 *            the method whose parameters will be inspected
+	 * @param params
+	 *            the parameters to which the method will be compared
 	 * @return true if the names and order of the parameters of the method are
 	 *         exactly the same, false otherwise
 	 */
+	@SuppressWarnings("rawtypes")
 	private static boolean matchingParams(Method method, List<ActionParameter> params) {
 		boolean result = false;
 		// Check to see if all parameters of the current method match the route

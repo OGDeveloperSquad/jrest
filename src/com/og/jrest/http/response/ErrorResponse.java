@@ -1,7 +1,6 @@
 package com.og.jrest.http.response;
 
 import com.og.jrest.http.Header;
-import com.og.jrest.http.ResponseCode;
 
 /**
  * Subclass of HTTPResponse used to send an Error response back to the web
@@ -13,19 +12,24 @@ import com.og.jrest.http.ResponseCode;
  */
 public class ErrorResponse extends Response {
 
-	public ErrorResponse(int statusCode) {
+	public ErrorResponse(int responseCode) {
 		super();
-		this.responseCode = new ResponseCode(statusCode);
-		this.headers.add(new Header("Content-Type: text/html"));
-		this.body = this.getErrorBody(statusCode);
+
+		String body = this.getErrorBody(responseCode);
+		this.setBody(body);
+
+		Header contentType = new Header(CONTENT_TYPE_KEY, "text/html");
+		this.addHeader(contentType);
+
+		this.setResponseCode(responseCode);
 	}
 
 	@Override
 	public byte[] getBytes() {
 		byte[] headers = this.getReponseLineAndHeaders().getBytes();
 		byte[] result = headers;
-		if (this.body != null) {
-			byte[] body = ((String) this.body).getBytes();
+		if (this.hasBody()) {
+			byte[] body = ((String) this.getBody()).getBytes();
 			result = this.concatenateBytes(headers, body);
 		}
 		return result;
@@ -38,7 +42,9 @@ public class ErrorResponse extends Response {
 	 * @return
 	 */
 	private String getErrorBody(int code) {
+
 		// TODO find a way to get some sweet html in here based on the error code
+
 		return "";
 	}
 

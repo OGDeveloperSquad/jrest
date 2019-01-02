@@ -9,10 +9,9 @@ import java.net.Socket;
 
 import com.og.jrest.api.Controller;
 import com.og.jrest.http.Request;
-import com.og.jrest.http.response.Response;
+import com.og.jrest.http.response.EmptyResponse;
 import com.og.jrest.http.response.ErrorResponse;
-import com.og.jrest.http.response.Response;
-import com.og.jrest.http.response.TextResponse;
+import com.og.jrest.http.response.IResponse;
 import com.og.jrest.logging.ILogger;
 import com.og.jrest.logging.Log;
 import com.og.jrest.routing.RouteResult;
@@ -102,7 +101,7 @@ public class RequestHandler implements Runnable {
 				controller.request = request;
 
 				// Plain response in case the controller doesnt return a nice response
-				Response response = new TextResponse();
+				IResponse response = new EmptyResponse();
 
 				/*
 				 * Invoke the action specified by the request. If/else just checks whether it
@@ -110,9 +109,9 @@ public class RequestHandler implements Runnable {
 				 */
 				if (routeResult.getParameters().length > 0) {
 					Object[] params = routeResult.getParameters();
-					response = (Response) routeResult.getAction().invoke(controller, params);
+					response = (IResponse) routeResult.getAction().invoke(controller, params);
 				} else {
-					response = (Response) routeResult.getAction().invoke(controller);
+					response = (IResponse) routeResult.getAction().invoke(controller);
 				}
 
 				// We've done our job and gotten the response back from the api client, so let's
@@ -166,12 +165,13 @@ public class RequestHandler implements Runnable {
 	 * Creates an ErrorResponse object with the given error code and writes it to
 	 * the given output stream.
 	 * 
-	 * @param out       output stream to which the response will be written
-	 * @param errorCode the response code with which to instantiate the error
-	 *                  response
+	 * @param out
+	 *            output stream to which the response will be written
+	 * @param errorCode
+	 *            the response code with which to instantiate the error response
 	 */
 	private void sendErrorResponse(OutputStream out, int errorCode) {
-		Response errorResponse = new ErrorResponse(errorCode);
+		IResponse errorResponse = new ErrorResponse(errorCode);
 		try {
 			out.write(errorResponse.getBytes());
 			out.flush();
