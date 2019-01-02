@@ -4,10 +4,6 @@ import com.og.jrest.http.Header;
 
 public class TextResponse extends Response {
 
-	public TextResponse() {
-		super();
-	}
-
 	public TextResponse(String text) {
 		super();
 		this.initialize(text);

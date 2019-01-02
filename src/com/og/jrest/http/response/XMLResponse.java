@@ -17,6 +17,9 @@ import com.og.jrest.logging.Log;
 
 public class XMLResponse extends Response {
 
+	private static final String CONTENT_TYPE = "application/xml";
+	private static final String XML_ENCODING = "UTF-8";
+
 	public XMLResponse(Document document) {
 		super();
 		String xml = xmlDocumentToString(document);
@@ -29,7 +32,7 @@ public class XMLResponse extends Response {
 	}
 
 	private void initialize(Object body) {
-		Header contentType = new Header(CONTENT_TYPE_KEY, "text/xml");
+		Header contentType = new Header(CONTENT_TYPE_KEY, CONTENT_TYPE);
 		this.addHeader(contentType);
 
 		this.setBody(body);
@@ -56,10 +59,10 @@ public class XMLResponse extends Response {
 	}
 
 	private String getXmlString(Document document) throws TransformerException {
-		StringWriter stringWriter = new StringWriter();
 		Transformer xmlTransformer = this.getXmlTransformer();
-
 		DOMSource domSource = new DOMSource(document);
+
+		StringWriter stringWriter = new StringWriter();
 		StreamResult streamResult = new StreamResult(stringWriter);
 
 		xmlTransformer.transform(domSource, streamResult);
@@ -73,7 +76,7 @@ public class XMLResponse extends Response {
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 		transformer.setOutputProperty(OutputKeys.INDENT, "no");
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+		transformer.setOutputProperty(OutputKeys.ENCODING, XML_ENCODING);
 
 		return transformer;
 	}

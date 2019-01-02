@@ -12,13 +12,18 @@ import com.og.jrest.http.Header;
  */
 public class ErrorResponse extends Response {
 
+	private static final String CONTENT_TYPE = "text/html";
+
 	public ErrorResponse(int responseCode) {
 		super();
+		this.initialize(responseCode);
+	}
 
+	private void initialize(int responseCode) {
 		String body = this.getErrorBody(responseCode);
 		this.setBody(body);
 
-		Header contentType = new Header(CONTENT_TYPE_KEY, "text/html");
+		Header contentType = new Header(CONTENT_TYPE_KEY, CONTENT_TYPE);
 		this.addHeader(contentType);
 
 		this.setResponseCode(responseCode);
