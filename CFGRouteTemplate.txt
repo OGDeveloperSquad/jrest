@@ -2,38 +2,70 @@
 *   Context-Free Grammar for jRest RouteTemplate   *
 ****************************************************
 
+RouteTemplate         =>  PathSegment < / PathSegment > < / OptionalParamSegment >
+PathSegment           ->  StaticSegment | ControllerSegment | ActionSegment | ParamSegment
+StaticSegment         ->  Text < Text >
+ControllerSegment     ->  {controller} | {controller= Text }
+ActionSegment         ->  {action} | {action?} | {action= Text }
+ParamSegment          ->  { Text } 
+OptionalParamSegment  ->  { Text ?}
+Text                  ->  Letter { Letter | Number }
+Letter                ->  a | b | c | ... | x | y | z | A | B | C | ... | X | Y | Z 
+Number                ->  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+
 /*
  * For simplicity, just know that there can 
  * only be 1 ControllerSegment and 1 ActionSegment.
  * ControllerSegment is the only segment REQUIRED to exist.
  * All RouteTemplates must specify a ControllerSegment.
- * Showing that in the CFG would be really complicated.
+ * Showing that in the CFG would be really complicated, 
+ * so eff that.
  */
+ 
 
 
-RouteTemplate         =>  PathSegment < / PathSegment > < / OptionalParamSegment >
-PathSegment           ->  StaticSegment | ControllerSegment | ActionSegment | ParameterSegment
-StaticSegment         ->  String < String >
-ControllerSegment     ->  {controller} | {controller= String }
-ActionSegment         ->  {action} | {action= String }
-ParameterSegment      ->  { String } 
-OptionalParamSegment  ->  { String ?}
-String                ->  Letter { Letter | Number }
-Letter                ->  a | b | c | ... | x | y | z | A | B | C | ... | X | Y | Z 
-Number                ->  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+***************************************************
+*     Some valid RouteTemplates for reference     *
+***************************************************
 
-
-
-
-
-
-
-Some valid RouteTemplates for reference:
-
-	api/{controller=name123}/{action=actionName42}/{param1}/{param2?}
-	foo/{controller}/{action=bar}/{param1?}
-	{controller=foo}
-	{controller}/{action}
-	{action=foo42}/bar/{controller}
+	1. "api/{controller=name123}/{action=actionName42}/{param1}/{param2?}"
+	
+			- This route says that the default controller is 'Name123Controller' 
+			  and the default action is the method 'actionName42' on that controller
+			- The 'param2' parameter segment is OPTIONAL, but 'param1' is REQUIRED
+			- If someone requests "api/test/testAction/7", then the request would be
+			  directed to the 'testAction' method with a parameter called 'param1' in 
+			  the controller 'TestController'
+			- Note the static segment prefix. All requests must be prefixed with "api/"
+			  in order to map to this route.
+			  
+	2. "foo/{controller}/{action=bar}/{param1?}"
+	
+			- No default controller
+			- Default action 'bar'
+			- 'param1' is an OPTIONAL parameter
+			
+	3. "{controller=foo}"
+	
+			- This route only contains a controller with a default of 'FooController'
+			- Note the only actions that can be called in this controller are the
+			  actions 'get()', 'post()', 'put()', 'delete()'
+			  
+	4. "{controller}"
+	
+			- This is the simplest possible route. Only specifies the controller and
+			  does not specify a default.
+			- Note the only actions that can be called in this controller are the
+			  actions 'get()', 'post()', 'put()', 'delete()'
+			  
+	5. "{controller}/{action?}"
+	
+			- This route specifies no default controller
+			- The action parameter in this route is optional, which means that if no action
+			  is supplied, the action for the corresponding HTTP verb will be invoked.
+			  
+	6. "bar/{action?}/{controller}"
+	
+	7. "{action=foo42}/bar/{controller}"
 	
 	

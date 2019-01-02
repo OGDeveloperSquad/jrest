@@ -85,6 +85,7 @@ public class RouteTable {
 	 * @param route    the route against which the segments will be evaluated
 	 * @param segments the segments of a requested uri
 	 * @return a RouteResult if the route is able to be generated.
+	 * 
 	 * @throws ClassNotFoundException
 	 * @throws NoSuchMethodException
 	 * @throws InstantiationException

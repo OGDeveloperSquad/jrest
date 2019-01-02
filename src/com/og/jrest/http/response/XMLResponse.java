@@ -4,6 +4,8 @@ import java.io.StringWriter;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -26,7 +28,7 @@ public class XMLResponse extends Response {
 		this.initialize(xml);
 	}
 
-	protected void initialize(Object body) {
+	private void initialize(Object body) {
 		Header contentType = new Header(CONTENT_TYPE_KEY, "text/xml");
 		this.addHeader(contentType);
 
@@ -37,31 +39,43 @@ public class XMLResponse extends Response {
 	 * Given a Document object containing XML, returns an unindented string of XML
 	 * contained in the document.
 	 * 
-	 * @param document
-	 *            Documnet object containing XML
+	 * @param document Documnet object containing XML
 	 * @return String representation of the XML contained in the document.
 	 * 
 	 * @requires the document format must be XML.
 	 */
-	private static String xmlDocumentToString(Document document) {
+	private String xmlDocumentToString(Document document) {
 		String xml = null;
 		try {
-			StringWriter stringWriter = new StringWriter();
-			TransformerFactory tf = TransformerFactory.newInstance();
-			Transformer transformer = tf.newTransformer();
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-			transformer.setOutputProperty(OutputKeys.INDENT, "no");
-			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-			transformer.transform(new DOMSource(document), new StreamResult(stringWriter));
-
-			xml = stringWriter.toString();
+			xml = this.getXmlString(document);
 		} catch (Exception ex) {
 			Log.exception(ex);
 		}
 
 		return xml;
+	}
+
+	private String getXmlString(Document document) throws TransformerException {
+		StringWriter stringWriter = new StringWriter();
+		Transformer xmlTransformer = this.getXmlTransformer();
+
+		DOMSource domSource = new DOMSource(document);
+		StreamResult streamResult = new StreamResult(stringWriter);
+
+		xmlTransformer.transform(domSource, streamResult);
+
+		return stringWriter.toString();
+	}
+
+	private Transformer getXmlTransformer() throws TransformerConfigurationException {
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer transformer = tf.newTransformer();
+		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+		transformer.setOutputProperty(OutputKeys.INDENT, "no");
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+		return transformer;
 	}
 
 	@Override
