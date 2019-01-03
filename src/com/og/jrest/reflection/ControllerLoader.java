@@ -75,6 +75,7 @@ public class ControllerLoader {
 	 * @return Method that can be invoked with the list of parameters
 	 * @throws NoSuchMethodException
 	 */
+	@SuppressWarnings("rawtypes")
 	public static Method loadAction(Controller controller, String actionName, List<ActionParameter> params)
 			throws NoSuchMethodException {
 		Method action = null;

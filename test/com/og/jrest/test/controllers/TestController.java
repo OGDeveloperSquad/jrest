@@ -12,13 +12,19 @@ import com.og.jrest.logging.Log;
 public class TestController extends Controller {
 
 	private IResponse getResponse(String calledMethod, String verb, Object... params) {
-		Log.info("Controller action '" + calledMethod + "' has been invoked via '" + verb
-				+ "' request with parameters:");
-		for (Object param : params)
-			Log.info("\t" + param.getClass().getSimpleName() + ":    '" + param.toString() + "'");
+		String message = "Controller action '" + calledMethod + "' has been invoked via '" + verb
+				+ "' request with parameters:" + System.lineSeparator();
+		Log.info(message);
+
+		for (Object param : params) {
+			String line = "\t" + param.getClass().getSimpleName() + ":    '" + param.toString() + "'";
+			message += line + System.lineSeparator();
+			Log.info(line);
+		}
 		Log.info("\n");
-		TextResponse response = new TextResponse();
-		response.setBody(this.request.toString());
+
+		String responseBody = message + System.lineSeparator() + System.lineSeparator() + this.request.toString();
+		TextResponse response = new TextResponse(responseBody);
 
 		return response;
 	}

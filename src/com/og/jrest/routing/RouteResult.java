@@ -23,6 +23,7 @@ public class RouteResult implements IRouteResult {
 
 	private Controller controller;
 	private Method action;
+	@SuppressWarnings("rawtypes")
 	private List<ActionParameter> params;
 
 	public RouteResult() {
