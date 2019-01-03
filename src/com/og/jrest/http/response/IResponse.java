@@ -25,7 +25,7 @@ public interface IResponse {
 	 * @param responseCode
 	 *            new response code of this Response.
 	 */
-	void setResponseCode(int responseCode);
+	void setStatusCode(int responseCode);
 
 	/**
 	 * Set the body of this response message.

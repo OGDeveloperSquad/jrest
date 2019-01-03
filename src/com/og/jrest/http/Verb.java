@@ -48,62 +48,6 @@ public enum Verb {
 		public String toString() {
 			return "GET";
 		}
-	},
-
-	COPY {
-		@Override
-		public String toString() {
-			return "COPY";
-		}
-	},
-
-	LINK {
-		@Override
-		public String toString() {
-			return "LINK";
-		}
-	},
-
-	UNLINK {
-		@Override
-		public String toString() {
-			return "INLINK";
-		}
-	},
-
-	PURGE {
-		@Override
-		public String toString() {
-			return "PURGE";
-		}
-	},
-
-	LOCK {
-		@Override
-		public String toString() {
-			return "LOCK";
-		}
-	},
-
-	UNLOCK {
-		@Override
-		public String toString() {
-			return "UNLOCK";
-		}
-	},
-
-	PROPFIND {
-		@Override
-		public String toString() {
-			return "PROPFIND";
-		}
-	},
-
-	VIEW {
-		@Override
-		public String toString() {
-			return "VIEW";
-		}
 	}
 
 }

@@ -3,9 +3,8 @@ package com.og.jrest.http;
 import java.util.Scanner;
 
 /**
- * This class is a model of an HTTP message. Contains things like Headers,
- * method (i.e. GET, POST, PUT, or DELETE), and request body. Pretty
- * straightforward
+ * This class is a model of an HTTP message. Contains things like Headers, method (i.e. GET, POST, PUT, or DELETE), and
+ * request body. Pretty straightforward
  * 
  * @author matthew.shoemaker
  * @author Hussain
@@ -20,11 +19,10 @@ public class Request {
 	private String body;
 
 	/**
-	 * Constructor to parse through a raw HTTP request and populate the fields of
-	 * this with the information contained in the request.
+	 * Constructor to parse through a raw HTTP request and populate the fields of this with the information contained in
+	 * the request.
 	 * 
-	 * @param httpRequest
-	 *            raw HTTP request
+	 * @param httpRequest raw HTTP request
 	 */
 	public Request(String httpRequest) {
 		this.initialize();
@@ -68,8 +66,7 @@ public class Request {
 	}
 
 	/**
-	 * Returns a list of HTTPHeader object containing all of the headers for this
-	 * request.
+	 * Returns a list of HTTPHeader object containing all of the headers for this request.
 	 * 
 	 * @return list of headers for this request
 	 */
@@ -92,21 +89,15 @@ public class Request {
 	 * 
 	 * @return body of this HTTP request
 	 */
-	public Object getBody() {
+	public String getBody() {
 		return this.body;
-	}
-
-	public void parseBody(Scanner request) {
-		while (request.hasNext()) {
-			this.body += request.nextLine();
-		}
 	}
 
 	public void setBody(String body) {
 		this.body = body;
 	}
 
-	public void setRequestLine(String requestLine) {
+	public void parseRequestLine(String requestLine) {
 		Scanner lineScanner = new Scanner(requestLine);
 		// parse request line assuming format 'verb uri version\n'
 		this.verb = Verb.valueOf(lineScanner.next());
@@ -127,7 +118,7 @@ public class Request {
 	private void parseRequest(String httpRequest) {
 		Scanner request = new Scanner(httpRequest);
 
-		this.setRequestLine(request.nextLine());
+		this.parseRequestLine(request.nextLine());
 		this.parseHeaders(request);
 		this.parseBody(request);
 
@@ -141,6 +132,12 @@ public class Request {
 				this.addHeader(headerLine);
 				headerLine = request.nextLine();
 			}
+		}
+	}
+
+	private void parseBody(Scanner request) {
+		while (request.hasNext()) {
+			this.body += request.nextLine();
 		}
 	}
 

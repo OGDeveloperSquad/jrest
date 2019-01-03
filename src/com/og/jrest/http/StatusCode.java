@@ -10,7 +10,7 @@ import java.util.Map;
  * @author matthew.shoemaker
  *
  */
-public class ResponseCode {
+public class StatusCode {
 
 	private int statusCode;
 	private String reasonPhrase;
@@ -34,9 +34,9 @@ public class ResponseCode {
 		statusCodeMap.put(500, "Internal Server Error");
 	}
 
-	public ResponseCode(int statusCode) {
+	public StatusCode(int statusCode) {
 		this.statusCode = statusCode;
-		this.reasonPhrase = ResponseCode.statusCodeMap.get(statusCode);
+		this.reasonPhrase = StatusCode.statusCodeMap.get(statusCode);
 	}
 
 	@Override

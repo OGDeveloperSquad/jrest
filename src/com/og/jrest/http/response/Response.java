@@ -2,7 +2,7 @@ package com.og.jrest.http.response;
 
 import com.og.jrest.http.Header;
 import com.og.jrest.http.HeaderCollection;
-import com.og.jrest.http.ResponseCode;
+import com.og.jrest.http.StatusCode;
 import com.og.jrest.http.Version;
 
 /**
@@ -14,7 +14,7 @@ import com.og.jrest.http.Version;
 public abstract class Response implements IResponse {
 
 	private Version httpVersion;
-	private ResponseCode responseCode;
+	private StatusCode responseCode;
 	private HeaderCollection headers;
 	private Object body;
 	protected static final String CONTENT_TYPE_KEY = "Content-Type";
@@ -23,7 +23,7 @@ public abstract class Response implements IResponse {
 		this.headers = new HeaderCollection();
 		this.body = null;
 		this.httpVersion = Version.HTTP1_1;
-		this.responseCode = new ResponseCode(200);
+		this.responseCode = new StatusCode(200);
 	}
 
 	/**
@@ -76,8 +76,8 @@ public abstract class Response implements IResponse {
 	}
 
 	@Override
-	public void setResponseCode(int statusCode) {
-		this.responseCode = new ResponseCode(statusCode);
+	public void setStatusCode(int statusCode) {
+		this.responseCode = new StatusCode(statusCode);
 	}
 
 	@Override

@@ -11,7 +11,9 @@ In eclipse, navigate to:
 Then check the box at the bottom that says:
 	"Store information about method parameters (usable via reflection)"
 	
-Done!	
+MAIN METHOD:	
+	Located in the test directory, in the package
+		'com.og.jrest.test.startup.Startup.java'
 
 
 

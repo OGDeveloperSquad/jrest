@@ -26,7 +26,7 @@ public class ErrorResponse extends Response {
 		Header contentType = new Header(CONTENT_TYPE_KEY, CONTENT_TYPE);
 		this.addHeader(contentType);
 
-		this.setResponseCode(responseCode);
+		this.setStatusCode(responseCode);
 	}
 
 	@Override

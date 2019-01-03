@@ -20,14 +20,13 @@ import com.og.jrest.routing.RouteResult;
 import com.og.jrest.routing.RouteTable;
 
 /**
- * This class handles the request received. Implements the Runnable interface so
- * that request handling can be done asynchronously (on a new thread), allowing
- * the server to handle many requests at once.
+ * This class handles the request received. Implements the Runnable interface so that request handling can be done
+ * asynchronously (on a new thread), allowing the server to handle many requests at once.
  * 
  * @author matthew.shoemaker
  *
  */
-public class RequestHandler implements Runnable {
+class RequestHandler implements Runnable {
 
 	private Socket socket;
 	private Request request;
@@ -40,14 +39,13 @@ public class RequestHandler implements Runnable {
 	}
 
 	/**
-	 * Asynchronously handles a request, processing it and returning the appropriate
-	 * response to the web client.
+	 * Asynchronously handles a request, processing it and returning the appropriate response to the web client.
 	 */
 	public void run() {
 		// New Connection opened, update the counter
-		RequestListener.openConnections++;
+		WebApi.openConnections++;
 
-		this.log.info("New connection opened. " + RequestListener.openConnections + " connections are currently open.");
+		this.log.info("New connection opened. " + WebApi.openConnections + " connections are currently open.");
 
 		OutputStream out = null;
 		try {
@@ -67,8 +65,8 @@ public class RequestHandler implements Runnable {
 				IResponse response = new EmptyResponse();
 
 				/*
-				 * Invoke the action specified by the request. If/else just checks whether it
-				 * needs to pass in parameters to the method or not
+				 * Invoke the action specified by the request. If/else just checks whether it needs to pass in
+				 * parameters to the method or not
 				 */
 				if (routeResult.getParameters().length > 0) {
 					Object[] params = routeResult.getParameters();
@@ -121,8 +119,8 @@ public class RequestHandler implements Runnable {
 				this.log.exception(e);
 			}
 			// Connection has ended, reduce the counter
-			RequestListener.openConnections--;
-			this.log.info("Connection Closed. " + RequestListener.openConnections + " connections are still open."
+			WebApi.openConnections--;
+			this.log.info("Connection Closed. " + WebApi.openConnections + " connections are still open."
 					+ System.lineSeparator());
 		}
 	}
@@ -139,10 +137,11 @@ public class RequestHandler implements Runnable {
 
 	private String processRequestLine(BufferedReader in) throws IOException {
 		String line = in.readLine();
+		// Some phantom requests just have "null"? idk why, just nullify the request if so
 		if (line == "null" || line == null)
 			this.request = null;
 		else
-			this.request.setRequestLine(line);
+			this.request.parseRequestLine(line);
 
 		return line;
 	}
