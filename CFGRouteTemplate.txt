@@ -9,9 +9,16 @@ ControllerSegment     ->  {controller} | {controller= Text }
 ActionSegment         ->  {action} | {action?} | {action= Text }
 ParamSegment          ->  { Text } 
 OptionalParamSegment  ->  { Text ?}
-Text                  ->  Letter { Letter | Number }
+Text                  ->  Letter < Letter | Number >
 Letter                ->  a | b | c | ... | x | y | z | A | B | C | ... | X | Y | Z 
 Number                ->  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
+ 
+NOTE:
+	PascalCase   indicates non-terminal symbol
+ 	< >          indicates 0 or more occurrences of the enclosed symbols
+ 	|            indicates logical 'OR'
+ 	
+
 
 /*
  * For simplicity, just know that there can 

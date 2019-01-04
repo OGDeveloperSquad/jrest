@@ -24,7 +24,8 @@ public class Log {
 	/**
 	 * Log the given exception to the exception output stream.
 	 * 
-	 * @param throwable exception to be logged
+	 * @param throwable
+	 *            exception to be logged
 	 */
 	public static void exception(Throwable throwable) {
 		Log.logger.exception(throwable);
@@ -55,7 +56,8 @@ public class Log {
 	/**
 	 * Log the given message to the current debug output stream.
 	 * 
-	 * @param message text to be written to the log output
+	 * @param message
+	 *            text to be written to the log output
 	 */
 	public static void debug(String message) {
 		Log.logger.debug(message);
@@ -64,8 +66,10 @@ public class Log {
 	/**
 	 * Log the given debug message to the given output stream.
 	 * 
-	 * @param message text to be logged
-	 * @param output  stream to which the log will be written
+	 * @param message
+	 *            text to be logged
+	 * @param output
+	 *            stream to which the log will be written
 	 */
 	public static void debug(String message, OutputStream output) {
 		ILogger log = Log.newInstance();
@@ -81,8 +85,10 @@ public class Log {
 	/**
 	 * Log the given debug message to the given file.
 	 * 
-	 * @param message text to be logged
-	 * @param file    location to which the log will be written
+	 * @param message
+	 *            text to be logged
+	 * @param file
+	 *            location to which the log will be written
 	 */
 	public static void debug(String message, File file) {
 		ILogger log = Log.newInstance();
@@ -98,7 +104,8 @@ public class Log {
 	/**
 	 * Log the given message to the current error output stream.
 	 * 
-	 * @param message text to be written to the log output
+	 * @param message
+	 *            text to be written to the log output
 	 */
 	public static void error(String message) {
 		Log.logger.error(message);
@@ -107,7 +114,8 @@ public class Log {
 	/**
 	 * Log the given error to the current error output stream.
 	 * 
-	 * @param message error to be written to the log output
+	 * @param message
+	 *            error to be written to the log output
 	 */
 	public static void error(Error error) {
 		Log.logger.error(error);
@@ -116,8 +124,10 @@ public class Log {
 	/**
 	 * Log the given error message to the given output stream.
 	 * 
-	 * @param message text to be logged
-	 * @param output  stream to which the log will be written
+	 * @param message
+	 *            text to be logged
+	 * @param output
+	 *            stream to which the log will be written
 	 */
 	public static void error(String message, OutputStream output) {
 		ILogger log = Log.newInstance();
@@ -133,8 +143,10 @@ public class Log {
 	/**
 	 * Log the given error to the given output stream.
 	 * 
-	 * @param error  error to be logged
-	 * @param output stream to which the log will be written
+	 * @param error
+	 *            error to be logged
+	 * @param output
+	 *            stream to which the log will be written
 	 */
 	public static void error(Error error, OutputStream output) {
 		ILogger log = Log.newInstance();
@@ -150,8 +162,10 @@ public class Log {
 	/**
 	 * Log the given error message to the given file.
 	 * 
-	 * @param message text to be logged
-	 * @param file    location to which the log will be written
+	 * @param message
+	 *            text to be logged
+	 * @param file
+	 *            location to which the log will be written
 	 */
 	public static void error(String message, File file) {
 		ILogger log = Log.newInstance();
@@ -167,8 +181,10 @@ public class Log {
 	/**
 	 * Log the given error message to the given file.
 	 * 
-	 * @param error text to be logged
-	 * @param file  location to which the log will be written
+	 * @param error
+	 *            text to be logged
+	 * @param file
+	 *            location to which the log will be written
 	 */
 	public static void error(Error error, File file) {
 		ILogger log = Log.newInstance();
@@ -184,8 +200,9 @@ public class Log {
 	/**
 	 * Log the given message to the current info output stream.
 	 * 
-	 * @param message text to be written to the log output text to be written to the
-	 *                log output
+	 * @param message
+	 *            text to be written to the log output text to be written to the log
+	 *            output
 	 */
 	public static void info(String message) {
 		Log.logger.info(message);
@@ -194,8 +211,10 @@ public class Log {
 	/**
 	 * Log the given info message to the given output stream.
 	 * 
-	 * @param message text to be logged
-	 * @param output  stream to which the log will be written
+	 * @param message
+	 *            text to be logged
+	 * @param output
+	 *            stream to which the log will be written
 	 */
 	public static void info(String message, OutputStream output) {
 		ILogger log = Log.newInstance();
@@ -211,8 +230,10 @@ public class Log {
 	/**
 	 * Log the given info message to the given file.
 	 * 
-	 * @param message text to be logged
-	 * @param file    location to which the log will be written
+	 * @param message
+	 *            text to be logged
+	 * @param file
+	 *            location to which the log will be written
 	 */
 	public static void info(String message, File file) {
 		ILogger log = Log.newInstance();
