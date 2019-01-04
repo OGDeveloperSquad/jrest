@@ -29,8 +29,7 @@ public abstract class Response implements IResponse {
 	/**
 	 * Set the Http version of this Response to the given version.
 	 * 
-	 * @param version
-	 *            the version of http to use in the response
+	 * @param version the version of http to use in the response
 	 * 
 	 */
 	protected void setHttpVersion(Version version) {
@@ -38,9 +37,8 @@ public abstract class Response implements IResponse {
 	}
 
 	/**
-	 * Returns the response line and headers as they would appear in the HTTP
-	 * response message, appended with a blank line to separate the body and the
-	 * headers.
+	 * Returns the response line and headers as they would appear in the HTTP response message, appended with a blank
+	 * line to separate the body and the headers.
 	 * 
 	 * @return response line and headers formatted as HTTP response message
 	 */
@@ -57,14 +55,11 @@ public abstract class Response implements IResponse {
 	}
 
 	/**
-	 * Convenient method for subclasses to concatenate the byte arrays for the body
-	 * and the headers/responseline. Concatenating primitive arrays is weirdly
-	 * difficult to do.
+	 * Convenient method for subclasses to concatenate the byte arrays for the body and the headers/responseline.
+	 * Concatenating primitive arrays is weirdly difficult to do.
 	 * 
-	 * @param headers
-	 *            byte array for the response line and headers
-	 * @param body
-	 *            byte array for the response body
+	 * @param headers byte array for the response line and headers
+	 * @param body    byte array for the response body
 	 * @return byte array with headers array and body array concatenated together
 	 */
 	protected byte[] concatenateBytes(byte[] headers, byte[] body) {
@@ -75,14 +70,20 @@ public abstract class Response implements IResponse {
 		return result;
 	}
 
-	@Override
-	public void setStatusCode(int statusCode) {
-		this.responseCode = new StatusCode(statusCode);
+	/**
+	 * Sets the body of this response. Only available to subclasses, the api client will set the body in the constructor
+	 * of the subclass. If the api client had access to this, they could set the body of an XMLResponse to a json object
+	 * or the body of an EmptyResponse to an image. That would be very problematic.
+	 * 
+	 * @param body the body of this response
+	 */
+	protected void setBody(Object body) {
+		this.body = body;
 	}
 
 	@Override
-	public void setBody(Object body) {
-		this.body = body;
+	public void setStatusCode(int statusCode) {
+		this.responseCode = new StatusCode(statusCode);
 	}
 
 	@Override
