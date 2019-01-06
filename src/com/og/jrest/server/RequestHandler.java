@@ -4,24 +4,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.Socket;
 
-import com.og.jrest.api.Controller;
+import com.og.jrest.api.JRest;
 import com.og.jrest.http.Header;
 import com.og.jrest.http.Request;
-import com.og.jrest.http.response.EmptyResponse;
 import com.og.jrest.http.response.ErrorResponse;
 import com.og.jrest.http.response.IResponse;
+import com.og.jrest.http.response.TextResponse;
 import com.og.jrest.logging.ILogger;
 import com.og.jrest.logging.Log;
-import com.og.jrest.routing.RouteResult;
+import com.og.jrest.routing.IRouteTemplate;
 import com.og.jrest.routing.RouteTable;
 
 /**
- * This class handles the request received. Implements the Runnable interface so that request handling can be done
- * asynchronously (on a new thread), allowing the server to handle many requests at once.
+ * This class handles the request received. Implements the Runnable interface so
+ * that request handling can be done asynchronously (on a new thread), allowing
+ * the server to handle many requests at once.
  * 
  * @author matthew.shoemaker
  *
@@ -39,13 +38,14 @@ class RequestHandler implements Runnable {
 	}
 
 	/**
-	 * Asynchronously handles a request, processing it and returning the appropriate response to the web client.
+	 * Asynchronously handles a request, processing it and returning the appropriate
+	 * response to the web client.
 	 */
 	public void run() {
 		// New Connection opened, update the counter
-		WebApi.openConnections++;
+		JRest.openConnections++;
 
-		this.log.info("New connection opened. " + WebApi.openConnections + " connections are currently open.");
+		this.log.info("New connection opened. " + JRest.openConnections + " connections are currently open.");
 
 		OutputStream out = null;
 		try {
@@ -54,27 +54,11 @@ class RequestHandler implements Runnable {
 			this.buildRequest();
 
 			if (this.request != null) {
-				// Evaulate the route based on the uri requested
-				RouteResult routeResult = RouteTable.evaluateRoute(request.getUri());
-				// Get the controller that was called by the request
-				Controller controller = routeResult.getController();
-				// Give the controller access to the request object we built
-				controller.request = request;
-
 				// Plain response in case the controller doesnt return a nice response
-				IResponse response = new EmptyResponse();
+				IResponse response = new TextResponse(this.request.toString());
+				String uri = this.request.getUri();
 
-				/*
-				 * Invoke the action specified by the request. If/else just checks whether it needs to pass in
-				 * parameters to the method or not
-				 */
-				if (routeResult.getParameters().length > 0) {
-					Object[] params = routeResult.getParameters();
-					Method action = routeResult.getAction();
-					response = (IResponse) action.invoke(controller, params);
-				} else {
-					response = (IResponse) routeResult.getAction().invoke(controller);
-				}
+				IRouteTemplate route = RouteTable.findCorrespondingRoute(uri);
 
 				// We've done our job and gotten the response back from the api client, so let's
 				// return it.
@@ -88,22 +72,7 @@ class RequestHandler implements Runnable {
 		} catch (IOException e) {
 			this.sendErrorResponse(out, 500);
 			this.log.exception(e);
-		} catch (ClassNotFoundException e) {
-			this.sendErrorResponse(out, 404);
-			this.log.exception(e);
-		} catch (NoSuchMethodException e) {
-			this.sendErrorResponse(out, 404);
-			this.log.exception(e);
-		} catch (InstantiationException e) {
-			this.sendErrorResponse(out, 404);
-			this.log.exception(e);
-		} catch (IllegalAccessException e) {
-			this.sendErrorResponse(out, 403);
-			this.log.exception(e);
 		} catch (IllegalArgumentException e) {
-			this.sendErrorResponse(out, 500);
-			this.log.exception(e);
-		} catch (InvocationTargetException e) {
 			this.sendErrorResponse(out, 500);
 			this.log.exception(e);
 		} catch (Exception e) {
@@ -119,8 +88,8 @@ class RequestHandler implements Runnable {
 				this.log.exception(e);
 			}
 			// Connection has ended, reduce the counter
-			WebApi.openConnections--;
-			this.log.info("Connection Closed. " + WebApi.openConnections + " connections are still open."
+			JRest.openConnections--;
+			this.log.info("Connection Closed. " + JRest.openConnections + " connections are still open."
 					+ System.lineSeparator());
 		}
 	}
@@ -137,7 +106,8 @@ class RequestHandler implements Runnable {
 
 	private String processRequestLine(BufferedReader in) throws IOException {
 		String line = in.readLine();
-		// Some phantom requests just have "null"? idk why, just nullify the request if so
+		// Some phantom requests just have "null"? idk why, just nullify the request if
+		// so
 		if (line == "null" || line == null)
 			this.request = null;
 		else

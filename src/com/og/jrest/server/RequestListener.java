@@ -6,7 +6,7 @@ import java.net.Socket;
 
 import com.og.jrest.logging.Log;
 
-class RequestListener {
+public class RequestListener {
 
 	public static void listen(int port) throws IOException {
 		while (true) {

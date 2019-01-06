@@ -18,7 +18,7 @@ import com.og.jrest.api.Controller;
  * @author matthew.shoemaker
  *
  */
-public class ControllerLoader {
+class ControllerLoader {
 
 	/**
 	 * Given the name of a controller, will search for the controller in the
@@ -59,6 +59,15 @@ public class ControllerLoader {
 		}
 
 		return controller;
+	}
+
+	public static Controller[] loadControllersInPackage(String packageName)
+			throws InstantiationException, IllegalAccessException {
+
+		Reflections reflections = new Reflections(packageName);
+		Set<Class<? extends Controller>> controllerSet = reflections.getSubTypesOf(Controller.class);
+
+		return (Controller[]) controllerSet.toArray();
 	}
 
 	/**

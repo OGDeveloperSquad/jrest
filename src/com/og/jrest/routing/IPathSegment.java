@@ -17,12 +17,19 @@ public interface IPathSegment {
 	 */
 	boolean isOptional();
 
-	/**
-	 * Sets whether or not the segment is optional.
-	 * 
-	 * @param isOptional whether or not the segment is optional
-	 */
-	void setOptional(boolean isOptional);
+	boolean isControllerSegment();
+
+	boolean isActionSegment();
+
+	boolean isParameterSegment();
+
+	boolean isStaticSegment();
+
+	boolean hasDefault();
+
+	String getDefault();
+
+	String getParameterName();
 
 	/**
 	 * Returns the raw text of the segment as specified in the template.
@@ -34,7 +41,8 @@ public interface IPathSegment {
 	/**
 	 * Sets the text of this segment to text.
 	 * 
-	 * @param text the text of this segment
+	 * @param text
+	 *            the text of this segment
 	 */
 	void setText(String text);
 

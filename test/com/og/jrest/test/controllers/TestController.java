@@ -24,7 +24,7 @@ public class TestController extends Controller {
 		}
 		Log.info("\n");
 
-		String responseBody = message + System.lineSeparator() + System.lineSeparator() + this.request.toString();
+		String responseBody = message + System.lineSeparator() + System.lineSeparator() + this.getRequest().toString();
 		TextResponse response = new TextResponse(responseBody);
 
 		return response;

@@ -1,9 +1,12 @@
 package com.og.jrest.routing;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.og.jrest.exceptions.InvalidRouteException;
 import com.og.jrest.logging.Log;
+import com.og.jrest.reflection.IControllerPackage;
+import com.og.jrest.reflection.ReflectionFactory;
 
 /**
  * Holds the routes for this application.
@@ -14,133 +17,122 @@ import com.og.jrest.logging.Log;
 public class RouteTable {
 
 	protected static List<IRouteTemplate> routes;
+	protected static List<IControllerPackage> controllerPackages;
 
 	static {
-		RouteTable.routes = new LinkedList<>();
+		RouteTable.routes = new ArrayList<>();
+		RouteTable.controllerPackages = new ArrayList<>();
 	}
 
-	/**
-	 * Given a uri from a request, will evaluate the route against the route table
-	 * and if it finds a route, will find the controller and action specified by the
-	 * request. Throws exception if no matching route could be found
-	 * 
-	 * @param uri reqeusted route
-	 * @return The controller, method, and list of params requested by the route.
-	 * @throws ClassNotFoundException
-	 * @throws NoSuchMethodException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 */
-	public static RouteResult evaluateRoute(String uri) throws ClassNotFoundException, NoSuchMethodException,
-			InstantiationException, IllegalAccessException, Exception {
-		IRouteTemplate route = findRoute(uri);
-		RouteResult result = null;
-		if (route != null) {
-			result = generateRouteResult(route, RouteBuilder.splitSegments(uri));
-		}
+	public static void RegisterControllers() throws InstantiationException, IllegalAccessException {
+		// TODO read package names from api.config
+		// String[] packageNames = ConfigurationManager.getControllerPackageNames();
 
-		return result;
+		String packageName = "com.og.jrest.test.controllers";
+		RouteTable.registerControllerPackage(packageName);
 	}
 
-	/**
-	 * Given a uri, will return the corresponding route template. If no template is
-	 * found, null is returned.
-	 * 
-	 * @param uri the uri from the http request
-	 * @return The route template corresponding to the given uri. If no route
-	 *         exists, null is returned.
-	 */
-	private static IRouteTemplate findRoute(String uri) {
-		IRouteTemplate result = null;
-		String[] segments = RouteBuilder.splitSegments("/");
-		for (int i = 0; i < routes.size(); i++) {
-			IRouteTemplate route = RouteTable.routes.get(i);
-			if (isMatchingRoute(route.getSegments(), segments)) {
-				result = route;
-				break;
-			}
-		}
-
-		return result;
+	private static void registerControllerPackage(String packageName)
+			throws InstantiationException, IllegalAccessException {
+		IControllerPackage controllerPackage = ReflectionFactory.newControllerPackage(packageName);
+		RouteTable.controllerPackages.add(controllerPackage);
 	}
 
-	/**
-	 * Given a template name and a route template, registers the template with the
-	 * routing engine for use in the application.
-	 * 
-	 * @param name     the name of the route
-	 * @param template the string template to describe the route
-	 */
 	public static void registerRoute(String name, String template) {
 		Log.info("Registering Route:  '" + template + "'");
-		IRouteTemplate route = RouteBuilder.build(name, template);
-		RouteTable.routes.add(route);
-		Log.info("Route has been successfully registered\n");
+		IRouteTemplate route = null;
+		try {
+			route = RouteBuilder.build(name, template);
+		} catch (InvalidRouteException e) {
+			Log.exception(e);
+		}
+		if (route != null) {
+			RouteTable.routes.add(route);
+			Log.info("Route has been successfully registered\n");
+		}
 	}
 
-	/**
-	 * Given an array of uri segments and its corresponding template, will attempt
-	 * to generate a RouteResult based on the template provided.
-	 * 
-	 * @param route    the route against which the segments will be evaluated
-	 * @param segments the segments of a requested uri
-	 * @return a RouteResult if the route is able to be generated.
-	 * 
-	 * @throws ClassNotFoundException
-	 * @throws NoSuchMethodException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws Exception
-	 */
-	private static RouteResult generateRouteResult(IRouteTemplate route, String[] segments)
-			throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException,
-			Exception {
-		RouteResult result = new RouteResult();
-		String[] templateSegments = route.getSegments();
-		String action = null;
-		for (int i = 0; i < segments.length; i++) {
-			String urlSegment = segments[i];
-			String templateSegment = templateSegments[i];
-			if (RouteBuilder.isControllerSegment(templateSegment)) {
-				result.setController(urlSegment);
-			} else if (RouteBuilder.isActionSegment(templateSegment)) {
-				action = urlSegment;
-			} else if (RouteBuilder.isParameterSegment(templateSegment)) {
-				templateSegment = templateSegment.replace("{", "").replace("}", "").replace("?", "");
-				result.addParam(templateSegment, urlSegment);
-			}
-		}
-		if (action != null) {
-			result.setAction(action);
-		} else {
-			result.setAction(route.getDefaultAction());
+	public static IRouteTemplate findCorrespondingRoute(String uri) {
+		IRouteComparator uriComparator = RoutingFactory.newRouteComparator(uri);
+		for (IRouteTemplate template : RouteTable.routes) {
+			if (uriComparator.matches(template))
+				return template;
 		}
 
-		return result;
-
+		return null;
 	}
 
-	/**
-	 * Given an array of segments with template data, will report whether the uri
-	 * segments are a match for the given route.
-	 * 
-	 * @param templateSegments the segments of a route template
-	 * @param urlSegments      the segments of a requested uri
-	 * @return true if the uri segments are a match for the given route template.
-	 *         False otherwise
-	 */
-	private static boolean isMatchingRoute(String[] templateSegments, String[] urlSegments) {
-		boolean result = true;
-		if (templateSegments.length == urlSegments.length) {
-			for (int i = 0; i < templateSegments.length; i++) {
-				String segment = templateSegments[i];
-				if (!segment.startsWith("{") && !segment.equals(urlSegments[i])) {
-					result = false;
-					break;
-				}
-			}
-		}
-		return result;
-	}
+	// private static RouteResult generateRouteResult(IRouteTemplate route, String[]
+	// segments)
+	// throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
+	// IllegalAccessException,
+	// Exception {
+	// RouteResult result = new RouteResult();
+	// String[] templateSegments = route.getSegments();
+	// String action = null;
+	// for (int i = 0; i < segments.length; i++) {
+	// String urlSegment = segments[i];
+	// String templateSegment = templateSegments[i];
+	// if (RouteBuilder.isControllerSegment(templateSegment)) {
+	// result.setController(urlSegment);
+	// } else if (RouteBuilder.isActionSegment(templateSegment)) {
+	// action = urlSegment;
+	// } else if (RouteBuilder.isParameterSegment(templateSegment)) {
+	// templateSegment = templateSegment.replace("{", "").replace("}",
+	// "").replace("?", "");
+	// result.addParam(templateSegment, urlSegment);
+	// }
+	// }
+	// if (action != null) {
+	// result.setAction(action);
+	// } else {
+	// result.setAction(route.getDefaultAction());
+	// }
+	//
+	// return result;
+	//
+	// }
+	//
+	// private static boolean isMatchingRoute(String[] templateSegments, String[]
+	// urlSegments) {
+	// boolean result = true;
+	// if (templateSegments.length == urlSegments.length) {
+	// for (int i = 0; i < templateSegments.length; i++) {
+	// String segment = templateSegments[i];
+	// if (!segment.startsWith("{") && !segment.equals(urlSegments[i])) {
+	// result = false;
+	// break;
+	// }
+	// }
+	// }
+	// return result;
+	// }
+	//
+	// private static IRouteTemplate findRoute(String uri) {
+	// IRouteTemplate result = null;
+	// String[] segments = RouteBuilder.splitTemplateStringIntoSegments("/");
+	// for (int i = 0; i < routes.size(); i++) {
+	// IRouteTemplate route = RouteTable.routes.get(i);
+	// // if (isMatchingRoute(route.getSegments(), segments)) {
+	// // result = route;
+	// // break;
+	// // }
+	// }
+	//
+	// return result;
+	// }
+	//
+	// public static RouteResult evaluateRoute(String uri) throws
+	// ClassNotFoundException, NoSuchMethodException,
+	// InstantiationException, IllegalAccessException, Exception {
+	// IRouteTemplate route = findRoute(uri);
+	// RouteResult result = null;
+	// if (route != null) {
+	// result = generateRouteResult(route,
+	// RouteBuilder.splitTemplateStringIntoSegments(uri));
+	// }
+	//
+	// return result;
+	// }
 
 }

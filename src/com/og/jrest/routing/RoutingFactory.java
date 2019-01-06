@@ -10,4 +10,8 @@ public class RoutingFactory {
 		return new PathSegment(segmentText);
 	}
 
+	public static IRouteComparator newRouteComparator(String requestUri) {
+		return new RouteComparator(requestUri);
+	}
+
 }

@@ -2,7 +2,7 @@ package com.og.jrest.reflection;
 
 import java.lang.reflect.Parameter;
 
-public class ActionParameter<T> {
+class ActionParameter<T> implements IActionParameter<T> {
 
 	private Class<T> type;
 
@@ -10,29 +10,67 @@ public class ActionParameter<T> {
 
 	private T value;
 
-	public ActionParameter(String key, T value) {
-		this.type = null;
-		this.name = key;
-		this.value = value;
+	public ActionParameter(String name, Class<T> type) {
+		this.type = type;
+		this.name = name;
+		this.value = null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.og.jrest.reflection.IActionParameter#getType()
+	 */
+	@Override
 	public Class<T> getType() {
 		return this.type;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public T getValue() {
-		return this.value;
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.og.jrest.reflection.IActionParameter#setType(java.lang.Class)
+	 */
+	@Override
 	public void setType(Class<T> type) {
 		this.type = type;
 	}
 
-	@SuppressWarnings("rawtypes")
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.og.jrest.reflection.IActionParameter#getName()
+	 */
+	@Override
+	public String getName() {
+		return this.name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.og.jrest.reflection.IActionParameter#getValue()
+	 */
+	@Override
+	public T getValue() {
+		return this.value;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.og.jrest.reflection.IActionParameter#setValue(T)
+	 */
+	@Override
+	public void setValue(T value) {
+		this.value = value;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.og.jrest.reflection.IActionParameter#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
@@ -46,7 +84,7 @@ public class ActionParameter<T> {
 			}
 		}
 		if (obj instanceof ActionParameter) {
-			ActionParameter param = (ActionParameter) obj;
+			ActionParameter<?> param = (ActionParameter<?>) obj;
 			if (param.getClass().equals(this.type) && param.getName().equalsIgnoreCase(this.name)
 					&& param.value.equals(this.value))
 				return true;
@@ -55,6 +93,11 @@ public class ActionParameter<T> {
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.og.jrest.reflection.IActionParameter#toString()
+	 */
 	@Override
 	public String toString() {
 		String name = this.name;
