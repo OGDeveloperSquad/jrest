@@ -14,7 +14,12 @@ import com.og.jrest.http.response.IResponse;
 import com.og.jrest.http.response.TextResponse;
 import com.og.jrest.logging.ILogger;
 import com.og.jrest.logging.Log;
+import com.og.jrest.reflection.IControllerContext;
+import com.og.jrest.reflection.Reflection;
 import com.og.jrest.routing.IRouteTemplate;
+import com.og.jrest.routing.ParsedRoute;
+import com.og.jrest.routing.RouteParameter;
+import com.og.jrest.routing.RouteParser;
 import com.og.jrest.routing.RouteTable;
 
 /**
@@ -56,9 +61,20 @@ class RequestHandler implements Runnable {
 			if (this.request != null) {
 				// Plain response in case the controller doesnt return a nice response
 				IResponse response = new TextResponse(this.request.toString());
-				String uri = this.request.getUri();
 
-				IRouteTemplate route = RouteTable.findCorrespondingRoute(uri);
+				String uri = this.request.getUri();
+				IRouteTemplate route = RouteTable.findRoute(uri);
+				ParsedRoute parsedRoute = RouteParser.parse(route, uri);
+				String controllerName = parsedRoute.getControllerName();
+				String actionName = parsedRoute.getActionName();
+				if (actionName == null) {
+					String httpVerb = this.request.getVerb().toString().toLowerCase();
+					actionName = httpVerb;
+				}
+				RouteParameter[] routeParams = parsedRoute.getParameters();
+
+				IControllerContext controllerContext = Reflection.getControllerContext(controllerName);
+				response = controllerContext.invoke(actionName, routeParams);
 
 				// We've done our job and gotten the response back from the api client, so let's
 				// return it.

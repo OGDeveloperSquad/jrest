@@ -5,7 +5,7 @@ public class RouteComparator implements IRouteComparator {
 	private String[] uriSegments;
 
 	public RouteComparator(String requestedUri) {
-		String[] segments = this.splitUri(requestedUri);
+		String[] segments = RouteUtility.splitIntoSegments(requestedUri);
 		this.uriSegments = segments;
 	}
 
@@ -54,12 +54,6 @@ public class RouteComparator implements IRouteComparator {
 		}
 
 		return result;
-	}
-
-	private String[] splitUri(String uri) {
-		if (uri.startsWith("/"))
-			uri = uri.substring(1);
-		return uri.split("/");
 	}
 
 }

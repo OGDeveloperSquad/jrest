@@ -89,4 +89,23 @@ public class RouteTemplate implements IRouteTemplate {
 		return this.numberOfOptionalParams;
 	}
 
+	@Override
+	public String getControllerNameFromUri(String uri) {
+		String name = null;
+		String[] uriSegments = RouteUtility.splitIntoSegments(uri);
+		for (int i = 0; i < this.pathSegments.size(); i++) {
+			IPathSegment templateSegment = this.pathSegments.get(i);
+			String uriSegment = uriSegments[i];
+			if (templateSegment.isControllerSegment())
+				name = uriSegment;
+		}
+		return null;
+	}
+
+	@Override
+	public String getActionNameFromUri(String uri) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

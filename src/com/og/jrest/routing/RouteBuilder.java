@@ -25,7 +25,7 @@ class RouteBuilder {
 		Log.info("Route '" + routeText + "' has begun its build");
 
 		IRouteTemplate route = RoutingFactory.newTemplate(routeName);
-		String[] segments = RouteBuilder.splitIntoSegments(routeText);
+		String[] segments = RouteUtility.splitIntoSegments(routeText);
 
 		for (String segment : segments) {
 			IPathSegment pathSegment = RoutingFactory.newPathSegment(segment);
@@ -33,20 +33,6 @@ class RouteBuilder {
 		}
 
 		return route;
-	}
-
-	/**
-	 * Given a '/' delimited template or uri, will split the uri or template into
-	 * its constituent segments.
-	 * 
-	 * @param template
-	 *            uri or template to be split
-	 * @return array of strings with the segments of template
-	 */
-	public static String[] splitIntoSegments(String template) {
-		if (template.startsWith("/"))
-			template = template.substring(1);
-		return template.split("/");
 	}
 
 }

@@ -74,6 +74,10 @@ public interface IRouteTemplate {
 	 */
 	public String getDefaultAction();
 
+	public String getControllerNameFromUri(String uri);
+
+	public String getActionNameFromUri(String uri);
+
 	public int optionalParamCount();
 
 }
