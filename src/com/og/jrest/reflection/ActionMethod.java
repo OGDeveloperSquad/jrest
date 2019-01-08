@@ -3,9 +3,12 @@ package com.og.jrest.reflection;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.og.jrest.api.Controller;
+import com.og.jrest.exceptions.ActionMethodInvocationException;
+import com.og.jrest.exceptions.ParameterBindingException;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.routing.RouteParameter;
 
@@ -20,6 +23,7 @@ class ActionMethod implements IActionMethod {
 	public ActionMethod(Method method) {
 		this.name = method.getName();
 		this.method = method;
+		this.params = new ArrayList<>();
 		this.setParams(method.getParameters());
 	}
 
@@ -45,12 +49,12 @@ class ActionMethod implements IActionMethod {
 
 	@Override
 	public IActionParameter<?>[] getParams() {
-		return (IActionParameter<?>[]) this.params.toArray();
+		return (IActionParameter<?>[]) this.params.toArray(new IActionParameter<?>[this.params.size()]);
 	}
 
 	@Override
 	public void addParam(Parameter param) {
-		Class<?> paramType = param.getClass();
+		Class<?> paramType = param.getType();
 		IActionParameter<?> actionParam = ReflectionFactory.newActionParameter(param.getName(), paramType);
 		this.params.add(actionParam);
 	}
@@ -63,9 +67,18 @@ class ActionMethod implements IActionMethod {
 	}
 
 	@Override
-	public IResponse invoke(Controller controller, RouteParameter[] params)
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public IResponse invoke(Controller controller, RouteParameter[] routeParams)
+			throws ParameterBindingException, ActionMethodInvocationException {
+		IActionParameter<?>[] actionParams = (IActionParameter<?>[]) this.params
+				.toArray(new IActionParameter<?>[this.params.size()]);
+		Object[] params = ParameterMapper.map(routeParams, actionParams);
+		IResponse response = null;
+		try {
+			response = (IResponse) this.method.invoke(controller, params);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new ActionMethodInvocationException(e.getMessage());
+		}
 
-		return null;
+		return response;
 	}
 }

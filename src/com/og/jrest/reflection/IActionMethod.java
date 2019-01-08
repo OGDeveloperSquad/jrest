@@ -1,9 +1,10 @@
 package com.og.jrest.reflection;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 
 import com.og.jrest.api.Controller;
+import com.og.jrest.exceptions.ActionMethodInvocationException;
+import com.og.jrest.exceptions.ParameterBindingException;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.routing.RouteParameter;
 
@@ -22,6 +23,6 @@ public interface IActionMethod {
 	void setParams(Parameter[] params);
 
 	IResponse invoke(Controller controller, RouteParameter[] params)
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+			throws ParameterBindingException, ActionMethodInvocationException;
 
 }

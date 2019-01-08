@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import com.og.jrest.api.Controller;
 import com.og.jrest.api.JRest;
 import com.og.jrest.http.Header;
 import com.og.jrest.http.Request;
@@ -74,7 +75,9 @@ class RequestHandler implements Runnable {
 				RouteParameter[] routeParams = parsedRoute.getParameters();
 
 				IControllerContext controllerContext = Reflection.getControllerContext(controllerName);
-				response = controllerContext.invoke(actionName, routeParams);
+				Controller controller = controllerContext.getControllerInstance();
+				controller.setRequest(request);
+				response = controllerContext.invoke(controller, actionName, routeParams);
 
 				// We've done our job and gotten the response back from the api client, so let's
 				// return it.

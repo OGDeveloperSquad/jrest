@@ -1,5 +1,7 @@
 package com.og.jrest.routing;
 
+import com.og.jrest.exceptions.InvalidRouteException;
+
 /**
  * Implementation of a path segment.
  * 
@@ -17,8 +19,16 @@ class PathSegment implements IPathSegment {
 
 	private String text;
 
-	public PathSegment(String segment) {
+	public PathSegment(String segment) throws InvalidRouteException {
 		this.text = segment;
+		this.checkForViolations();
+	}
+
+	private void checkForViolations() throws InvalidRouteException {
+		if (this.isControllerSegment() && this.isOptional())
+			throw new InvalidRouteException("Controller cannot be marked as optional.");
+		if (this.isActionSegment() && this.hasDefault() && this.isOptional())
+			throw new InvalidRouteException("Action cannot be optional if default is specified.");
 	}
 
 	@Override

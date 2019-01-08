@@ -1,13 +1,14 @@
 package com.og.jrest.reflection;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.og.jrest.api.Controller;
+import com.og.jrest.exceptions.ActionMethodInvocationException;
 import com.og.jrest.exceptions.ActionMethodNotFoundException;
+import com.og.jrest.exceptions.ParameterBindingException;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.logging.Log;
 import com.og.jrest.routing.RouteParameter;
@@ -20,7 +21,7 @@ class ControllerContext implements IControllerContext {
 	private List<IActionMethod> actions;
 
 	public ControllerContext(Controller controller) {
-		this.name = controller.getClass().getName();
+		this.name = controller.getClass().getSimpleName();
 		this.clazz = controller.getClass();
 		this.actions = new ArrayList<>();
 
@@ -59,7 +60,8 @@ class ControllerContext implements IControllerContext {
 	@Override
 	public IActionMethod getAction(String name, String[] parameterNames) throws ActionMethodNotFoundException {
 		for (IActionMethod action : this.actions) {
-			if (action.getName().equals(name) && this.parametersMatch(action, parameterNames)) {
+			String actionName = action.getName();
+			if (actionName.equalsIgnoreCase(name) && this.parametersMatch(action, parameterNames)) {
 				return action;
 			}
 		}
@@ -101,13 +103,14 @@ class ControllerContext implements IControllerContext {
 	}
 
 	@Override
-	public IResponse invoke(String actionName, RouteParameter[] params) throws ActionMethodNotFoundException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public IResponse invoke(Controller controller, String actionName, RouteParameter[] params)
+			throws ActionMethodNotFoundException, ParameterBindingException, ActionMethodInvocationException {
 		List<String> parameterNames = new ArrayList<>();
 		for (RouteParameter param : params)
 			parameterNames.add(param.getName());
-		IActionMethod action = this.getAction(actionName, (String[]) parameterNames.toArray());
-		IResponse response = action.invoke(this.getControllerInstance(), params);
+		IActionMethod action = this.getAction(actionName,
+				(String[]) parameterNames.toArray(new String[parameterNames.size()]));
+		IResponse response = action.invoke(controller, params);
 
 		return response;
 	}

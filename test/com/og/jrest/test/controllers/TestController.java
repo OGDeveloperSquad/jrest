@@ -5,6 +5,7 @@ import com.og.jrest.annotation.Get;
 import com.og.jrest.annotation.Post;
 import com.og.jrest.annotation.Put;
 import com.og.jrest.api.Controller;
+import com.og.jrest.http.Request;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.http.response.TextResponse;
 import com.og.jrest.logging.Log;
@@ -23,15 +24,17 @@ public class TestController extends Controller {
 			Log.info(line);
 		}
 		Log.info("\n");
+		Request request = this.getRequest();
+		String requestString = request.toString();
 
-		String responseBody = message + System.lineSeparator() + System.lineSeparator() + this.getRequest().toString();
+		String responseBody = message + System.lineSeparator() + System.lineSeparator() + requestString;
 		TextResponse response = new TextResponse(responseBody);
 
 		return response;
 	}
 
 	@Get
-	public IResponse actionTestGet(String id) {
+	public IResponse actionTestGet(int id) {
 		return getResponse("actionTestGet", "GET", id);
 	}
 

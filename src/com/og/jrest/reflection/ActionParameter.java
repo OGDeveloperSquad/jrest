@@ -1,6 +1,10 @@
 package com.og.jrest.reflection;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
+
+import com.og.jrest.exceptions.ParameterBindingException;
 
 class ActionParameter<T> implements IActionParameter<T> {
 
@@ -52,25 +56,25 @@ class ActionParameter<T> implements IActionParameter<T> {
 	 * @see com.og.jrest.reflection.IActionParameter#getValue()
 	 */
 	@Override
-	public T getValue() {
+	public Object getValue() {
 		return this.value;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.og.jrest.reflection.IActionParameter#setValue(T)
-	 */
 	@Override
-	public void setValue(T value) {
+	public void setValue(String valueAsString) throws ParameterBindingException {
+		T value;
+		try {
+			Constructor<?>[] constructors = this.type.getDeclaredConstructors();
+			Constructor<T> constructor = this.type.getDeclaredConstructor(String.class);
+			value = constructor.newInstance(valueAsString);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			throw new ParameterBindingException("Unable to invoke String constructor for class '"
+					+ this.getClass().getName() + "' to instantiate parameter '" + this.getName() + "'");
+		}
 		this.value = value;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.og.jrest.reflection.IActionParameter#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
@@ -93,11 +97,6 @@ class ActionParameter<T> implements IActionParameter<T> {
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.og.jrest.reflection.IActionParameter#toString()
-	 */
 	@Override
 	public String toString() {
 		String name = this.name;

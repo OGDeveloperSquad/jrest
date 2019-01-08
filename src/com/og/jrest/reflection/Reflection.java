@@ -3,6 +3,8 @@ package com.og.jrest.reflection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.og.jrest.routing.RouteUtility;
+
 public class Reflection {
 
 	protected static List<IControllerPackage> controllerPackages;
@@ -28,7 +30,8 @@ public class Reflection {
 	public static IControllerContext getControllerContext(String name) {
 		for (IControllerPackage controllerPackage : Reflection.controllerPackages) {
 			for (IControllerContext controller : controllerPackage.getAllControllerContexts()) {
-				if (controller.getName().equals(name))
+				String controllerToFind = RouteUtility.getControllerName(name);
+				if (controller.getName().equalsIgnoreCase(controllerToFind))
 					return controller;
 			}
 		}

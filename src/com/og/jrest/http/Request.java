@@ -3,8 +3,9 @@ package com.og.jrest.http;
 import java.util.Scanner;
 
 /**
- * This class is a model of an HTTP message. Contains things like Headers, method (i.e. GET, POST, PUT, or DELETE), and
- * request body. Pretty straightforward
+ * This class is a model of an HTTP message. Contains things like Headers,
+ * method (i.e. GET, POST, PUT, or DELETE), and request body. Pretty
+ * straightforward
  * 
  * @author matthew.shoemaker
  * @author Hussain
@@ -19,10 +20,11 @@ public class Request {
 	private String body;
 
 	/**
-	 * Constructor to parse through a raw HTTP request and populate the fields of this with the information contained in
-	 * the request.
+	 * Constructor to parse through a raw HTTP request and populate the fields of
+	 * this with the information contained in the request.
 	 * 
-	 * @param httpRequest raw HTTP request
+	 * @param httpRequest
+	 *            raw HTTP request
 	 */
 	public Request(String httpRequest) {
 		this.initialize();
@@ -66,7 +68,8 @@ public class Request {
 	}
 
 	/**
-	 * Returns a list of HTTPHeader object containing all of the headers for this request.
+	 * Returns a list of HTTPHeader object containing all of the headers for this
+	 * request.
 	 * 
 	 * @return list of headers for this request
 	 */
@@ -143,7 +146,7 @@ public class Request {
 
 	@Override
 	public String toString() {
-		String result = String.format("%s %s %s%s", this.verb, this.uri, this.httpVersion, System.lineSeparator());
+		String result = this.verb.toString() + " " + this.uri + " " + this.httpVersion.toString();
 		for (Header header : this.headers) {
 			result += header.toString() + System.lineSeparator();
 		}

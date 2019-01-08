@@ -32,7 +32,7 @@ public class ParsedRoute {
 	}
 
 	public RouteParameter[] getParameters() {
-		return (RouteParameter[]) this.params.toArray();
+		return (RouteParameter[]) this.params.toArray(new RouteParameter[this.params.size()]);
 	}
 
 	public void addParameter(String name, String value) {

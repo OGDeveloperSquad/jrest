@@ -1,5 +1,7 @@
 package com.og.jrest.reflection;
 
+import com.og.jrest.exceptions.ParameterBindingException;
+
 public interface IActionParameter<T> {
 
 	Class<T> getType();
@@ -8,12 +10,12 @@ public interface IActionParameter<T> {
 
 	String getName();
 
-	T getValue();
-
-	void setValue(T value);
+	Object getValue();
 
 	boolean equals(Object obj);
 
 	String toString();
+
+	void setValue(String valueAsString) throws ParameterBindingException;
 
 }

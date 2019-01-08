@@ -8,4 +8,8 @@ public class RouteUtility {
 		return uri.split("/");
 	}
 
+	public static String getControllerName(String name) {
+		return name + "Controller";
+	}
+
 }

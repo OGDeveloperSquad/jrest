@@ -13,7 +13,7 @@ public class RouteParser {
 			if (templateSegment.isControllerSegment())
 				route.setControllerName(uriSegment);
 			else if (templateSegment.isActionSegment())
-				route.setControllerName(uriSegment);
+				route.setActionName(uriSegment);
 			else if (templateSegment.isParameterSegment())
 				route.addParameter(templateSegment.getParameterName(), uriSegment);
 		}
@@ -23,7 +23,7 @@ public class RouteParser {
 		if (route.getActionName() == null)
 			route.setActionName(template.getDefaultAction());
 
-		return null;
+		return route;
 	}
 
 }

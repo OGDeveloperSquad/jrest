@@ -2,6 +2,7 @@ package com.og.jrest.reflection;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -65,9 +66,15 @@ class ControllerLoader {
 			throws InstantiationException, IllegalAccessException {
 
 		Reflections reflections = new Reflections(packageName);
-		Set<Class<? extends Controller>> controllerSet = reflections.getSubTypesOf(Controller.class);
+		Set<Class<? extends Controller>> controllerClasses = reflections.getSubTypesOf(Controller.class);
+		List<Controller> controllers = new ArrayList<>();
+		for (Class<? extends Controller> controllerClass : controllerClasses) {
+			Controller controller = controllerClass.newInstance();
+			controllers.add(controller);
+		}
+		Controller[] controllerArray = (Controller[]) controllers.toArray(new Controller[controllers.size()]);
 
-		return (Controller[]) controllerSet.toArray();
+		return controllerArray;
 	}
 
 	/**
@@ -107,9 +114,10 @@ class ControllerLoader {
 
 		// If no method was found, throw exception up the stack
 		if (action == null) {
-			throw new NoSuchMethodException(
-					String.format("Unable to load method '%s' in controller '%s' with parameters %s", actionName,
-							controller.getClass().toString(), Arrays.toString(params.toArray())));
+			throw new NoSuchMethodException(String.format(
+					"Unable to load method '%s' in controller '%s' with parameters %s", actionName,
+					controller.getClass().toString(),
+					Arrays.toString((ActionParameter<?>[]) params.toArray(new ActionParameter<?>[params.size()]))));
 		}
 		return action;
 	}
