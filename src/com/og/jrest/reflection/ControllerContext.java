@@ -8,6 +8,7 @@ import java.util.List;
 import com.og.jrest.api.Controller;
 import com.og.jrest.exceptions.ActionMethodInvocationException;
 import com.og.jrest.exceptions.ActionMethodNotFoundException;
+import com.og.jrest.exceptions.InvalidActionParameterException;
 import com.og.jrest.exceptions.ParameterBindingException;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.logging.Log;
@@ -104,7 +105,8 @@ class ControllerContext implements IControllerContext {
 
 	@Override
 	public IResponse invoke(Controller controller, String actionName, RouteParameter[] params)
-			throws ActionMethodNotFoundException, ParameterBindingException, ActionMethodInvocationException {
+			throws ActionMethodNotFoundException, ParameterBindingException, ActionMethodInvocationException,
+			InvalidActionParameterException {
 		List<String> parameterNames = new ArrayList<>();
 		for (RouteParameter param : params)
 			parameterNames.add(param.getName());

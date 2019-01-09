@@ -1,12 +1,12 @@
 package com.og.jrest.exceptions;
 
 @SuppressWarnings("serial")
-public class ParameterBindingException extends JRestException {
+public class InvalidActionParameterException extends JRestException {
 
-	private static final String HEADER = "ParameterBindingException:   ";
+	private static final String HEADER = "InvalidActionParameterException:   ";
 	private static final int STATUS_CODE = 500;
 
-	public ParameterBindingException(String message) {
+	public InvalidActionParameterException(String message) {
 		super(HEADER + message);
 	}
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.og.jrest.api.Controller;
 import com.og.jrest.exceptions.ActionMethodInvocationException;
+import com.og.jrest.exceptions.InvalidActionParameterException;
 import com.og.jrest.exceptions.ParameterBindingException;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.routing.RouteParameter;
@@ -68,7 +69,7 @@ class ActionMethod implements IActionMethod {
 
 	@Override
 	public IResponse invoke(Controller controller, RouteParameter[] routeParams)
-			throws ParameterBindingException, ActionMethodInvocationException {
+			throws ParameterBindingException, ActionMethodInvocationException, InvalidActionParameterException {
 		IActionParameter<?>[] actionParams = (IActionParameter<?>[]) this.params
 				.toArray(new IActionParameter<?>[this.params.size()]);
 		Object[] params = ParameterMapper.mapToObjects(routeParams, actionParams);
