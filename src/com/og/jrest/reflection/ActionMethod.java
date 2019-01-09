@@ -71,7 +71,7 @@ class ActionMethod implements IActionMethod {
 			throws ParameterBindingException, ActionMethodInvocationException {
 		IActionParameter<?>[] actionParams = (IActionParameter<?>[]) this.params
 				.toArray(new IActionParameter<?>[this.params.size()]);
-		Object[] params = ParameterMapper.map(routeParams, actionParams);
+		Object[] params = ParameterMapper.mapToObjects(routeParams, actionParams);
 		IResponse response = null;
 		try {
 			response = (IResponse) this.method.invoke(controller, params);

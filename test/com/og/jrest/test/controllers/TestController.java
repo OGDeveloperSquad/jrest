@@ -34,7 +34,7 @@ public class TestController extends Controller {
 	}
 
 	@Get
-	public IResponse actionTestGet(int id) {
+	public IResponse actionTestGet(long id) {
 		return getResponse("actionTestGet", "GET", id);
 	}
 
