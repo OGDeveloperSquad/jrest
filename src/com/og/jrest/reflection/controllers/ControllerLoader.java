@@ -1,4 +1,4 @@
-package com.og.jrest.reflection;
+package com.og.jrest.reflection.controllers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -11,6 +11,7 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 import com.og.jrest.api.Controller;
+import com.og.jrest.reflection.IActionParameter;
 
 /**
  * This class handles the reflection done to load controllers and actions for
@@ -92,7 +93,7 @@ class ControllerLoader {
 	 * @throws NoSuchMethodException
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Method loadAction(Controller controller, String actionName, List<ActionParameter> params)
+	public static Method loadAction(Controller controller, String actionName, List<IActionParameter> params)
 			throws NoSuchMethodException {
 		Method action = null;
 		Method[] methods = controller.getClass().getDeclaredMethods();
@@ -117,7 +118,7 @@ class ControllerLoader {
 			throw new NoSuchMethodException(String.format(
 					"Unable to load method '%s' in controller '%s' with parameters %s", actionName,
 					controller.getClass().toString(),
-					Arrays.toString((ActionParameter<?>[]) params.toArray(new ActionParameter<?>[params.size()]))));
+					Arrays.toString((IActionParameter<?>[]) params.toArray(new IActionParameter<?>[params.size()]))));
 		}
 		return action;
 	}
@@ -134,7 +135,7 @@ class ControllerLoader {
 	 *         exactly the same, false otherwise
 	 */
 	@SuppressWarnings("rawtypes")
-	private static boolean matchingParams(Method method, List<ActionParameter> params) {
+	private static boolean matchingParams(Method method, List<IActionParameter> params) {
 		boolean result = false;
 		// Check to see if all parameters of the current method match the route
 		Parameter[] methodParams = method.getParameters();

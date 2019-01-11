@@ -12,6 +12,11 @@ public class ActionMethodNotFoundException extends JRestException {
 				controllerName));
 	}
 
+	public ActionMethodNotFoundException(String controllerName, String actionName, Throwable cause) {
+		super(String.format("Unable to find action method '%s' on controller '%sController'", actionName,
+				controllerName), cause);
+	}
+
 	@Override
 	public StatusCode getStatusCode() {
 		return new StatusCode(STATUS_CODE);

@@ -26,7 +26,8 @@ class RouteBuilder {
 
 		IRouteTemplate route = RoutingFactory.newTemplate(routeName);
 		String[] segments = RouteUtility.splitIntoSegments(routeText);
-
+		Log.info("Route segments detected as:");
+		Log.info("\t" + segments.toString());
 		for (String segment : segments) {
 			IPathSegment pathSegment = RoutingFactory.newPathSegment(segment);
 			route.addSegment(pathSegment);

@@ -11,6 +11,10 @@ public class ActionMethodInvocationException extends JRestException {
 		super(message);
 	}
 
+	public ActionMethodInvocationException(String message, Exception cause) {
+		super(message, cause);
+	}
+
 	@Override
 	public StatusCode getStatusCode() {
 		return new StatusCode(STATUS_CODE);

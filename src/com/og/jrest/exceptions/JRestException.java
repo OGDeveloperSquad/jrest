@@ -1,6 +1,7 @@
 package com.og.jrest.exceptions;
 
 import com.og.jrest.http.StatusCode;
+import com.og.jrest.logging.Log;
 
 @SuppressWarnings("serial")
 public abstract class JRestException extends Exception {
@@ -12,12 +13,23 @@ public abstract class JRestException extends Exception {
 
 	public JRestException(String message) {
 		super(message);
+		this.initialize(message);
+	}
+
+	public JRestException(String message, Throwable cause) {
+		super(message, cause);
+		this.initialize(message);
+	}
+
+	private void initialize(String message) {
+		this.message = message;
+		Log.exception(this);
 	}
 
 	@Override
 	public String getMessage() {
-		String header = this.getClass().getSimpleName();
-		String message = header + HEADER_SEPARATOR + this.message;
+		String exceptionType = this.getClass().getSimpleName();
+		String message = exceptionType + HEADER_SEPARATOR + this.message;
 
 		return message;
 	}

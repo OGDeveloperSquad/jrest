@@ -1,4 +1,4 @@
-package com.og.jrest.reflection;
+package com.og.jrest.reflection.controllers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -12,9 +12,12 @@ import com.og.jrest.exceptions.InvalidActionParameterException;
 import com.og.jrest.exceptions.ParameterBindingException;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.logging.Log;
+import com.og.jrest.reflection.IActionMethod;
+import com.og.jrest.reflection.IActionParameter;
+import com.og.jrest.reflection.ReflectionFactory;
 import com.og.jrest.routing.RouteParameter;
 
-class ControllerContext implements IControllerContext {
+public class ControllerContext implements IControllerContext {
 
 	private String name;
 	// class is a java keyword, so convention is to use clazz

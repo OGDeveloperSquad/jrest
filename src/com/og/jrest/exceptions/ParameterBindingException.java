@@ -11,6 +11,10 @@ public class ParameterBindingException extends JRestException {
 		super(message);
 	}
 
+	public ParameterBindingException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 	@Override
 	public StatusCode getStatusCode() {
 		return new StatusCode(STATUS_CODE);

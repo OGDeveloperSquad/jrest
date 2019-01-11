@@ -1,4 +1,4 @@
-package com.og.jrest.reflection;
+package com.og.jrest.reflection.controllers;
 
 import com.og.jrest.exceptions.ControllerNotFoundException;
 

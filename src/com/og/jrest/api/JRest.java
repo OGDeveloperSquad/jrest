@@ -3,7 +3,8 @@ package com.og.jrest.api;
 import java.io.IOException;
 
 import com.og.jrest.logging.Log;
-import com.og.jrest.reflection.ControllerTable;
+import com.og.jrest.reflection.controllers.ControllerTable;
+import com.og.jrest.reflection.models.ModelTable;
 import com.og.jrest.server.RequestListener;
 
 /**
@@ -16,7 +17,6 @@ import com.og.jrest.server.RequestListener;
 public class JRest {
 
 	public static int openConnections;
-
 	private static final int DEFAULT_PORT_NUMBER = 9090;
 
 	static {
@@ -41,6 +41,7 @@ public class JRest {
 
 	private static void performStartup(int port) throws InstantiationException, IllegalAccessException, IOException {
 		ControllerTable.registerControllers();
+		ModelTable.registerModels();
 		RequestListener.listen(port);
 	}
 

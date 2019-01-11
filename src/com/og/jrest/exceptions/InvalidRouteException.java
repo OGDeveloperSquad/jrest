@@ -11,6 +11,10 @@ public class InvalidRouteException extends JRestException {
 		super(message);
 	}
 
+	public InvalidRouteException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 	@Override
 	public StatusCode getStatusCode() {
 		return new StatusCode(STATUS_CODE);

@@ -11,6 +11,10 @@ public class ControllerNotFoundException extends JRestException {
 		super(String.format("Unable to find controller with name '%sController'", controllerName));
 	}
 
+	public ControllerNotFoundException(String controllerName, Throwable cause) {
+		super(String.format("Unable to find controller with name '%sController'", controllerName), cause);
+	}
+
 	@Override
 	public StatusCode getStatusCode() {
 		return new StatusCode(STATUS_CODE);

@@ -11,6 +11,10 @@ public class InvalidActionParameterException extends JRestException {
 		super(message);
 	}
 
+	public InvalidActionParameterException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 	@Override
 	public StatusCode getStatusCode() {
 		return new StatusCode(STATUS_CODE);

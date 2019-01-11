@@ -11,6 +11,10 @@ public class ControllerPackageNotFoundException extends JRestException {
 		super(message);
 	}
 
+	public ControllerPackageNotFoundException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 	@Override
 	public StatusCode getStatusCode() {
 		return new StatusCode(STATUS_CODE);
