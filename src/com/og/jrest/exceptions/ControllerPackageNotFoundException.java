@@ -3,11 +3,11 @@ package com.og.jrest.exceptions;
 import com.og.jrest.http.StatusCode;
 
 @SuppressWarnings("serial")
-public class InvalidActionParameterException extends JRestException {
+public class ControllerPackageNotFoundException extends JRestException {
 
 	private static final int STATUS_CODE = 500;
 
-	public InvalidActionParameterException(String message) {
+	public ControllerPackageNotFoundException(String message) {
 		super(message);
 	}
 

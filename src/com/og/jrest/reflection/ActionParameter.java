@@ -64,7 +64,7 @@ class ActionParameter<T> implements IActionParameter<T> {
 	public void setValue(String valueAsString) throws ParameterBindingException {
 		T value;
 		try {
-			Constructor<?>[] constructors = this.type.getDeclaredConstructors();
+			// Constructor<?>[] constructors = this.type.getDeclaredConstructors();
 			Constructor<T> constructor = this.type.getDeclaredConstructor(String.class);
 			value = constructor.newInstance(valueAsString);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

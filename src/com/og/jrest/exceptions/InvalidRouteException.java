@@ -1,18 +1,19 @@
 package com.og.jrest.exceptions;
 
+import com.og.jrest.http.StatusCode;
+
 @SuppressWarnings("serial")
 public class InvalidRouteException extends JRestException {
 
-	private static final String HEADER = "InvalidRouteException:   ";
 	private static final int STATUS_CODE = 500;
 
 	public InvalidRouteException(String message) {
-		super(HEADER + message);
+		super(message);
 	}
 
 	@Override
-	protected int getStatusCodeInteger() {
-		return STATUS_CODE;
+	public StatusCode getStatusCode() {
+		return new StatusCode(STATUS_CODE);
 	}
 
 }

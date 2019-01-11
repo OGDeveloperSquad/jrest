@@ -6,15 +6,22 @@ import com.og.jrest.http.StatusCode;
 public abstract class JRestException extends Exception {
 
 	protected StatusCode statusCode;
+	private String message;
+
+	private static final String HEADER_SEPARATOR = ":    ";
 
 	public JRestException(String message) {
 		super(message);
 	}
 
-	public StatusCode getStatusCode() {
-		return this.statusCode;
+	@Override
+	public String getMessage() {
+		String header = this.getClass().getSimpleName();
+		String message = header + HEADER_SEPARATOR + this.message;
+
+		return message;
 	}
 
-	protected abstract int getStatusCodeInteger();
+	public abstract StatusCode getStatusCode();
 
 }

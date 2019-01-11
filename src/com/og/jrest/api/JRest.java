@@ -3,7 +3,7 @@ package com.og.jrest.api;
 import java.io.IOException;
 
 import com.og.jrest.logging.Log;
-import com.og.jrest.reflection.Reflection;
+import com.og.jrest.reflection.ControllerTable;
 import com.og.jrest.server.RequestListener;
 
 /**
@@ -40,7 +40,7 @@ public class JRest {
 	}
 
 	private static void performStartup(int port) throws InstantiationException, IllegalAccessException, IOException {
-		Reflection.RegisterControllers();
+		ControllerTable.registerControllers();
 		RequestListener.listen(port);
 	}
 
