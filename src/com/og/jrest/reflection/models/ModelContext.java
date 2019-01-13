@@ -10,7 +10,7 @@ public class ModelContext {
 	private List<ModelField> fields;
 
 	public ModelContext(IModel model) {
-
+		this.model = model;
 	}
 
 }

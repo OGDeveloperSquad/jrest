@@ -1,6 +1,7 @@
 package com.og.jrest.reflection;
 
 import com.og.jrest.exceptions.InvalidActionParameterException;
+import com.og.jrest.exceptions.ParameterBindingException;
 import com.og.jrest.logging.Log;
 import com.og.jrest.routing.RouteParameter;
 
@@ -61,6 +62,8 @@ public class ParameterMapper {
 				case STRING:
 					parameter = routeParam.getValue();
 					break;
+				default:
+					parameter = mapToModel(routeParam, param);
 			}
 		} catch (Exception exception) {
 			InvalidActionParameterException ex = new InvalidActionParameterException("Unable to map the value '"
@@ -81,6 +84,15 @@ public class ParameterMapper {
 		}
 
 		return parameters;
+	}
+
+	public static <T> T mapToModel(RouteParameter routeParam, IActionParameter<T> param)
+			throws ParameterBindingException {
+		Class<T> paramType = param.getType();
+		String json = routeParam.getValue();
+		T object = Deserialization.convertJsonToObject(paramType, json);
+
+		return object;
 	}
 
 }
