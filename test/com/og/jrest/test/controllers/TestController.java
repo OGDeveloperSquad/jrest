@@ -9,7 +9,6 @@ import com.og.jrest.http.Request;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.http.response.TextResponse;
 import com.og.jrest.logging.Log;
-import com.og.jrest.test.models.SingleStringModel;
 
 public class TestController extends Controller {
 
@@ -35,7 +34,7 @@ public class TestController extends Controller {
 	}
 
 	@Get
-	public IResponse actionTestGet(SingleStringModel id) {
+	public IResponse actionTestGet(String id) {
 		return getResponse("actionTestGet", "GET", id);
 	}
 

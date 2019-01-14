@@ -86,7 +86,7 @@ class RequestHandler implements Runnable {
 				out.flush();
 			}
 
-			this.socket.close();
+			this.socket.shutdownOutput();
 
 		} catch (IOException e) {
 			this.sendErrorResponse(out, 500);
@@ -102,7 +102,8 @@ class RequestHandler implements Runnable {
 			this.log.exception(e);
 		} finally {
 			try {
-				out.close();
+				if (out != null)
+					out.close();
 			} catch (IOException e) {
 				this.log.exception(e);
 			}

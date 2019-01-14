@@ -14,7 +14,7 @@ class ActionParameter<T> implements IActionParameter<T> {
 
 	private T value;
 
-	public ActionParameter(String name, Class<T> type) {
+	ActionParameter(String name, Class<T> type) {
 		this.type = type;
 		this.name = name;
 		this.value = null;

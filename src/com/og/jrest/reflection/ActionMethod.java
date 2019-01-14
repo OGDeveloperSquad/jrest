@@ -21,7 +21,7 @@ class ActionMethod implements IActionMethod {
 
 	private List<IActionParameter<?>> params;
 
-	public ActionMethod(Method method) {
+	ActionMethod(Method method) {
 		this.name = method.getName();
 		this.method = method;
 		this.params = new ArrayList<>();

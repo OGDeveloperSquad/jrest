@@ -1,5 +1,7 @@
 package com.og.jrest.routing;
 
+import java.util.Arrays;
+
 import com.og.jrest.exceptions.InvalidRouteException;
 import com.og.jrest.logging.Log;
 
@@ -27,7 +29,7 @@ class RouteBuilder {
 		IRouteTemplate route = RoutingFactory.newTemplate(routeName);
 		String[] segments = RouteUtility.splitIntoSegments(routeText);
 		Log.info("Route segments detected as:");
-		Log.info("\t" + segments.toString());
+		Log.info("\t" + Arrays.toString(segments));
 		for (String segment : segments) {
 			IPathSegment pathSegment = RoutingFactory.newPathSegment(segment);
 			route.addSegment(pathSegment);
