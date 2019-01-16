@@ -14,9 +14,10 @@ import java.util.Scanner;
 public class Request {
 
 	private Verb verb;
+	private String uri;
+	private QueryString queryString;
 	private Version httpVersion;
 	private HeaderCollection headers;
-	private String uri;
 	private String body;
 
 	/**
@@ -37,6 +38,7 @@ public class Request {
 
 	private void initialize() {
 		this.headers = new HeaderCollection();
+		this.queryString = new QueryString();
 		this.body = null;
 	}
 
@@ -100,11 +102,16 @@ public class Request {
 		this.body = body;
 	}
 
+	public QueryString getQueryString() {
+		return this.queryString;
+	}
+
 	public void parseRequestLine(String requestLine) {
 		Scanner lineScanner = new Scanner(requestLine);
 		// parse request line assuming format 'verb uri version\n'
 		this.verb = Verb.valueOf(lineScanner.next());
 		this.uri = lineScanner.next();
+		this.parseQueryString(this.uri);
 		this.httpVersion = Version.fromString(lineScanner.next());
 		lineScanner.close();
 	}
@@ -116,6 +123,14 @@ public class Request {
 
 	public void addHeader(Header header) {
 		this.headers.add(header);
+	}
+
+	private void parseQueryString(String uri) {
+		int indexOfQueryString = uri.indexOf('?');
+		if (indexOfQueryString > -1) {
+			String queryString = uri.substring(indexOfQueryString + 1, uri.length());
+			this.queryString = new QueryString(queryString);
+		}
 	}
 
 	private void parseRequest(String httpRequest) {
