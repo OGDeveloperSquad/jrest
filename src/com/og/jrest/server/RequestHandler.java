@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import com.og.jrest.api.JRest;
-import com.og.jrest.exceptions.JRestException;
 import com.og.jrest.exceptions.JRestServerException;
 import com.og.jrest.http.Request;
 import com.og.jrest.http.response.ErrorResponse;
@@ -64,7 +63,7 @@ class RequestHandler implements Runnable {
 		}
 	}
 
-	private void sendResponse(OutputStream out) throws JRestException, IOException {
+	private void sendResponse(OutputStream out) throws JRestServerException, IOException {
 		if (this.request != null) {
 			IResponse response = RouteEvaluator.evaluateRoute(this.request);
 			if (response == null)

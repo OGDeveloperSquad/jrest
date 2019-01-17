@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.og.jrest.api.Controller;
 import com.og.jrest.exceptions.ActionMethodInvocationException;
-import com.og.jrest.exceptions.JRestException;
+import com.og.jrest.exceptions.JRestServerException;
 import com.og.jrest.http.Request;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.logging.Log;
@@ -18,7 +18,7 @@ import com.og.jrest.routing.RouteTable;
 
 public class RouteEvaluator {
 
-	public static IResponse evaluateRoute(Request request) throws JRestException {
+	public static IResponse evaluateRoute(Request request) throws JRestServerException {
 		String uri = request.getUri();
 		IRouteTemplate route = RouteTable.findRoute(uri);
 		ParsedRoute parsedRoute = RouteParser.parse(route, uri);

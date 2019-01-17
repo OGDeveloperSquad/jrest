@@ -1,7 +1,7 @@
 package com.og.jrest.reflection;
 
 import com.og.jrest.exceptions.InvalidActionParameterException;
-import com.og.jrest.exceptions.ParameterBindingException;
+import com.og.jrest.exceptions.JRestServerException;
 import com.og.jrest.logging.Log;
 import com.og.jrest.routing.RouteParameter;
 
@@ -16,8 +16,7 @@ public class ParameterMapper {
 	private static final String CHAR = "char";
 	private static final String STRING = "java.lang.String";
 
-	public static <T> Object mapToObjecct(RouteParameter routeParam, IActionParameter<T> param)
-			throws InvalidActionParameterException {
+	public static <T> Object mapToObjecct(RouteParameter routeParam, IActionParameter<T> param) throws JRestServerException {
 		String paramType = param.getType().getName();
 		String paramValue = routeParam.getValue();
 		Object parameter = null;
@@ -66,8 +65,8 @@ public class ParameterMapper {
 					parameter = mapToModel(routeParam, param);
 			}
 		} catch (Exception exception) {
-			InvalidActionParameterException ex = new InvalidActionParameterException("Unable to map the value '"
-					+ routeParam.getValue() + "' to the type '" + param.getType().toString() + "'");
+			InvalidActionParameterException ex = new InvalidActionParameterException(
+					"Unable to map the value '" + routeParam.getValue() + "' to the type '" + param.getType().toString() + "'");
 			Log.exception(ex);
 			throw ex;
 		}
@@ -75,8 +74,7 @@ public class ParameterMapper {
 		return parameter;
 	}
 
-	public static Object[] mapToObjects(RouteParameter[] routeParams, IActionParameter<?>[] params)
-			throws InvalidActionParameterException {
+	public static Object[] mapToObjects(RouteParameter[] routeParams, IActionParameter<?>[] params) throws JRestServerException {
 		Object[] parameters = new Object[routeParams.length];
 		for (int i = 0; i < parameters.length; i++) {
 			Object parameter = mapToObjecct(routeParams[i], params[i]);
@@ -86,8 +84,7 @@ public class ParameterMapper {
 		return parameters;
 	}
 
-	public static <T> T mapToModel(RouteParameter routeParam, IActionParameter<T> param)
-			throws ParameterBindingException {
+	public static <T> T mapToModel(RouteParameter routeParam, IActionParameter<T> param) throws JRestServerException {
 		Class<T> paramType = param.getType();
 		String json = routeParam.getValue();
 		T object = Deserialization.convertJsonToObject(paramType, json);

@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 
+import com.og.jrest.exceptions.JRestServerException;
 import com.og.jrest.exceptions.ParameterBindingException;
 
 class ActionParameter<T> implements IActionParameter<T> {
@@ -61,16 +62,16 @@ class ActionParameter<T> implements IActionParameter<T> {
 	}
 
 	@Override
-	public void setValue(String valueAsString) throws ParameterBindingException {
+	public void setValue(String valueAsString) throws JRestServerException {
 		T value;
 		try {
 			// Constructor<?>[] constructors = this.type.getDeclaredConstructors();
 			Constructor<T> constructor = this.type.getDeclaredConstructor(String.class);
 			value = constructor.newInstance(valueAsString);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			throw new ParameterBindingException("Unable to invoke String constructor for class '"
-					+ this.getClass().getName() + "' to instantiate parameter '" + this.getName() + "'");
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			throw new ParameterBindingException("Unable to invoke String constructor for class '" + this.getClass().getName()
+					+ "' to instantiate parameter '" + this.getName() + "'");
 		}
 		this.value = value;
 	}
@@ -89,8 +90,7 @@ class ActionParameter<T> implements IActionParameter<T> {
 		}
 		if (obj instanceof ActionParameter) {
 			ActionParameter<?> param = (ActionParameter<?>) obj;
-			if (param.getClass().equals(this.type) && param.getName().equalsIgnoreCase(this.name)
-					&& param.value.equals(this.value))
+			if (param.getClass().equals(this.type) && param.getName().equalsIgnoreCase(this.name) && param.value.equals(this.value))
 				return true;
 		}
 

@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.og.jrest.api.Controller;
-import com.og.jrest.exceptions.ActionMethodInvocationException;
 import com.og.jrest.exceptions.ActionMethodNotFoundException;
-import com.og.jrest.exceptions.InvalidActionParameterException;
-import com.og.jrest.exceptions.ParameterBindingException;
+import com.og.jrest.exceptions.JRestServerException;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.logging.Log;
 import com.og.jrest.reflection.IActionMethod;
@@ -62,7 +60,7 @@ public class ControllerContext implements IControllerContext {
 	}
 
 	@Override
-	public IActionMethod getAction(String name, String[] parameterNames) throws ActionMethodNotFoundException {
+	public IActionMethod getAction(String name, String[] parameterNames) throws JRestServerException {
 		for (IActionMethod action : this.actions) {
 			String actionName = action.getName();
 			if (actionName.equalsIgnoreCase(name) && this.parametersMatch(action, parameterNames)) {
@@ -102,19 +100,16 @@ public class ControllerContext implements IControllerContext {
 	}
 
 	@Override
-	public IActionMethod getAction(String name) throws ActionMethodNotFoundException {
+	public IActionMethod getAction(String name) throws JRestServerException {
 		return this.getAction(name, new String[0]);
 	}
 
 	@Override
-	public IResponse invoke(Controller controller, String actionName, RouteParameter[] params)
-			throws ActionMethodNotFoundException, ParameterBindingException, ActionMethodInvocationException,
-			InvalidActionParameterException {
+	public IResponse invoke(Controller controller, String actionName, RouteParameter[] params) throws JRestServerException {
 		List<String> parameterNames = new ArrayList<>();
 		for (RouteParameter param : params)
 			parameterNames.add(param.getName());
-		IActionMethod action = this.getAction(actionName,
-				(String[]) parameterNames.toArray(new String[parameterNames.size()]));
+		IActionMethod action = this.getAction(actionName, (String[]) parameterNames.toArray(new String[parameterNames.size()]));
 		IResponse response = action.invoke(controller, params);
 
 		return response;

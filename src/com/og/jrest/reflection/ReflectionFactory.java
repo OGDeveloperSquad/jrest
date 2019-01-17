@@ -22,8 +22,7 @@ public class ReflectionFactory {
 		return new ControllerContext(controller);
 	}
 
-	public static IControllerPackage newControllerPackage(String packageName)
-			throws InstantiationException, IllegalAccessException {
+	public static IControllerPackage newControllerPackage(String packageName) throws InstantiationException, IllegalAccessException {
 		return new ControllerPackage(packageName);
 	}
 

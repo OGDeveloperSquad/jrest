@@ -75,8 +75,7 @@ class PathSegment implements IPathSegment {
 	public boolean hasDefault() {
 		boolean isAbleToBeDefaulted = this.isControllerSegment() && this.isActionSegment();
 		if (isAbleToBeDefaulted)
-			return this.text.startsWith(CONTROLLER_IDENTIFIER + DEFAULT_IDENTIFIER)
-					|| this.text.startsWith(ACTION_IDENTIFIER + DEFAULT_IDENTIFIER);
+			return this.text.startsWith(CONTROLLER_IDENTIFIER + DEFAULT_IDENTIFIER) || this.text.startsWith(ACTION_IDENTIFIER + DEFAULT_IDENTIFIER);
 
 		return false;
 	}

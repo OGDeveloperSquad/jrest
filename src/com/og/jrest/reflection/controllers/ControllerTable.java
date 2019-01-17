@@ -48,8 +48,7 @@ public class ControllerTable {
 		return false;
 	}
 
-	private static void registerControllerPackage(String packageName)
-			throws InstantiationException, IllegalAccessException {
+	private static void registerControllerPackage(String packageName) throws InstantiationException, IllegalAccessException {
 		IControllerPackage controllerPackage = ReflectionFactory.newControllerPackage(packageName);
 		ControllerTable.controllerPackages.add(controllerPackage);
 	}

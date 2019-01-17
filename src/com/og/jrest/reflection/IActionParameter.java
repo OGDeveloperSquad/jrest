@@ -1,6 +1,6 @@
 package com.og.jrest.reflection;
 
-import com.og.jrest.exceptions.ParameterBindingException;
+import com.og.jrest.exceptions.JRestServerException;
 
 public interface IActionParameter<T> {
 
@@ -16,6 +16,6 @@ public interface IActionParameter<T> {
 
 	String toString();
 
-	void setValue(String valueAsString) throws ParameterBindingException;
+	void setValue(String valueAsString) throws JRestServerException;
 
 }

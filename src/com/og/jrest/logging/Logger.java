@@ -9,10 +9,10 @@ abstract class Logger implements ILogger {
 	protected LogWriter throwableLogWriter;
 
 	public Logger() {
-		this.exceptionLogWriter = Log.getExceptionLogger();
-		this.errorLogWriter = Log.getErrorLogger();
-		this.debugLogWriter = Log.getDebugLogger();
-		this.infoLogWriter = Log.getInfoLogger();
+		this.exceptionLogWriter = Log.getExceptionLogWriter();
+		this.errorLogWriter = Log.getErrorLogWriter();
+		this.debugLogWriter = Log.getDebugLogWriter();
+		this.infoLogWriter = Log.getInfoLogWriter();
 	}
 
 	/**

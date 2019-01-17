@@ -4,15 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class DefaultLogger extends Logger {
+public class LoggerDefault extends Logger {
 
-	public DefaultLogger() {
+	public LoggerDefault() {
 		super();
 	}
 
 	@Override
 	public void exception(Throwable ex) {
-		this.exceptionLogWriter.log(ExceptionLogWriter.formatExceptionMessage(ex));
+		this.exceptionLogWriter.log(LogWriterException.formatExceptionMessage(ex));
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class DefaultLogger extends Logger {
 
 	@Override
 	public void error(Error error) {
-		this.errorLogWriter.log(ErrorLogWriter.formatErrorMessage(error));
+		this.errorLogWriter.log(LogWriterError.formatErrorMessage(error));
 	}
 
 }

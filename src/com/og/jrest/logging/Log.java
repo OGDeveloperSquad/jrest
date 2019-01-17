@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Global logging api. Singleton implementations of logging utilities for the
+ * Global logging api. Singleton implementation of logging utilities for the
  * various logging levels. For local logging (i.e. separate from the global
  * logging scheme), use the factory methods in this class to obtain new
  * instances of the logger.
@@ -257,8 +257,8 @@ public class Log {
 	 * @return new instance of a class implemented specifically to handle error
 	 *         logging
 	 */
-	protected static LogWriter getErrorLogger() {
-		return new ErrorLogWriter();
+	protected static LogWriter getErrorLogWriter() {
+		return new LogWriterError();
 	}
 
 	/**
@@ -268,8 +268,8 @@ public class Log {
 	 * @return new instance of a class implemented specifically to handle exception
 	 *         logging.
 	 */
-	protected static LogWriter getExceptionLogger() {
-		return new ExceptionLogWriter();
+	protected static LogWriter getExceptionLogWriter() {
+		return new LogWriterException();
 	}
 
 	/**
@@ -279,8 +279,8 @@ public class Log {
 	 * @return new instance of a class implemented specifically to handle debug
 	 *         logging.
 	 */
-	protected static LogWriter getDebugLogger() {
-		return new DebugLogWriter();
+	protected static LogWriter getDebugLogWriter() {
+		return new LogWriterDebug();
 	}
 
 	/**
@@ -290,8 +290,8 @@ public class Log {
 	 * @return new instance of a class implemented specifically to handle info
 	 *         logging.
 	 */
-	protected static LogWriter getInfoLogger() {
-		return new InfoLogWriter();
+	protected static LogWriter getInfoLogWriter() {
+		return new LogWriterInfo();
 	}
 
 	/**
@@ -300,6 +300,6 @@ public class Log {
 	 * @return new instance of an ILogger implementation.
 	 */
 	public static ILogger newInstance() {
-		return new DefaultLogger();
+		return new LoggerDefault();
 	}
 }

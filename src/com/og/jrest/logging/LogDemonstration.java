@@ -3,7 +3,7 @@ package com.og.jrest.logging;
 import java.io.File;
 import java.io.IOException;
 
-public class LogDemo {
+public class LogDemonstration {
 
 	public static void demo() throws IOException {
 

@@ -25,8 +25,7 @@ public class Reflection {
 		return null;
 	}
 
-	public static <T> List<T> loadSubclassesInPackage(Class<T> clazz, String packageName)
-			throws InstantiationException, IllegalAccessException {
+	public static <T> List<T> loadSubclassesInPackage(Class<T> clazz, String packageName) throws InstantiationException, IllegalAccessException {
 		Reflections reflections = new Reflections(packageName);
 		Set<Class<? extends T>> controllerClasses = reflections.getSubTypesOf(clazz);
 		List<T> controllers = new ArrayList<>();

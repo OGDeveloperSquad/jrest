@@ -63,8 +63,7 @@ class ControllerLoader {
 		return controller;
 	}
 
-	public static Controller[] loadControllersInPackage(String packageName)
-			throws InstantiationException, IllegalAccessException {
+	public static Controller[] loadControllersInPackage(String packageName) throws InstantiationException, IllegalAccessException {
 
 		Reflections reflections = new Reflections(packageName);
 		Set<Class<? extends Controller>> controllerClasses = reflections.getSubTypesOf(Controller.class);
@@ -93,8 +92,7 @@ class ControllerLoader {
 	 * @throws NoSuchMethodException
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Method loadAction(Controller controller, String actionName, List<IActionParameter> params)
-			throws NoSuchMethodException {
+	public static Method loadAction(Controller controller, String actionName, List<IActionParameter> params) throws NoSuchMethodException {
 		Method action = null;
 		Method[] methods = controller.getClass().getDeclaredMethods();
 		// Look at all the methods for the controller
@@ -115,10 +113,9 @@ class ControllerLoader {
 
 		// If no method was found, throw exception up the stack
 		if (action == null) {
-			throw new NoSuchMethodException(String.format(
-					"Unable to load method '%s' in controller '%s' with parameters %s", actionName,
-					controller.getClass().toString(),
-					Arrays.toString((IActionParameter<?>[]) params.toArray(new IActionParameter<?>[params.size()]))));
+			throw new NoSuchMethodException(
+					String.format("Unable to load method '%s' in controller '%s' with parameters %s", actionName, controller.getClass().toString(),
+							Arrays.toString((IActionParameter<?>[]) params.toArray(new IActionParameter<?>[params.size()]))));
 		}
 		return action;
 	}

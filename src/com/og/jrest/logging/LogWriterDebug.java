@@ -6,9 +6,9 @@ package com.og.jrest.logging;
  * @author Matthew.Shoemaker
  *
  */
-class DebugLogWriter extends LogWriter {
+class LogWriterDebug extends LogWriter {
 
-	protected DebugLogWriter() {
+	protected LogWriterDebug() {
 		super();
 	}
 

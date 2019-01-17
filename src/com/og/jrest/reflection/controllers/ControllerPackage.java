@@ -39,8 +39,7 @@ public class ControllerPackage implements IControllerPackage {
 
 	@Override
 	public ControllerContext[] getAllControllerContexts() {
-		return (ControllerContext[]) this.controllerContexts
-				.toArray(new ControllerContext[this.controllerContexts.size()]);
+		return (ControllerContext[]) this.controllerContexts.toArray(new ControllerContext[this.controllerContexts.size()]);
 	}
 
 	@Override

@@ -6,9 +6,9 @@ package com.og.jrest.logging;
  * @author Matthew.Shoemaker
  *
  */
-class ExceptionLogWriter extends LogWriter {
+class LogWriterException extends LogWriter {
 
-	protected ExceptionLogWriter() {
+	protected LogWriterException() {
 		super();
 	}
 
