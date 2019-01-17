@@ -6,6 +6,7 @@ import java.net.Socket;
 
 import com.og.jrest.api.JRest;
 import com.og.jrest.exceptions.JRestException;
+import com.og.jrest.exceptions.JRestServerException;
 import com.og.jrest.http.Request;
 import com.og.jrest.http.response.ErrorResponse;
 import com.og.jrest.http.response.IResponse;
@@ -51,7 +52,7 @@ class RequestHandler implements Runnable {
 
 			this.socket.shutdownOutput();
 
-		} catch (JRestException e) {
+		} catch (JRestServerException e) {
 			this.sendErrorResponse(out, e.getStatusCode().getCode());
 		} catch (Throwable e) {
 			this.sendErrorResponse(out, 500);

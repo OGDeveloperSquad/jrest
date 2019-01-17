@@ -3,7 +3,7 @@ package com.og.jrest.exceptions;
 import com.og.jrest.http.StatusCode;
 
 @SuppressWarnings("serial")
-public class ActionMethodNotFoundException extends JRestException {
+public class ActionMethodNotFoundException extends JRestServerException {
 
 	private static final int STATUS_CODE = 404;
 

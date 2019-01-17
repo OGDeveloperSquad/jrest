@@ -3,7 +3,7 @@ package com.og.jrest.exceptions;
 import com.og.jrest.http.StatusCode;
 
 @SuppressWarnings("serial")
-public class ControllerPackageNotFoundException extends JRestException {
+public class ControllerPackageNotFoundException extends JRestServerException {
 
 	private static final int STATUS_CODE = 500;
 

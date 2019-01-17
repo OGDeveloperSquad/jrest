@@ -34,6 +34,4 @@ public abstract class JRestException extends Exception {
 		return message;
 	}
 
-	public abstract StatusCode getStatusCode();
-
 }
