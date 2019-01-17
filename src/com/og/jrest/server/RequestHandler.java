@@ -1,27 +1,17 @@
 package com.og.jrest.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import com.og.jrest.api.Controller;
 import com.og.jrest.api.JRest;
-import com.og.jrest.http.Header;
+import com.og.jrest.exceptions.JRestException;
 import com.og.jrest.http.Request;
 import com.og.jrest.http.response.ErrorResponse;
 import com.og.jrest.http.response.IResponse;
 import com.og.jrest.http.response.TextResponse;
 import com.og.jrest.logging.ILogger;
 import com.og.jrest.logging.Log;
-import com.og.jrest.reflection.Reflection;
-import com.og.jrest.reflection.controllers.IControllerContext;
-import com.og.jrest.routing.IRouteTemplate;
-import com.og.jrest.routing.ParsedRoute;
-import com.og.jrest.routing.RouteParameter;
-import com.og.jrest.routing.RouteParser;
-import com.og.jrest.routing.RouteTable;
 
 /**
  * This class handles the request received. Implements the Runnable interface so
@@ -48,7 +38,6 @@ class RequestHandler implements Runnable {
 	 * response to the web client.
 	 */
 	public void run() {
-		// New Connection opened, update the counter
 		JRest.openConnections++;
 
 		this.log.info("New connection opened. " + JRest.openConnections + " connections are currently open.");
@@ -56,111 +45,34 @@ class RequestHandler implements Runnable {
 		OutputStream out = null;
 		try {
 			out = this.socket.getOutputStream();
+			this.request = RequestBuilder.buildFromSocket(this.socket);
 
-			this.buildRequest();
-
-			if (this.request != null) {
-				// Plain response in case the controller doesnt return a nice response
-				IResponse response = new TextResponse(this.request.toString());
-
-				String uri = this.request.getUri();
-				IRouteTemplate route = RouteTable.findRoute(uri);
-				ParsedRoute parsedRoute = RouteParser.parse(route, uri);
-				String controllerName = parsedRoute.getControllerName();
-				String actionName = parsedRoute.getActionName();
-				if (actionName == null) {
-					String httpVerb = this.request.getVerb().toString().toLowerCase();
-					actionName = httpVerb;
-				}
-				RouteParameter[] routeParams = parsedRoute.getParameters();
-
-				IControllerContext controllerContext = Reflection.getControllerContext(controllerName);
-				Controller controller = controllerContext.getControllerInstance();
-				controller.setRequest(request);
-				response = controllerContext.invoke(controller, actionName, routeParams);
-
-				// We've done our job and gotten the response back from the api client, so let's
-				// return it.
-				byte[] bytes = response.getBytes();
-				out.write(bytes);
-				out.flush();
-			}
+			this.sendResponse(out);
 
 			this.socket.shutdownOutput();
 
-		} catch (IOException e) {
-			this.sendErrorResponse(out, 500);
-			this.log.exception(e);
-		} catch (IllegalArgumentException e) {
-			this.sendErrorResponse(out, 500);
-			this.log.exception(e);
-		} catch (Exception e) {
-			this.sendErrorResponse(out, 500);
-			this.log.exception(e);
+		} catch (JRestException e) {
+			this.sendErrorResponse(out, e.getStatusCode().getCode());
 		} catch (Throwable e) {
 			this.sendErrorResponse(out, 500);
 			this.log.exception(e);
 		} finally {
-			try {
-				if (out != null)
-					out.close();
-			} catch (IOException e) {
-				this.log.exception(e);
-			}
-			// Connection has ended, reduce the counter
+			this.closeStream(out);
 			JRest.openConnections--;
-			this.log.info("Connection Closed. " + JRest.openConnections + " connections are still open."
-					+ System.lineSeparator());
+			this.log.info("Connection Closed. " + JRest.openConnections + " connections are still open.");
 		}
 	}
 
-	private void buildRequest() throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-
-		this.processRequestLine(in);
+	private void sendResponse(OutputStream out) throws JRestException, IOException {
 		if (this.request != null) {
-			this.processHeaders(in);
-			this.processBody(in);
+			IResponse response = RouteEvaluator.evaluateRoute(this.request);
+			if (response == null)
+				response = new TextResponse("Something went wrong somewhere, somehow, in some way...");
+
+			byte[] bytes = response.getBytes();
+			out.write(bytes);
+			out.flush();
 		}
-	}
-
-	private String processRequestLine(BufferedReader in) throws IOException {
-		String line = in.readLine();
-		// Some phantom requests just have "null"? idk why, just nullify the request if
-		// so
-		if (line == "null" || line == null)
-			this.request = null;
-		else
-			this.request.parseRequestLine(line);
-
-		return line;
-	}
-
-	private void processHeaders(BufferedReader in) throws IOException {
-		String line = in.readLine();
-		while (line != null && line.length() > 0) {
-			this.request.addHeader(line);
-			line = in.readLine();
-		}
-	}
-
-	private void processBody(BufferedReader in) throws IOException {
-		Header contentLengthHeader = this.request.getHeader("Content-Length");
-		if (contentLengthHeader != null) {
-			int bodyLength = Integer.parseInt(contentLengthHeader.getValuesJoined());
-			if (bodyLength > 0) {
-				String body = readBody(in, bodyLength);
-				this.request.setBody(body);
-			}
-		}
-	}
-
-	private String readBody(BufferedReader in, int bodyLength) throws IOException {
-		char[] charArray = new char[bodyLength];
-		in.read(charArray, 0, bodyLength);
-		String body = new String(charArray);
-
-		return body;
 	}
 
 	private void sendErrorResponse(OutputStream out, int errorCode) {
@@ -168,6 +80,15 @@ class RequestHandler implements Runnable {
 		try {
 			out.write(errorResponse.getBytes());
 			out.flush();
+		} catch (IOException e) {
+			this.log.exception(e);
+		}
+	}
+
+	private void closeStream(OutputStream out) {
+		try {
+			if (out != null)
+				out.close();
 		} catch (IOException e) {
 			this.log.exception(e);
 		}

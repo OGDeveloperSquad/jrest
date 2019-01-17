@@ -39,6 +39,14 @@ public class StatusCode {
 		this.reasonPhrase = StatusCode.statusCodeMap.get(statusCode);
 	}
 
+	public int getCode() {
+		return this.statusCode;
+	}
+
+	public String getPhrase() {
+		return this.reasonPhrase;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s %s", Integer.toString(this.statusCode), this.reasonPhrase);
